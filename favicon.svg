@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="4" fill="#070500"/>
+  <rect width="32" height="32" fill="#070500"/>
   <text x="16" y="16" font-family="'Space Mono', 'Courier New', monospace"
         font-size="11" font-weight="700" fill="#C06010"
         text-anchor="middle" dominant-baseline="central" letter-spacing="-0.5">L.D.</text>
