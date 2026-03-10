@@ -15,12 +15,12 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Louis Delignon">
 <meta property="og:description" content="Sound designer, compositeur et artiste multimédia.">
-<meta property="og:image" content="images/vinyle_volpe.jpg">
-<meta property="og:url" content="YOUR_DOMAIN">
+<meta property="og:image" content="https://louisdelignon.com/images/vinyle_volpe.jpg">
+<meta property="og:url" content="https://louisdelignon.com">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Louis Delignon">
-<meta name="twitter:image" content="images/vinyle_volpe.jpg">
+<meta name="twitter:image" content="https://louisdelignon.com/images/vinyle_volpe.jpg">
 
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&display=swap" rel="stylesheet">
 
@@ -490,7 +490,9 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
   nav{padding:16px 20px;}
   nav ul{gap:14px;}
   .page-inner{padding:90px 20px 60px;}
-  .home-name{left:20px;}
+  .home-name{left:20px;bottom:max(12vh,120px);}
+  .modal-overlay.open{align-items:flex-start;padding-top:56px;}
+  .modal-box{max-height:calc(100vh - 56px);padding:40px 20px 32px;}
   .disc-line{padding:0 20px;} /* Adapter le padding au mobile */
   .ct-wrap{grid-template-columns:1fr;} /* Contact passe en colonne unique */
   .ct-l{padding-right:0;border-right:none;padding-bottom:32px;}
@@ -513,7 +515,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
    RESPONSIVE — TRÈS ÉTROIT (< 440px) — disc-line 3 lignes
    ============================================================ */
 @media(max-width:440px){
-  .home-name{bottom:max(10vh,100px);}
+  .home-name{bottom:max(14vh,160px);}
 }
 
 /* ============================================================
@@ -1205,8 +1207,8 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
       <div class="ct-r">
         <!-- Liens de téléchargement — remplacer href="#" par le vrai chemin de fichier -->
         <div class="ct-dl-row">
-          <a href="#" class="ct-dl" data-i18n="ct_bio">↓ Bio / Contact</a>
-          <a href="#" class="ct-dl" data-i18n="ct_press">↓ Photos de presse</a>
+          <a href="press/louisdelignon_bio_contact.pdf" class="ct-dl" download data-i18n="ct_bio">↓ Bio / Contact</a>
+          <a href="press/louisdelignon_photos.zip" class="ct-dl" download data-i18n="ct_press">↓ Photos de presse</a>
         </div>
       </div>
     </div>
@@ -1912,10 +1914,15 @@ window.addEventListener('resize',()=>{ Object.keys(rsState).forEach(id=>rsGo(id,
   if(!igCanvas) return;
   const igCtx=igCanvas.getContext('2d');
   const dpr=window.devicePixelRatio||1;
-  const S=200;
-  igCanvas.width=S*dpr; igCanvas.height=S*dpr;
-  igCanvas.style.width=S+'px'; igCanvas.style.height=S+'px';
-  igCtx.scale(dpr,dpr);
+  let S=Math.min(200,Math.round(window.innerWidth*.45));
+  function igResize(){
+    S=Math.min(200,Math.round(window.innerWidth*.45));
+    igCanvas.width=S*dpr; igCanvas.height=S*dpr;
+    igCanvas.style.width=S+'px'; igCanvas.style.height=S+'px';
+    igCtx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  igResize();
+  window.addEventListener('resize',igResize);
 
   function drawIgShape(c){
     const m=S*.13, r=S*.22, cx=S/2, cy=S/2;
