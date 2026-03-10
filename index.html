@@ -1,0 +1,2337 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Louis Delignon</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="favicon.ico">
+
+<!-- SEO & Open Graph -->
+<meta name="description" content="Louis Delignon — sound designer, compositeur et artiste multimédia.">
+<meta name="author" content="Louis Delignon">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Louis Delignon">
+<meta property="og:description" content="Sound designer, compositeur et artiste multimédia.">
+<meta property="og:image" content="images/vinyle_volpe.jpg">
+<meta property="og:url" content="YOUR_DOMAIN">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Louis Delignon">
+<meta name="twitter:image" content="images/vinyle_volpe.jpg">
+
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   VARIABLES GLOBALES
+   Toutes les couleurs et polices sont définies ici.
+   Modifier une valeur ici la change partout sur le site.
+   ============================================================ */
+:root {
+  --bg:      #070500;   /* fond principal (quasi-noir chaud) */
+  --phosphor:#C06010;   /* orange phosphore (accents chauds) */
+  --warm:    #E8E4DC;   /* stone clair (labels, titres) */
+  --violet:  #9D8FFF;   /* violet clair (éléments actifs) */
+  --violet2: #4A3FA0;   /* violet foncé (bordures, fonds) */
+  --dim:     #5E5A54;   /* texte discret */
+  --dim2:    #B8B0A8;   /* texte secondaire */
+  --text:    #E8E4DF;   /* texte principal */
+  --line:    #171308;   /* séparateur très discret */
+  --line2:   #1E180A;   /* séparateur légèrement visible */
+  --mono:    'Space Mono', monospace;          /* police technique / labels */
+  --display: 'Bricolage Grotesque', sans-serif; /* police titres */
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:var(--bg);color:var(--text);overflow:hidden;width:100vw;height:100vh;}
+
+/* ============================================================
+   ARRIÈRE-PLAN — OSCILLOSCOPE, GRAIN & VIGNETTE
+   L'oscilloscope est un <canvas> animé en JS (voir section OSCILLOSCOPE).
+   Le grain est une texture SVG en overlay.
+   La vignette est un dégradé radial qui assombrit les bords.
+   ============================================================ */
+#osc{position:fixed;inset:0;width:100%;height:100%;z-index:0;}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.03;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:180px;}
+.vignette{position:fixed;inset:0;z-index:2;pointer-events:none;
+  background:radial-gradient(ellipse 90% 90% at 50% 50%,transparent 30%,rgba(4,3,0,.5) 75%,rgba(4,3,0,.95) 100%);}
+
+/* ============================================================
+   NAVIGATION
+   Barre fixe en haut. Le logo "L.D." à gauche, liens à droite.
+   La classe .active sur un lien l'affiche en jaune souligné.
+   ============================================================ */
+nav{position:fixed;top:0;left:0;right:0;z-index:50;
+  display:flex;justify-content:space-between;align-items:center;padding:16px 52px;
+  background:rgba(7,5,0,.60);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  -webkit-mask-image:linear-gradient(to bottom,black 75%,transparent 100%);
+  mask-image:linear-gradient(to bottom,black 75%,transparent 100%);}
+.nav-name{font-family:var(--mono);font-size:10px;font-weight:700;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--dim2);cursor:pointer;
+  text-decoration:none;transition:color .2s;}
+.nav-name:hover{color:var(--text);}
+nav ul{list-style:none;display:flex;gap:32px;}
+nav ul a{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  text-decoration:none;color:var(--dim);transition:color .2s;cursor:pointer;}
+nav ul a:hover{color:var(--text);}
+nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bottom:1px;}
+
+.nav-left { display:flex; align-items:center; gap:16px; }
+
+.lang-switcher { display:flex; gap:4px; }
+
+.fbtn-lang {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  border: 1px solid var(--line2);
+  background: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  color: var(--dim);
+  transition: all .15s;
+}
+.fbtn-lang:hover:not(.on) { border-color: var(--dim2); color: var(--text); }
+.fbtn-lang.on { background: var(--violet2); color: var(--violet); border-color: var(--violet2); }
+
+/* ============================================================
+   SYSTÈME DE PAGES
+   Chaque page est un div fixe plein écran.
+   Seule la page avec la classe .active est visible (display:block).
+   La navigation est gérée en JS via la fonction go().
+   ============================================================ */
+.page{display:none;position:fixed;inset:0;z-index:10;overflow-y:auto;overflow-x:hidden;}
+.page.active{display:block;}
+/* Scrollbar fine et discrète sur les pages scrollables */
+.page::-webkit-scrollbar{width:3px;}
+.page::-webkit-scrollbar-track{background:transparent;}
+.page::-webkit-scrollbar-thumb{background:var(--line2);}
+
+/* ============================================================
+   PAGE HOME — NOM & LIGNE DE DISCIPLINES
+   ============================================================ */
+#page-home{overflow:hidden;}
+/* Bloc nom positionné en bas à gauche */
+.home-name{position:absolute;bottom:10vh;left:52px;z-index:10;user-select:none;line-height:1;}
+.name-first{display:block;font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.42em;text-transform:uppercase;color:var(--warm);opacity:.7;margin-bottom:8px;}
+/* Nom de famille en grand — chaque lettre est un <span class="l"> pour l'effet glitch */
+.name-last{display:block;font-family:var(--display);font-weight:800;
+  font-size:clamp(40px,12vw,160px);letter-spacing:-.02em;line-height:.9;color:var(--text);
+  transition:color .3s;}
+.name-last:hover{color:var(--phosphor);}
+.name-last .l{display:inline-block;}
+/* Animation glitch appliquée lettre par lettre via JS */
+.name-last .l.glitch{animation:lhit .2s steps(1) forwards;}
+@keyframes lhit{
+  0%  {transform:translate(var(--gx),var(--gy)) skewX(var(--gsk));color:var(--phosphor);opacity:.5;}
+  40% {transform:translate(calc(var(--gx)*-.4),calc(var(--gy)*.3)) skewX(0deg);opacity:1;}
+  70% {transform:translate(calc(var(--gx)*.15),0);}
+  100%{transform:none;color:var(--text);opacity:1;}
+}
+/* Ligne de disciplines en bas de page (cachée sur mobile) */
+.disc-line{position:absolute;bottom:28px;left:0;right:0;z-index:10;
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px 22px;padding:0 32px;
+  font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim2);}
+.disc-sep{width:4px;height:4px;border-radius:50%;background:var(--violet);opacity:.6;}
+
+/* ============================================================
+   LAYOUT GÉNÉRAL DES PAGES INTÉRIEURES
+   .page-inner : padding qui évite la nav en haut
+   .ph : en-tête de section avec grand titre
+   ============================================================ */
+.page-inner{padding:110px 52px 80px;min-height:100vh;}
+.ph{margin-bottom:64px;padding-bottom:44px;border-bottom:1px solid var(--line2);}
+/* Grand titre en deux lignes : .out = contour transparent / .sol = texte plein */
+.ph-title{font-family:var(--display);font-weight:800;
+  font-size:clamp(36px,9vw,120px);line-height:.9;letter-spacing:-.02em;}
+.ph-title .out{color:transparent;-webkit-text-stroke:1px var(--phosphor);display:block;}
+.ph-title .sol{display:block;color:var(--text);}
+
+/* ============================================================
+   PAGE PROJETS — LÉGENDE, FILTRES & LISTE
+   ============================================================ */
+/* Légende des statuts (En cours / Récent) */
+.status-legend{display:flex;gap:28px;margin-bottom:32px;}
+.leg{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;}
+.leg-dot{width:6px;height:6px;border-radius:50%;}
+
+/* Système de filtres à deux niveaux :
+   - Niveau 1 (#rf) : Rôle (Composition / Performance / Installation)
+   - Niveau 2 (#cf) : Contexte (Théâtre / Film / Concert…)
+   Le filtrage actif est géré en JS via applyF() */
+.filters{margin-bottom:44px;display:flex;flex-direction:column;gap:0;}
+.fg{display:flex;align-items:center;gap:18px;padding:8px 0;}
+.fg-sub{display:flex;align-items:center;gap:18px;padding:8px 0 8px 20px;
+  border-left:1px solid var(--line2);margin-left:4px;}
+.fr{display:flex;flex-wrap:wrap;gap:7px;}
+/* Boutons de filtre — .on = filtre actif (fond violet) */
+.fbtn{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  border:1px solid var(--line2);background:none;padding:7px 16px;cursor:pointer;
+  color:var(--dim);transition:all .15s;}
+.fbtn-sub{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  border:1px solid var(--line2);background:none;padding:5px 12px;cursor:pointer;
+  color:var(--dim);transition:all .15s;}
+.fbtn:hover,.fbtn-sub:hover{border-color:var(--dim2);color:var(--text);}
+.fbtn.on{background:var(--violet2);color:var(--violet);border-color:var(--violet2);}
+.fbtn-sub.on{background:var(--violet2);color:var(--violet);border-color:var(--violet2);opacity:.8;}
+
+/* Liste de projets en grille 3 colonnes : année / contenu / statut
+   data-roles et data-ctx sont lus par JS pour le filtrage
+   .hidden masque la ligne filtrée */
+.proj-list{display:flex;flex-direction:column;}
+.proj-row{display:grid;grid-template-columns:80px 1fr 90px;gap:20px;align-items:start;
+  padding:18px 0;border-top:1px solid var(--line);transition:all .15s;cursor:default;}
+.proj-row:hover{padding-left:8px;background:rgba(255,255,255,.015);}
+.proj-row.hidden{display:none;}
+.py{font-family:var(--mono);font-size:12px;color:var(--dim);padding-top:4px;} /* Année */
+.ptitle{font-family:var(--display);font-size:22px;font-weight:700;margin-bottom:6px;line-height:1.1;}
+.psub{font-family:var(--mono);font-size:13px;color:var(--dim2);margin-bottom:10px;line-height:1.7;}
+.ptags{display:flex;flex-wrap:wrap;gap:5px;}
+/* Tags : .role = violet (rôle principal) / sans classe = gris (contexte) */
+.ptag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  padding:4px 11px;border:1px solid var(--line2);color:var(--dim);}
+.ptag.role{border-color:var(--violet2);color:var(--violet);background:rgba(157,143,255,.07);}
+/* Statut à droite : .s-on = orange (en cours) / .s-re = violet (récent) / .s-pa = caché (passé) */
+.pstatus{font-family:var(--mono);font-size:11px;text-align:right;padding-top:4px;}
+.s-on{color:var(--phosphor);}
+.s-re{color:var(--violet);}
+.s-pa{display:none;}
+
+/* ============================================================
+   PAGE RECHERCHE — INTRO, TEXTES, SLIDER VINYLE, FIL CONDUCTEUR
+   ============================================================ */
+/* Citation d'introduction avec bordure violette */
+.rech-intro{font-family:var(--mono);font-size:15px;line-height:2.1;max-width:580px;
+  margin-bottom:64px;color:var(--dim2);border-left:2px solid var(--violet2);
+  padding-left:28px;font-style:italic;}
+
+/* Mots-clés mis en valeur dans le texte */
+.rech-hl{font-family:var(--display);font-weight:800;font-size:1em;color:var(--violet);font-style:normal;}
+/* Bandeau image pleine largeur entre l'intro et le texte de recherche */
+.rech-banner{width:100%;aspect-ratio:16/5;overflow:hidden;margin-bottom:64px;}
+.rech-banner img{width:100%;height:100%;object-fit:cover;object-position:center;
+  display:block;filter:saturate(20%) sepia(45%) brightness(0.85);}
+/* Bloc texte principal de recherche */
+.rech-main{margin-bottom:64px;padding-bottom:48px;border-bottom:1px solid var(--line2);}
+.rech-main-label{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--warm);margin-bottom:28px;}
+.rech-main p{font-family:var(--mono);font-size:13px;line-height:2.1;color:var(--dim2);max-width:680px;}
+.rech-main p+p{margin-top:18px;}
+/* Bande d'images 3 colonnes — format portrait 3:4 */
+.rech-img-strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:48px 0 0;}
+/* Chaque image est dans un wrapper relatif pour le numéro en overlay */
+.rech-img{aspect-ratio:3/4;background:var(--line2);overflow:hidden;position:relative;}
+.rech-img img{width:100%;height:100%;object-fit:cover;opacity:.7;transition:opacity .2s;}
+.rech-img img:hover{opacity:1;}
+/* Numéro en bas à gauche de chaque image */
+.rech-img-num{position:absolute;bottom:10px;left:12px;
+  font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.14em;
+  color:var(--dim2);opacity:.7;pointer-events:none;}
+/* Ligne chronologique sous la frise */
+.rech-img-timeline{display:flex;align-items:center;gap:0;margin:12px 0 48px;height:20px;}
+.rech-img-tl-label{font-family:var(--mono);font-size:9px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--dim);white-space:nowrap;flex-shrink:0;}
+.rech-img-tl-line{flex:1;height:1px;background:linear-gradient(to right,var(--violet2),var(--dim));
+  margin:0 10px;position:relative;}
+/* Flèche à droite de la ligne */
+.rech-img-tl-line::after{content:'';position:absolute;right:-1px;top:50%;
+  transform:translateY(-50%);
+  border-top:4px solid transparent;border-bottom:4px solid transparent;
+  border-left:6px solid var(--dim);}
+/* Bloc "Fil conducteur" avec fond légèrement teinté */
+.rech-fil{margin-top:0;padding:40px;border-top:1px solid var(--line);
+  background:rgba(74,63,160,.06);border-left:2px solid var(--violet2);}
+.rech-fil-label{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--violet);margin-bottom:16px;}
+.rech-fil-title{font-family:var(--display);font-size:clamp(22px,3vw,36px);font-weight:800;
+  letter-spacing:-.02em;color:var(--text);margin-bottom:24px;line-height:1;}
+.rech-fil p{font-family:var(--mono);font-size:13px;line-height:2.1;color:var(--dim2);max-width:720px;}
+.rech-fil p+p{margin-top:14px;}
+
+/* Bloc slider platine vinyle */
+.rech-vinyle-block{margin-bottom:64px;padding-bottom:48px;border-bottom:1px solid var(--line2);}
+.rech-vinyle-title{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.18em;
+  text-transform:uppercase;margin-bottom:24px;color:var(--warm);text-align:center;}
+.rech-vinyle-desc{font-family:var(--mono);font-size:13px;line-height:2.1;color:var(--dim2);max-width:900px;margin-top:20px;text-align:center;margin:20px auto 0;}
+.rech-hl-ph{font-family:var(--display);font-weight:800;font-size:1em;color:var(--phosphor);font-style:normal;}
+
+/* ============================================================
+   COMPOSANT SLIDER (images — utilisé dans Recherche)
+   Le slider est piloté par rsGo() / rsMove() en JS.
+   La diapo centrale (.active) est à pleine opacité, les autres sont à 35%.
+   ============================================================ */
+.rech-slider{position:relative;overflow:hidden;margin:0 auto 16px;max-width:800px;}
+.rech-slider-track{display:flex;transition:transform .4s cubic-bezier(.4,0,.2,1);will-change:transform;}
+.rech-slide{flex:0 0 76%;margin:0 2%;transition:opacity .35s;opacity:.35;}
+.rech-slide.active{opacity:1;}
+.rech-slide-inner{aspect-ratio:4/3;overflow:hidden;}
+.rech-slide-inner img{width:100%;height:100%;object-fit:cover;display:block;}
+/* Boutons prev/next (flèches CSS) */
+.rech-slider-btn{position:absolute;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;z-index:2;padding:10px;opacity:.4;transition:opacity .15s;}
+.rech-slider-btn:hover{opacity:1;}
+.rech-slider-btn::after{content:'';display:block;width:14px;height:14px;
+  border-right:2px solid var(--text);border-top:2px solid var(--text);}
+.rech-slider-btn.prev{left:12px;}
+.rech-slider-btn.prev::after{transform:rotate(-135deg);}
+.rech-slider-btn.next{right:12px;}
+.rech-slider-btn.next::after{transform:rotate(45deg);}
+/* Points de pagination — .on = diapo active */
+.rech-slider-dots{display:flex;justify-content:center;gap:8px;margin-top:12px;}
+.rech-slider-dot{width:5px;height:5px;border-radius:50%;background:var(--line2);
+  cursor:pointer;transition:background .2s;}
+.rech-slider-dot.on{background:var(--violet);}
+
+/* ============================================================
+   PAGE COLLABORATIONS — BLOC EKLEKTO (accordéon) & GRILLE
+   ============================================================ */
+/* Bloc Eklekto avec bordure violette */
+.par-eklekto{margin-bottom:60px;padding:36px;border:1px solid var(--violet2);
+  background:rgba(74,63,160,.05);}
+.par-eklekto-head{display:flex;align-items:baseline;gap:20px;margin-bottom:20px;}
+.par-eklekto-title{font-family:var(--display);font-size:28px;font-weight:800;color:var(--violet);}
+.par-eklekto-sub{font-family:var(--mono);font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--violet2);}
+.par-eklekto-text{font-family:var(--mono);font-size:13px;line-height:2;
+  color:var(--dim2);margin-bottom:28px;}
+.par-ek-link{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--violet);text-decoration:none;border-bottom:1px solid var(--violet2);
+  padding-bottom:2px;display:inline-block;margin-top:24px;transition:border-color .2s;}
+.par-ek-link:hover{border-color:var(--violet);}
+
+/* En-tête cliquable de l'accordéon Eklekto.
+   .open sur .ek-toggle retourne le chevron. */
+.ek-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;}
+.ek-toggle-chevron{width:28px;height:28px;border:1px solid var(--violet2);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;transition:border-color .2s;}
+.ek-toggle-chevron::after{content:'';display:block;width:8px;height:8px;
+  border-right:1.5px solid var(--violet);border-bottom:1.5px solid var(--violet);
+  transform:rotate(45deg);margin-top:-4px;transition:transform .35s;}
+.ek-toggle.open .ek-toggle-chevron{border-color:var(--violet);}
+.ek-toggle.open .ek-toggle-chevron::after{transform:rotate(-135deg);margin-top:4px;}
+/* Contenu collapsible : max-height:0 fermé → 9999px ouvert */
+.ek-collapsible{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.4,0,.2,1);}
+.ek-collapsible.open{max-height:9999px;}
+
+/* Timeline Eklekto : grille année / événements */
+.ek-timeline{display:flex;flex-direction:column;}
+.ek-yr{display:grid;grid-template-columns:52px 1fr;gap:20px;padding:14px 0;
+  border-top:1px solid rgba(74,63,160,.18);}
+.ek-yr-label{font-family:var(--mono);font-size:11px;font-weight:700;
+  color:var(--violet2);padding-top:3px;letter-spacing:.08em;}
+.ek-events{display:flex;flex-direction:column;gap:12px;}
+.ek-ev-tag{display:inline-block;font-family:var(--mono);font-size:9px;
+  letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;
+  border:1px solid var(--violet2);color:var(--violet);margin-bottom:3px;}
+.ek-ev-title{font-family:var(--display);font-size:15px;font-weight:700;
+  color:var(--text);line-height:1.2;margin-bottom:2px;}
+.ek-ev-ctx{font-family:var(--mono);font-size:11px;color:var(--dim);line-height:1.6;}
+.ek-ev-pieces{font-family:var(--mono);font-size:11px;color:var(--violet2);
+  font-style:italic;margin-top:2px;line-height:1.6;}
+
+/* Titre de section et grille collaborations passées */
+.par-section-title{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--dim);margin-bottom:0;}
+.par-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));}
+.par-item{padding:22px 20px 22px 0;border-top:1px solid var(--line);}
+.par-name{font-family:var(--display);font-size:19px;font-weight:700;margin-bottom:5px;}
+.par-desc{font-family:var(--mono);font-size:12px;color:var(--dim);line-height:1.7;}
+
+/* Grille discographie */
+.disco-section-title{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--dim);margin:64px 0 24px;}
+.disco-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:24px;}
+.disco-item{display:flex;flex-direction:column;gap:10px;}
+.disco-cover{aspect-ratio:1/1;background:var(--line2);overflow:hidden;}
+.disco-cover img{width:100%;height:100%;object-fit:cover;display:block;opacity:.7;transition:opacity .2s;}
+.disco-cover img:hover{opacity:1;}
+.disco-info{display:flex;flex-direction:column;gap:3px;}
+.disco-title{font-family:var(--display);font-size:14px;font-weight:700;color:var(--text);line-height:1.2;}
+.disco-group{font-family:var(--mono);font-size:11px;color:var(--dim2);}
+.disco-meta{font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.06em;}
+
+/* ============================================================
+   PAGE CONTACT — PROCHAINE DATE & INFOS
+   ============================================================ */
+/* Logo Instagram canvas phosphore */
+.ct-ig-wrap{margin-bottom:52px;padding-bottom:44px;border-bottom:1px solid var(--line2);display:flex;justify-content:center;}
+.ct-ig-link{display:inline-block;opacity:.85;transition:opacity .2s;}
+.ct-ig-link:hover{opacity:1;}
+/* Layout contact : grand titre à gauche / infos à droite */
+.ct-wrap{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:20px;}
+.ct-l{padding-right:64px;border-right:1px solid var(--line);}
+/* Grand titre typographique : .out = contour / .col = violet */
+.ct-big{font-family:var(--display);font-weight:800;
+  font-size:clamp(24px,5.5vw,70px);line-height:1.05;letter-spacing:-.02em;}
+.ct-big .out{color:transparent;-webkit-text-stroke:1px var(--dim);}
+.ct-big .col{color:var(--violet);}
+.ct-r{padding-left:64px;display:flex;flex-direction:column;justify-content:center;}
+/* Boutons de téléchargement Bio / Photos de presse */
+.ct-dl-row{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap;}
+.ct-dl{display:inline-block;font-family:var(--mono);font-size:11px;
+  letter-spacing:.18em;text-transform:uppercase;padding:13px 26px;
+  border:1px solid var(--violet2);text-decoration:none;color:var(--violet);transition:all .15s;}
+.ct-dl:hover{background:var(--violet);border-color:var(--violet);color:var(--bg);}
+
+/* ============================================================
+   COMPOSANT MODALE
+   Overlay sombre + boîte centrée.
+   .open sur l'overlay rend la modale visible.
+   Cliquer sur l'overlay (hors de la boîte) la ferme.
+   ============================================================ */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:100;
+  background:rgba(7,5,0,.88);backdrop-filter:blur(6px);cursor:pointer;}
+.modal-overlay.open{display:flex;align-items:center;justify-content:center;}
+.modal-box{position:relative;width:min(860px,92vw);max-height:88vh;overflow-y:auto;
+  background:var(--bg);border:1px solid var(--line2);cursor:default;padding:48px 48px 40px;}
+.modal-box::-webkit-scrollbar{width:3px;}
+.modal-box::-webkit-scrollbar-thumb{background:var(--line2);}
+.modal-close{position:absolute;top:20px;right:24px;font-family:var(--mono);font-size:11px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--dim);background:none;
+  border:none;cursor:pointer;transition:color .15s;}
+.modal-close:hover{color:var(--text);}
+.modal-title{font-family:var(--display);font-size:clamp(20px,5vw,52px);font-weight:800;
+  letter-spacing:-.02em;line-height:.95;margin-bottom:6px;}
+.modal-meta{font-family:var(--mono);font-size:12px;color:var(--dim2);margin-bottom:32px;}
+.modal-imgs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:32px;}
+.modal-img{background:var(--line2);overflow:hidden;position:relative;}
+.modal-img img{width:100%;height:auto;display:block;opacity:.85;transition:opacity .2s;}
+.modal-img img:hover{opacity:1;}
+.modal-img.placeholder{aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--dim);text-transform:uppercase;}
+/* Conteneur image + crédit photo */
+.modal-img-wrap{display:flex;flex-direction:column;gap:5px;}
+.modal-img-credit{font-family:var(--mono);font-size:9px;letter-spacing:.08em;
+  color:var(--dim);text-align:right;display:flex;align-items:center;justify-content:flex-end;gap:3px;}
+.modal-img-credit .cr-sym{font-size:12px;line-height:1;font-family:var(--display);}
+.modal-desc{font-family:var(--mono);font-size:13px;line-height:2;color:var(--dim2);
+  border-left:2px solid var(--violet2);padding-left:24px;}
+/* Grille 3 albums (modale Lolomis) */
+.modal-albums{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:8px;}
+.modal-album{display:flex;flex-direction:column;gap:8px;text-decoration:none;}
+.modal-album-img{aspect-ratio:1/1;background:var(--line2);overflow:hidden;}
+.modal-album-img img{width:100%;height:100%;object-fit:cover;display:block;opacity:.8;transition:opacity .2s;}
+.modal-album:hover .modal-album-img img{opacity:1;}
+.modal-album-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--dim);text-align:center;transition:color .2s;}
+.modal-album:hover .modal-album-label{color:var(--violet);}
+.modal-album-yt{font-family:var(--mono);font-size:9px;color:var(--violet2);text-align:center;letter-spacing:.06em;}
+
+/* ============================================================
+   COMPOSANT CARROUSEL VIDÉO (utilisé dans modales Sillons & Topographies)
+   Même logique que le slider images mais avec des <video>.
+   Piloté par vcGo() / vcMove() en JS.
+   ============================================================ */
+.vid-carousel{position:relative;overflow:hidden;margin:0 auto 16px;max-width:800px;}
+.vid-carousel-track{display:flex;transition:transform .4s cubic-bezier(.4,0,.2,1);will-change:transform;}
+.vid-slide{flex:0 0 76%;margin:0 2%;transition:opacity .35s;opacity:.35;}
+.vid-slide.active{opacity:1;}
+.vid-slide-inner{aspect-ratio:4/3;overflow:hidden;background:var(--line2);}
+.vid-slide-inner.portrait{aspect-ratio:9/16;} /* Pour les vidéos verticales (Sillons) */
+.vid-slide-inner video{width:100%;height:100%;object-fit:cover;display:block;}
+.vid-carousel-btn{position:absolute;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;z-index:2;padding:10px;opacity:.4;transition:opacity .15s;}
+.vid-carousel-btn:hover{opacity:1;}
+.vid-carousel-btn::after{content:'';display:block;width:14px;height:14px;
+  border-right:2px solid var(--text);border-top:2px solid var(--text);}
+.vid-carousel-btn.prev{left:12px;}
+.vid-carousel-btn.prev::after{transform:rotate(-135deg);}
+.vid-carousel-btn.next{right:12px;}
+.vid-carousel-btn.next::after{transform:rotate(45deg);}
+.vid-carousel-dots{display:flex;justify-content:center;gap:8px;margin-top:12px;}
+.vid-carousel-dot{width:5px;height:5px;border-radius:50%;background:var(--line2);
+  cursor:pointer;transition:background .2s;}
+.vid-carousel-dot.on{background:var(--violet);}
+
+/* ============================================================
+   COMPOSANT LECTEUR AUDIO
+   Chaque piste = un .ap-track avec data-src="chemin/fichier.mp3".
+   Les boutons play/pause et la barre de progression sont gérés en JS.
+   ============================================================ */
+.audio-player{margin-top:28px;}
+.ap-track{display:flex;align-items:center;gap:16px;padding:14px 0;border-top:1px solid var(--line2);}
+.ap-track:last-child{border-bottom:1px solid var(--line2);}
+.ap-play{width:32px;height:32px;border:1px solid var(--violet2);background:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;}
+.ap-play:hover{background:var(--violet2);}
+.ap-play svg{fill:var(--violet);width:12px;height:12px;}
+.ap-play.playing{background:var(--violet2);}
+.ap-info{flex:1;min-width:0;}
+.ap-title{font-family:var(--display);font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.ap-duration{font-family:var(--mono);font-size:10px;color:var(--dim);}
+/* Barre de progression — .ap-bar-fill s'élargit via JS */
+.ap-bar{flex:1;height:2px;background:var(--line2);cursor:pointer;position:relative;}
+.ap-bar-fill{height:100%;background:var(--violet);width:0%;transition:width .1s linear;pointer-events:none;}
+
+/* ============================================================
+   RESPONSIVE — TABLETTE (< 900px)
+   ============================================================ */
+@media(max-width:900px){
+  nav{padding:20px 32px;}
+  .page-inner{padding:100px 32px 70px;}
+}
+
+/* ============================================================
+   RESPONSIVE — MOBILE (< 780px)
+   ============================================================ */
+@media(max-width:780px){
+  nav{padding:16px 20px;}
+  nav ul{gap:14px;}
+  .page-inner{padding:90px 20px 60px;}
+  .home-name{left:20px;}
+  .disc-line{padding:0 20px;} /* Adapter le padding au mobile */
+  .ct-wrap{grid-template-columns:1fr;} /* Contact passe en colonne unique */
+  .ct-l{padding-right:0;border-right:none;padding-bottom:32px;}
+  .ct-r{padding-left:0;padding-top:32px;}
+  .proj-row{grid-template-columns:64px 1fr;} /* Statut masqué sur mobile */
+  .pstatus{display:none;}
+  .fg{flex-direction:column;align-items:flex-start;gap:8px;}
+}
+
+/* ============================================================
+   RESPONSIVE — TRÈS ÉTROIT (< 520px) — nav sur 2 lignes
+   ============================================================ */
+@media(max-width:520px){
+  nav{flex-direction:column;align-items:flex-start;gap:8px;}
+  nav ul{flex-wrap:wrap;row-gap:8px;}
+  .page-inner{padding-top:112px;}
+}
+
+/* ============================================================
+   RESPONSIVE — TRÈS ÉTROIT (< 440px) — disc-line 3 lignes
+   ============================================================ */
+@media(max-width:440px){
+  .home-name{bottom:max(10vh,100px);}
+}
+
+/* ============================================================
+   RESPONSIVE — TRÈS PETITS ÉCRANS (< 360px)
+   ============================================================ */
+@media(max-width:360px){
+  nav{padding:14px 16px;}
+  nav ul{gap:8px;}
+  .page-inner{padding:100px 16px 48px;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="osc"></canvas>
+<div class="grain"></div>
+<div class="vignette"></div>
+
+<!-- ============================================================
+     NAVIGATION PRINCIPALE
+     go('id') charge la page correspondante (voir JS).
+     ============================================================ -->
+<nav>
+  <div class="nav-left">
+    <a class="nav-name" onclick="go('home')">L.D.</a>
+    <div class="lang-switcher">
+      <button class="fbtn-lang on" id="btn-fr" onclick="setLang('fr')">FR</button>
+      <button class="fbtn-lang"    id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+  <ul>
+    <li><a onclick="go('projets')"        data-i18n="nav_projets">Projets</a></li>
+    <li><a onclick="go('recherche')"      data-i18n="nav_recherche">Recherche</a></li>
+    <li><a onclick="go('collaborations')">Collaborations</a></li>
+    <li><a onclick="go('contact')">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ============================================================
+     PAGE : HOME
+     ============================================================ -->
+<div class="page active" id="page-home">
+  <div class="home-name">
+    <span class="name-first">Louis</span>
+    <!-- Chaque lettre est un <span class="l"> pour l'animation glitch -->
+    <span class="name-last" id="nameMain">
+      <span class="l">D</span><span class="l">e</span><span class="l">l</span><span class="l">i</span><span class="l">g</span><span class="l">n</span><span class="l">o</span><span class="l">n</span>
+    </span>
+  </div>
+  <!-- Ligne de disciplines en bas (cachée sur mobile) -->
+  <div class="disc-line">
+    <span>Composition</span><span class="disc-sep"></span>
+    <span>Performance</span><span class="disc-sep"></span>
+    <span data-i18n="disc_installation">Installation sonore</span><span class="disc-sep"></span>
+    <span data-i18n="disc_recherche">Recherche artistique</span>
+  </div>
+</div>
+
+<!-- ============================================================
+     PAGE : PROJETS
+     Chaque .proj-row a :
+       data-roles="composition performance"  → filtre rôle
+       data-ctx="theatre"                    → filtre contexte
+       onclick="openModalXxx()"              → ouvre la modale
+     ============================================================ -->
+<div class="page" id="page-projets">
+  <div class="page-inner">
+    <div class="ph">
+      <div class="ph-title" data-i18n-html="ph_projets"><span class="out">Pro</span><span class="sol">jets.</span></div>
+    </div>
+    <!-- Légende des statuts -->
+    <div class="status-legend">
+      <div class="leg"><span class="leg-dot" style="background:var(--phosphor)"></span><span style="color:var(--phosphor)" data-i18n="legend_on">En cours</span></div>
+      <div class="leg"><span class="leg-dot" style="background:var(--violet)"></span><span style="color:var(--violet)" data-i18n="legend_re">Récent</span></div>
+    </div>
+    <!-- Filtres niveau 1 (rôle) et niveau 2 (contexte) -->
+    <div class="filters">
+      <div class="fg">
+        <div class="fr" id="rf">
+          <button class="fbtn on" data-role="all" data-i18n="filter_all">Tout</button>
+          <button class="fbtn" data-role="composition">Composition</button>
+          <button class="fbtn" data-role="performance">Performance</button>
+          <button class="fbtn" data-role="installation">Installation</button>
+        </div>
+      </div>
+      <div class="fg-sub">
+        <div class="fr" id="cf">
+          <button class="fbtn-sub on" data-ctx="all" data-i18n="filter_all">Tout</button>
+          <button class="fbtn-sub" data-ctx="theatre" data-i18n="filter_theatre">Théâtre</button>
+          <button class="fbtn-sub" data-ctx="film">Film</button>
+          <button class="fbtn-sub" data-ctx="concert">Concert</button>
+          <button class="fbtn-sub" data-ctx="solo">Solo</button>
+          <!-- <button class="fbtn-sub" data-ctx="pedagogie">Pédagogie</button> -->
+        </div>
+      </div>
+    </div>
+    <!-- ── Liste des projets ──
+         Pour AJOUTER un projet : copier un .proj-row, adapter les data-attributes et le contenu.
+         Pour SUPPRIMER : retirer le .proj-row entier.
+         Statuts : s-on = En cours (orange) / s-re = Récent (violet) / s-pa = masqué -->
+    <div class="proj-list">
+
+      <div class="proj-row" data-roles="composition performance" data-ctx="solo" onclick="openModalVinyle()" style="cursor:pointer;">
+        <div class="py">2025</div>
+        <div>
+          <div class="ptitle">Projet Vinyle</div>
+          <div class="psub" data-i18n="psub_vinyle">Dispositif analogique électronique — électro expérimentale</div>
+          <div class="ptags"><span class="ptag role">Composition</span><span class="ptag role">Performance</span><span class="ptag">Solo</span></div>
+        </div>
+        <div class="pstatus s-on" data-i18n="status_on">● En cours</div>
+      </div>
+
+      <div class="proj-row" data-roles="composition performance" data-ctx="theatre" onclick="openModalABDM()" style="cursor:pointer;">
+        <div class="py">2025</div>
+        <div>
+          <div class="ptitle">Au bord du Monde</div>
+          <div class="psub" data-i18n="psub_abdm">Mise en scène Thierry Crozat — Cie les arTpenteurs</div>
+          <div class="ptags"><span class="ptag role">Composition</span><span class="ptag role">Performance</span><span class="ptag" data-i18n="tag_theatre">Théâtre</span></div>
+        </div>
+        <div class="pstatus s-re" data-i18n="status_re">● Récent</div>
+      </div>
+
+      <div class="proj-row" data-roles="composition" data-ctx="theatre" onclick="openModalFondue()" style="cursor:pointer;">
+        <div class="py">2025</div>
+        <div>
+          <div class="ptitle">Une fondue dans la neige</div>
+          <div class="psub" data-i18n="psub_fondue">Mise en scène Mehdi Duman — Cie Divisar</div>
+          <div class="ptags"><span class="ptag role">Composition</span><span class="ptag" data-i18n="tag_theatre">Théâtre</span></div>
+        </div>
+        <div class="pstatus s-re" data-i18n="status_re">● Récent</div>
+      </div>
+
+      <div class="proj-row" data-roles="composition" data-ctx="film" onclick="openModalBlindDate()" style="cursor:pointer;">
+        <div class="py">2025</div>
+        <div>
+          <div class="ptitle">Blind Date</div>
+          <div class="psub" data-i18n="psub_blinddate">Court-métrage réalisé par Mehdi Duman</div>
+          <div class="ptags"><span class="ptag role">Composition</span><span class="ptag">Film</span></div>
+        </div>
+        <div class="pstatus s-re" data-i18n="status_re">● Récent</div>
+      </div>
+
+      <div class="proj-row" data-roles="installation" data-ctx="concert" onclick="openModalSillons()" style="cursor:pointer;">
+        <div class="py">2026</div>
+        <div>
+          <div class="ptitle">Sillons de mémoires</div>
+          <div class="psub" data-i18n="psub_sillons">Platines vinyles modifiées — Opéra de Zurich</div>
+          <div class="ptags"><span class="ptag role" data-i18n="tag_installation">Installation sonore</span></div>
+        </div>
+        <div class="pstatus s-re" data-i18n="status_re">● Récent</div>
+      </div>
+
+      <div class="proj-row" data-roles="installation" data-ctx="concert" onclick="openModal()" style="cursor:pointer;">
+        <div class="py">2024</div>
+        <div>
+          <div class="ptitle">Topographies</div>
+          <div class="psub" data-i18n="psub_topo">Co-création avec Katharina Rosenberger — projet The Gap</div>
+          <div class="ptags"><span class="ptag role" data-i18n="tag_installation">Installation sonore</span></div>
+        </div>
+        <div class="pstatus s-re" data-i18n="status_re">● Récent</div>
+      </div>
+
+      <div class="proj-row" data-roles="composition performance" data-ctx="concert" onclick="openModalDasein()" style="cursor:pointer;">
+        <div class="py">2024</div>
+        <div>
+          <div class="ptitle">Dasein</div>
+          <div class="psub" data-i18n="psub_dasein">Quatuor — composition collective (trad., jazz, électro)</div>
+          <div class="ptags"><span class="ptag role">Composition</span><span class="ptag role">Performance</span><span class="ptag">Concert</span></div>
+        </div>
+        <div class="pstatus s-pa"></div>
+      </div>
+
+      <div class="proj-row" data-roles="composition performance" data-ctx="theatre" onclick="openModalF451()" style="cursor:pointer;">
+        <div class="py">2023</div>
+        <div>
+          <div class="ptitle">Fahrenheit 451</div>
+          <div class="psub" data-i18n="psub_f451">Mise en scène Laurent Annoni — Cie les arTpenteurs</div>
+          <div class="ptags"><span class="ptag role">Composition</span><span class="ptag role">Performance</span><span class="ptag" data-i18n="tag_theatre">Théâtre</span></div>
+        </div>
+        <div class="pstatus s-pa"></div>
+      </div>
+
+      <div class="proj-row" data-roles="composition" data-ctx="theatre" onclick="openModalRilke()" style="cursor:pointer;">
+        <div class="py">2022</div>
+        <div>
+          <div class="ptitle">Les quatre portraits de Rainer Maria Rilke</div>
+          <div class="psub" data-i18n="psub_rilke">Mise en scène Mehdi Duman — Cie Divisar</div>
+          <div class="ptags"><span class="ptag role">Composition</span><span class="ptag" data-i18n="tag_theatre">Théâtre</span></div>
+        </div>
+        <div class="pstatus s-pa"></div>
+      </div>
+
+      <div class="proj-row" data-roles="composition performance" data-ctx="solo">
+        <div class="py">2021</div>
+        <div>
+          <div class="ptitle">parole.es</div>
+          <div class="psub">Festival Fracanaüm · Cinéma Bellevaux, Lausanne</div>
+          <div class="ptags"><span class="ptag role">Composition</span><span class="ptag role">Performance</span><span class="ptag">Solo</span></div>
+        </div>
+        <div class="pstatus s-pa"></div>
+      </div>
+
+      <div class="proj-row" data-roles="composition performance" data-ctx="concert" onclick="openModalLolomis()" style="cursor:pointer;">
+        <div class="py">2020</div>
+        <div>
+          <div class="ptitle">Lolomis</div>
+          <div class="psub">Balkan Pulse · Boukane · Red Sonja</div>
+          <div class="ptags"><span class="ptag role">Composition</span><span class="ptag role">Performance</span><span class="ptag">Concert</span></div>
+        </div>
+        <div class="pstatus s-pa"></div>
+      </div>
+
+      <!-- PROJET MIS DE CÔTÉ — décommenter pour réactiver
+      <div class="proj-row" data-roles="composition" data-ctx="pedagogie">
+        <div class="py">2019</div>
+        <div>
+          <div class="ptitle">Bancroche</div>
+          <div class="psub">Pièce pour vibraphone 4 baguettes avec bande électronique — débutants</div>
+          <div class="ptags"><span class="ptag role">Composition</span><span class="ptag">Pédagogie</span></div>
+        </div>
+        <div class="pstatus s-pa"></div>
+      </div>
+      -->
+
+      <div class="proj-row" data-roles="composition performance" data-ctx="concert" onclick="openModalVybisto()" style="cursor:pointer;">
+        <div class="py">2018</div>
+        <div>
+          <div class="ptitle">Vybisto</div>
+          <div class="psub">Trio jazz/rock</div>
+          <div class="ptags"><span class="ptag role">Composition</span><span class="ptag role">Performance</span><span class="ptag">Concert</span></div>
+        </div>
+        <div class="pstatus s-pa"></div>
+      </div>
+
+      <div class="proj-row" data-roles="composition performance" data-ctx="theatre">
+        <div class="py">2014</div>
+        <div>
+          <div class="ptitle">Wie Der Wolf</div>
+          <div class="psub" data-i18n="psub_wdw">Mise en scène Lefki Papachrysostomou — Cie Alma Alba</div>
+          <div class="ptags"><span class="ptag role">Composition</span><span class="ptag role">Performance</span><span class="ptag" data-i18n="tag_theatre">Théâtre</span></div>
+        </div>
+        <div class="pstatus s-pa"></div>
+      </div>
+
+      <div class="proj-row" data-roles="composition performance" data-ctx="theatre">
+        <div class="py">2014</div>
+        <div>
+          <div class="ptitle">Précisément…</div>
+          <div class="psub" data-i18n="psub_pinter">Textes de Harold Pinter — mise en scène Sébastien Dupperet</div>
+          <div class="ptags"><span class="ptag role">Composition</span><span class="ptag role">Performance</span><span class="ptag" data-i18n="tag_theatre">Théâtre</span></div>
+        </div>
+        <div class="pstatus s-pa"></div>
+      </div>
+
+    </div><!-- fin .proj-list -->
+  </div>
+</div>
+
+<!-- ============================================================
+     PAGE : RECHERCHE
+     ============================================================ -->
+<div class="page" id="page-recherche">
+  <div class="page-inner">
+    <div class="ph">
+      <div class="ph-title" data-i18n-html="ph_recherche"><span class="out">Re</span><span class="sol">cherche.</span></div>
+    </div>
+    <!-- Citation d'introduction -->
+    <p class="rech-intro" data-i18n="rech_intro">Développer des formes performatives fondées sur l'instabilité des systèmes analogiques pour créer des expériences d'écoute singulières et éphémères.</p>
+    <!-- Bandeau paysage : image rognée haut/bas pour former un bandeau panoramique -->
+    <div class="rech-banner">
+      <img src="images/recherche_cassette.jpg" alt="Recherche cassette" loading="lazy">
+    </div>
+    <!-- Texte de recherche principal -->
+    <div class="rech-main">
+      <div class="rech-main-label" data-i18n="rech_main_label">Recherche en cours — instrument acoustique &amp; dispositif analogique</div>
+      <p data-i18n-html="rech_p1">Ma recherche s'appuie sur <span class="rech-hl">l'instabilité des systèmes analogiques</span>. Les micro-variations générées par les composants — tolérances, dérives, interactions électriques — produisent des comportements sonores imprévisibles. Ces phénomènes constituent le point de départ d'une <span class="rech-hl">écriture performative</span>.</p>
+      <p data-i18n-html="rech_p2">Le dispositif n'est pas un simple outil de production sonore : il agit comme un système actif dont le comportement influence la forme, la temporalité et l'intensité de la performance. L'instrument acoustique entre en dialogue avec cette instabilité, créant une tension constante <span class="rech-hl">entre maîtrise et imprévu</span>.</p>
+      <p data-i18n="rech_p3">Le·la musicien·ne intervient au sein de ce système instable en articulant comportement électronique et présence acoustique. La composition établit des règles d'interaction qui organisent leur confrontation et leur transformation réciproque.</p>
+      <p data-i18n-html="rech_p4">Pensés pour des <span class="rech-hl">contextes de proximité et d'immersion</span>, ces projets déplacent le cadre d'écoute habituel. La spatialisation, la distance, la circulation du son et la présence corporelle modifient la <span class="rech-hl">perception des micro-variations</span>. L'espace et le public participent ainsi activement à la construction de la situation sonore.</p>
+    </div>
+    <!-- Bande de 3 images portrait 3:4 — les images 9:16 sont rognées haut/bas par object-fit:cover -->
+    <!-- Numéros 01→03 : progression chronologique gauche (récent) → droite (prototype initial) -->
+    <div class="rech-img-strip">
+      <div class="rech-img">
+        <img src="images/recherche_raquette.jpg" alt="Recherche prototype initial" loading="lazy">
+        <span class="rech-img-num">01</span>
+      </div>
+      <div class="rech-img">
+        <img src="images/recherche_raquette2.jpg" alt="Recherche prototype 2" loading="lazy">
+        <span class="rech-img-num">02</span>
+      </div>
+      <div class="rech-img">
+        <img src="images/recherche_4069.jpg" alt="Recherche" loading="lazy">
+        <span class="rech-img-num">03</span>
+      </div>
+    </div>
+    <!-- Ligne directionnelle chronologique : prototype initial (gauche) → plus récent (droite) -->
+    <div class="rech-img-timeline">
+      <div class="rech-img-tl-line"></div>
+    </div>
+    <!-- Slider photos platine vinyle (8 slides, piloté par rsGo/rsMove) -->
+    <div class="rech-vinyle-block">
+      <div class="rech-vinyle-title" data-i18n="rech_vinyle_title">La platine vinyle comme instrument</div>
+      <div class="rech-slider" id="rs-vinyle">
+        <div class="rech-slider-track" id="rs-vinyle-track">
+          <div class="rech-slide active"><div class="rech-slide-inner"><img src="images/vinyle_volpe.jpg" alt="Platine vinyle" loading="lazy"></div></div>
+          <div class="rech-slide"><div class="rech-slide-inner"><img src="images/vinyle_dessin.jpg" alt="Platine vinyle dessin" loading="lazy"></div></div>
+          <div class="rech-slide"><div class="rech-slide-inner"><img src="images/vinyle1.jpg" alt="Platine vinyle 1" loading="lazy"></div></div>
+          <div class="rech-slide"><div class="rech-slide-inner"><img src="images/vinyle2.jpg" alt="Platine vinyle 2" loading="lazy"></div></div>
+          <div class="rech-slide"><div class="rech-slide-inner"><img src="images/vinyle_euclide.jpg" alt="Platine vinyle euclide" loading="lazy"></div></div>
+          <div class="rech-slide"><div class="rech-slide-inner"><img src="images/vinyle_wood.jpg" alt="Platine vinyle wood" loading="lazy"></div></div>
+          <div class="rech-slide"><div class="rech-slide-inner"><img src="images/vinyle_fourrure1.jpg" alt="Platine vinyle fourrure" loading="lazy"></div></div>
+          <div class="rech-slide"><div class="rech-slide-inner"><img src="images/vinyle_argile.jpg" alt="Platine vinyle argile" loading="lazy"></div></div>
+        </div>
+        <button class="rech-slider-btn prev" onclick="rsMove('vinyle',-1)"></button>
+        <button class="rech-slider-btn next" onclick="rsMove('vinyle',1)"></button>
+      </div>
+      <!-- Un point par slide — onclick="rsGo('vinyle', INDEX)" -->
+      <div class="rech-slider-dots" id="rs-vinyle-dots">
+        <div class="rech-slider-dot on" onclick="rsGo('vinyle',0)"></div>
+        <div class="rech-slider-dot"    onclick="rsGo('vinyle',1)"></div>
+        <div class="rech-slider-dot"    onclick="rsGo('vinyle',2)"></div>
+        <div class="rech-slider-dot"    onclick="rsGo('vinyle',3)"></div>
+        <div class="rech-slider-dot"    onclick="rsGo('vinyle',4)"></div>
+        <div class="rech-slider-dot"    onclick="rsGo('vinyle',5)"></div>
+        <div class="rech-slider-dot"    onclick="rsGo('vinyle',6)"></div>
+        <div class="rech-slider-dot"    onclick="rsGo('vinyle',7)"></div>
+      </div>
+      <p class="rech-vinyle-desc" data-i18n-html="rech_vinyle_desc">Un travail de lutherie autour de la modification de platines vinyles — détournement de fonction, altérations mécaniques et électroniques — pour produire des <span class="rech-hl-ph">textures sonores autonomes</span>.</p>
+    </div>
+    <!-- Bloc "Fil conducteur" -->
+    <div class="rech-fil">
+      <div class="rech-fil-label" data-i18n="rech_fil_label">Fil conducteur</div>
+      <div class="rech-fil-title" data-i18n="rech_fil_title">Improvisation &amp; écriture</div>
+      <p data-i18n="rech_fil_p1">La composition n'est pas envisagée comme une structure fermée mais comme un cadre d'action. Les partitions que je développe définissent des conditions d'émergence plutôt que des résultats : elles organisent les possibles sans les fixer.</p>
+      <p data-i18n="rech_fil_p2">L'aléatoire, l'imprévisible et la valorisation du moment présent en sont des piliers centraux. L'implication du·de la performeur·euse est constitutive de la pièce : ses décisions, ses réactions, son écoute transforment la forme en temps réel. La partition fixe des règles d'interaction, des zones de liberté, des seuils — elle génère une situation plutôt qu'elle ne prescrit un résultat.</p>
+      <p data-i18n="rech_fil_p3">Cette approche place le concert comme lieu de risque et de présence. Ce qui se passe ne peut être répété à l'identique : chaque performance est une occurrence unique, irréductible à sa notation.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     PAGE : COLLABORATIONS
+     ============================================================ -->
+<div class="page" id="page-collaborations">
+  <div class="page-inner">
+    <div class="ph">
+      <div class="ph-title"><span class="out">Colla</span><span class="sol">borations.</span></div>
+    </div>
+
+    <!-- Bloc accordéon Eklekto.
+         Cliquer sur l'en-tête (.ek-toggle) appelle ekToggle() en JS.
+         Pour ajouter une année : copier un bloc .ek-yr dans la timeline. -->
+    <div class="par-eklekto">
+      <div class="par-eklekto-head ek-toggle" id="ek-toggle" onclick="ekToggle()">
+        <div>
+          <span class="par-eklekto-title">Eklekto</span>
+          <span class="par-eklekto-sub" style="margin-left:20px;">Geneva Percussion Center · Genève</span>
+        </div>
+        <div class="ek-toggle-chevron"></div>
+      </div>
+      <div class="ek-collapsible" id="ek-collapsible">
+        <p class="par-eklekto-text" style="margin-top:20px;" data-i18n="ek_text">Membre d'Eklekto Geneva Percussion Center depuis 2016, j'ai participé à de nombreuses créations originales et concerts en Suisse et à l'international, travaillant avec un large spectre de compositeur·rices de la scène contemporaine actuelle.</p>
+        <!-- Timeline chronologique inversée -->
+        <div class="ek-timeline">
+
+          <div class="ek-yr">
+            <div class="ek-yr-label">2026</div>
+            <div class="ek-events">
+              <div class="ek-ev">
+                <div class="ek-ev-tag" data-i18n="ek_tag_inst_creation">Installation · Création</div>
+                <div class="ek-ev-title">Sillons de mémoires</div>
+                <div class="ek-ev-ctx" data-i18n-html="ek_ctx_2026_1">Fév. · Opéra de Zürich · Mise en scène Steven Whiting<br>Installation sonore : Louis Delignon &amp; Katharina Rosenberger</div>
+                <div class="ek-ev-pieces">Katharina Rosenberger, Dzovinar Mikirditsian</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ek-yr">
+            <div class="ek-yr-label">2025</div>
+            <div class="ek-events">
+              <div class="ek-ev">
+                <div class="ek-ev-tag" data-i18n="ek_tag_creation">Création</div>
+                <div class="ek-ev-title">Minutes sonores</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2025_1">Avr. · Festival Archipel, Genève</div>
+              </div>
+              <div class="ek-ev">
+                <div class="ek-ev-title">(f)LUX</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2025_2">Jan. · Festival Sonic Matter, Zürich</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ek-yr">
+            <div class="ek-yr-label">2024</div>
+            <div class="ek-events">
+              <div class="ek-ev">
+                <div class="ek-ev-title">Nik Bärtsch / Eklekto</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2024_1">Oct. · Victoria Hall, Genève</div>
+              </div>
+              <div class="ek-ev">
+                <div class="ek-ev-tag" data-i18n="ek_tag_creation">Création</div>
+                <div class="ek-ev-title">Projet Vinyle</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2024_2">Oct. · Concert 50ème anniversaire Eklekto, Genève</div>
+              </div>
+              <div class="ek-ev">
+                <div class="ek-ev-tag" data-i18n="ek_tag_creation">Création</div>
+                <div class="ek-ev-title">Nik Bärtsch / Eklekto</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2024_3">Sept. · Festival Label Suisse, Lausanne</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ek-yr">
+            <div class="ek-yr-label">2023</div>
+            <div class="ek-events">
+              <div class="ek-ev">
+                <div class="ek-ev-tag" data-i18n="ek_tag_creation">Création</div>
+                <div class="ek-ev-title">(f)FLUX</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2023_1">Nov. · Les 6 Toits, Genève</div>
+                <div class="ek-ev-pieces">Alexandre Babel, Mio Chareteau, Isandro Ojeda-Garcia</div>
+              </div>
+              <div class="ek-ev">
+                <div class="ek-ev-title">Eklekto Flash Shanghai</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2023_2">Oct. · Shangyin Opera House, Shanghai</div>
+                <div class="ek-ev-pieces">Justina Repečkaitė, Mio Chareteau, Alexandre Babel, Ryoji Ikeda</div>
+              </div>
+              <div class="ek-ev">
+                <div class="ek-ev-tag" data-i18n="ek_tag_creation">Création</div>
+                <div class="ek-ev-title">Film — Instrumentarium Eklekto</div>
+                <div class="ek-ev-ctx" data-i18n-html="ek_ctx_2023_3">Sept. · Les 6 Toits, Genève · <a href="https://www.youtube.com/watch?v=VMS7Pi9kEq8" target="_blank" style="color:var(--violet);text-decoration:none;">Voir le film ↗</a></div>
+              </div>
+              <div class="ek-ev">
+                <div class="ek-ev-title">Transit</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2023_4">Avr. · Festival Archipel, Genève</div>
+                <div class="ek-ev-pieces">Mio Chareteau, Michael Ranta</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ek-yr">
+            <div class="ek-yr-label">2022</div>
+            <div class="ek-events">
+              <div class="ek-ev">
+                <div class="ek-ev-tag" data-i18n="ek_tag_creation">Création</div>
+                <div class="ek-ev-title">Territoires — Grace/or/Echo</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2022_1">Sept. · Les 6 Toits, Genève</div>
+                <div class="ek-ev-pieces">Anthony Pateras</div>
+              </div>
+              <div class="ek-ev">
+                <div class="ek-ev-title">Inuksuit</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2022_2">Avr. · Les 6 Toits, Genève</div>
+                <div class="ek-ev-pieces">John Luther Adams</div>
+              </div>
+              <div class="ek-ev">
+                <div class="ek-ev-title">Eklekto @DeLink</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2022_3">Mai · Het Cenakel, Tilburg</div>
+                <div class="ek-ev-pieces">Mio Chareteau, Mark Barden, Ryoji Ikeda</div>
+              </div>
+              <div class="ek-ev">
+                <div class="ek-ev-tag" data-i18n="ek_tag_creation">Création</div>
+                <div class="ek-ev-title">Poésies</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2022_4">Avr. · Bâtiment Arcoop, Genève</div>
+                <div class="ek-ev-pieces">Pauline Oliveros, Denis Schuler</div>
+              </div>
+              <div class="ek-ev">
+                <div class="ek-ev-tag" data-i18n="ek_tag_creation">Création</div>
+                <div class="ek-ev-title">Les Sphères</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2022_5">Mars · ADC — Pavillon de la danse, Genève</div>
+                <div class="ek-ev-pieces">Stephen O'Malley, Kali Malone</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ek-yr">
+            <div class="ek-yr-label">2021</div>
+            <div class="ek-events">
+              <div class="ek-ev">
+                <div class="ek-ev-tag" data-i18n="ek_tag_creation">Création</div>
+                <div class="ek-ev-title">House Music</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2021_1">Nov. · Villa Bernasconi, Grand-Lancy</div>
+                <div class="ek-ev-pieces">Thomas Meadowcroft, Joke Lanz, Mayke Nas, Félicia Atkinson</div>
+              </div>
+              <div class="ek-ev">
+                <div class="ek-ev-title">Falten für Perkussion</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2021_2">Juil. · Festival Tonlagen, Albertinum, Dresden</div>
+                <div class="ek-ev-pieces">William Engelen</div>
+              </div>
+              <div class="ek-ev">
+                <div class="ek-ev-title">Drumming</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2021_3">Juil. · Scène Ella Fitzgerald, Genève</div>
+                <div class="ek-ev-pieces">Steve Reich</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ek-yr">
+            <div class="ek-yr-label">2020</div>
+            <div class="ek-events">
+              <div class="ek-ev">
+                <div class="ek-ev-tag" data-i18n="ek_tag_creation">Création</div>
+                <div class="ek-ev-title">Festival Les Amplitudes</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2020_1">Oct. · La Chaux-de-Fonds</div>
+                <div class="ek-ev-pieces">Pauline Oliveros, Philip Corner, Alexandre Babel, Alvin Lucier, Anthony Pateras</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ek-yr">
+            <div class="ek-yr-label">2019</div>
+            <div class="ek-events">
+              <div class="ek-ev">
+                <div class="ek-ev-title">Eklekto joue Eklekto</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2019_1">Nov. · Festival de la Bâtie, Alhambra, Genève</div>
+                <div class="ek-ev-pieces">Alexandre Babel</div>
+              </div>
+              <div class="ek-ev">
+                <div class="ek-ev-title">Insomnia and the Moon</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2019_2">Sept. · Biennale de Venise, Salon Suisse</div>
+                <div class="ek-ev-pieces">John Cage, Pauline Oliveros, James Tenney, Tom Johnson</div>
+              </div>
+              <div class="ek-ev">
+                <div class="ek-ev-tag" data-i18n="ek_tag_creation">Création</div>
+                <div class="ek-ev-title">TŘESK — Eklekto &amp; N.E.S.E.V.E.N</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2019_3">Mai · Wittener Tage für neue Kammermusik, Witten</div>
+                <div class="ek-ev-pieces">Ondrej Adamek, Mio Chareteau, Mayke Nas, Martin Smolka</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ek-yr">
+            <div class="ek-yr-label">2018</div>
+            <div class="ek-events">
+              <div class="ek-ev">
+                <div class="ek-ev-title">The Art of Sound</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2018_1">Déc. · IGNM, Zürich</div>
+                <div class="ek-ev-pieces">Mark Barden, Mio Chareteau, Alvin Lucier</div>
+              </div>
+              <div class="ek-ev">
+                <div class="ek-ev-title">Exil</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2018_2">Nov. · Musée de la Croix-Rouge, Genève</div>
+                <div class="ek-ev-pieces">Mio Chareteau</div>
+              </div>
+              <div class="ek-ev">
+                <div class="ek-ev-title">Ecce Robo — Eklekto &amp; Ensemble KNM Berlin</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2018_3">Mars · Festival Archipel, Alhambra, Genève</div>
+                <div class="ek-ev-pieces">Alberto Posadas, Martin Riches, Tom Johnson, Masahiro Miwa</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ek-yr">
+            <div class="ek-yr-label">2017</div>
+            <div class="ek-events">
+              <div class="ek-ev">
+                <div class="ek-ev-tag" data-i18n="ek_tag_creation">Création</div>
+                <div class="ek-ev-title">Discount Minimal</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2017_1">Nov. · Théâtre du Galpon, Genève</div>
+                <div class="ek-ev-pieces">Thomas Meadowcroft</div>
+              </div>
+              <div class="ek-ev">
+                <div class="ek-ev-title">Die Welt nach Tiepolo</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2017_2">Sept. · Radial System V, Berlin</div>
+                <div class="ek-ev-pieces">Georges Aperghis, Hugues Dufourt, Lars Peter Hagen</div>
+              </div>
+              <div class="ek-ev">
+                <div class="ek-ev-tag" data-i18n="ek_tag_creation">Création</div>
+                <div class="ek-ev-title">5+5</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2017_3">Avr. · Festival Archipel, Alhambra, Genève</div>
+                <div class="ek-ev-pieces">William Blank, Jürg Frey, Peter Ablinger, Ricardo Eizirik, Thomas Kessler</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ek-yr">
+            <div class="ek-yr-label">2016</div>
+            <div class="ek-events">
+              <div class="ek-ev">
+                <div class="ek-ev-title">Festival Les Athénéennes</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2016_1">Mai · Crypte de l'Athénée, Genève</div>
+                <div class="ek-ev-pieces">Thomas Meadowcroft, Claude Vivier, David Lang</div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- fin .ek-timeline -->
+        <a href="https://eklekto.ch" target="_blank" class="par-ek-link">eklekto.ch ↗</a>
+      </div><!-- fin .ek-collapsible -->
+    </div><!-- fin .par-eklekto -->
+
+    <!-- Grille collaborations passées (sans accordéon) -->
+    <div class="par-section-title" data-i18n="collab_section_title">Collaborations passées</div>
+    <div class="par-grid">
+      <div class="par-item"><div class="par-name"><a href="https://www.youtube.com/watch?v=W7nJzas8Cl8&list=PL3Nye1RuGb78TbojA8dcWFDFN4RwNJvYC" target="_blank" style="color:var(--text);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--violet)'" onmouseout="this.style.color='var(--text)'">Raaar</a></div><div class="par-desc" data-i18n="collab_desc_raaar">Trio d'improvisation libre</div></div>
+      <div class="par-item"><div class="par-name"><a href="https://www.youtube.com/watch?v=z4hJ-gTsscg&list=RDz4hJ-gTsscg&start_radio=1" target="_blank" style="color:var(--text);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--violet)'" onmouseout="this.style.color='var(--text)'">Los Biganos</a></div><div class="par-desc" data-i18n="collab_desc_biganos">Musique ancienne</div></div>
+      <div class="par-item"><div class="par-name"><a href="https://www.youtube.com/watch?v=qDKEoMfBnPQ&list=RDqDKEoMfBnPQ&start_radio=1" target="_blank" style="color:var(--text);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--violet)'" onmouseout="this.style.color='var(--text)'">Jonas &amp; le Chant des Roseaux</a></div><div class="par-desc" data-i18n="collab_desc_jonas">Rap et musique ancienne</div></div>
+      <div class="par-item"><div class="par-name">Michel Tirabosco &amp; Bella Terra</div><div class="par-desc" data-i18n="collab_desc_tirabosco">Musique du monde</div></div>
+      <div class="par-item"><div class="par-name">Hassan Abd Alrahman</div><div class="par-desc" data-i18n="collab_desc_hassan">Musique syrienne</div></div>
+      <div class="par-item"><div class="par-name">Ensemble Kaboul</div><div class="par-desc" data-i18n="collab_desc_kaboul">Musique afghane</div></div>
+      <div class="par-item"><div class="par-name">Inflammatur</div><div class="par-desc" data-i18n="collab_desc_inflammatur">Chanson francophone</div></div>
+      <div class="par-item"><div class="par-name">Minimal Gesture Trio</div><div class="par-desc" data-i18n="collab_desc_minimal">Musique contemporaine</div></div>
+      <div class="par-item"><div class="par-name">Cie Atrium</div><div class="par-desc" data-i18n="collab_desc_atrium">Théâtre musical, trio de percussion</div></div>
+      <div class="par-item"><div class="par-name">MoussaKintet</div><div class="par-desc" data-i18n="collab_desc_moussa">Musique Folk, néo-trad.</div></div>
+      <div class="par-item"><div class="par-name">Genève que Toi</div><div class="par-desc" data-i18n="collab_desc_geneve">Indescriptible</div></div>
+    </div>
+
+    <!-- Grille discographie.
+         Les items avec href sont des liens directs.
+         Les items onclick ouvrent une modale avec lecteur audio. -->
+    <div class="disco-section-title" data-i18n="disco_title">Discographie</div>
+    <div class="disco-grid">
+      <a class="disco-item" href="https://link.deezer.com/s/32E5IEg5aaWbyx0ewvMTq" target="_blank" style="text-decoration:none;">
+        <div class="disco-cover"><img src="images/lesmondesbar.jpg" alt="Jeu de rôles" loading="lazy"></div>
+        <div class="disco-info">
+          <div class="disco-title">Jeu de rôles</div>
+          <div class="disco-group">Les mondes baroques</div>
+          <div class="disco-meta">2026 · Paraty</div>
+        </div>
+      </a>
+      <a class="disco-item" href="https://www.youtube.com/watch?v=NsYVoNPHc20&list=PLN4shEjCz0TaxNihzpKibU8qQZWWYKee2&index=1" target="_blank" style="text-decoration:none;">
+        <div class="disco-cover"><img src="images/lolomis_redsonja.jpg" alt="Red Sonja" loading="lazy"></div>
+        <div class="disco-info">
+          <div class="disco-title">Red Sonja</div>
+          <div class="disco-group">Lolomis</div>
+          <div class="disco-meta">2020 · Buda musique</div>
+        </div>
+      </a>
+      <a class="disco-item" href="https://www.youtube.com/watch?v=-BlavuFgeXA&list=PL4c5eBtnzClYPOfIwHOpYThJJKRiY8blD" target="_blank" style="text-decoration:none;">
+        <div class="disco-cover"><img src="images/lolomis_boukane.jpg" alt="Boukane" loading="lazy"></div>
+        <div class="disco-info">
+          <div class="disco-title">Boukane</div>
+          <div class="disco-group">Lolomis</div>
+          <div class="disco-meta">2017 · Buda musique</div>
+        </div>
+      </a>
+      <a class="disco-item" href="https://www.youtube.com/watch?v=82Rg0vcSGMo&list=PL34hLaHsZ3wi4xh_6QnA3DYaYbQIHsl2N" target="_blank" style="text-decoration:none;">
+        <div class="disco-cover"><img src="images/lolomis_balkanpulse.jpg" alt="Balkan Pulse" loading="lazy"></div>
+        <div class="disco-info">
+          <div class="disco-title">Balkan Pulse</div>
+          <div class="disco-group">Lolomis</div>
+          <div class="disco-meta">2014 · Playa Sound</div>
+        </div>
+      </a>
+      <div class="disco-item" onclick="openModalMadarat()" style="cursor:pointer;">
+        <div class="disco-cover"><img src="images/madarat.jpg" alt="Mawarra Ajjoudran" loading="lazy"></div>
+        <div class="disco-info">
+          <div class="disco-title">Mawarra Ajjoudran</div>
+          <div class="disco-group">Madarat</div>
+          <div class="disco-meta">2012 · NC</div>
+        </div>
+      </div>
+      <div class="disco-item" onclick="openModalBiganos()" style="cursor:pointer;">
+        <div class="disco-cover"><img src="images/biganos.jpg" alt="Gitana" loading="lazy"></div>
+        <div class="disco-info">
+          <div class="disco-title">Gitana</div>
+          <div class="disco-group">Los Biganos</div>
+          <div class="disco-meta">2011 · Le Tourdion</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div><!-- fin page-collaborations -->
+
+<!-- ============================================================
+     PAGE : CONTACT
+     L'email et le téléphone sont injectés par JS (obfuscation).
+     Pour modifier : voir la section "EMAIL & PHONE" dans le JS.
+     ============================================================ -->
+<div class="page" id="page-contact">
+  <div class="page-inner">
+    <div class="ph">
+      <div class="ph-title"><span class="out">Con</span><span class="sol">tact.</span></div>
+    </div>
+    <!-- Logo Instagram animé (canvas phosphore) -->
+    <div class="ct-ig-wrap">
+      <a href="https://www.instagram.com/louis_delignon/" target="_blank" aria-label="Instagram" class="ct-ig-link">
+        <canvas id="ct-ig-canvas"></canvas>
+      </a>
+    </div>
+    <div class="ct-wrap">
+      <div class="ct-l">
+        <div class="ct-big" data-i18n-html="ct_big">
+          <span class="out">Commandes,</span><br>
+          <span class="out">collaborations</span><br>
+          <span class="col">&amp; projets.</span>
+        </div>
+      </div>
+      <div class="ct-r">
+        <!-- Liens de téléchargement — remplacer href="#" par le vrai chemin de fichier -->
+        <div class="ct-dl-row">
+          <a href="#" class="ct-dl" data-i18n="ct_bio">↓ Bio / Contact</a>
+          <a href="#" class="ct-dl" data-i18n="ct_press">↓ Photos de presse</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODALES — UNE PAR PROJET
+     Structure commune :
+       - .modal-overlay  → fond sombre (clic dessus = ferme)
+       - .modal-box      → boîte de contenu
+       - .modal-close    → bouton ✕
+       - image + lecteur audio (ap-track) OU carrousel vidéo (vid-carousel)
+     ============================================================ -->
+
+<!-- MODALE : Los Biganos -->
+<div class="modal-overlay" id="modal-biganos" onclick="closeModalBiganos(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModalBiganos()">✕ Fermer</button>
+    <div class="modal-title">Gitana</div>
+    <div class="modal-meta">2011 · Los Biganos · Le Tourdion</div>
+    <div class="modal-imgs" style="grid-template-columns:1fr;margin-bottom:0;max-width:320px;margin-left:auto;margin-right:auto;">
+      <div class="modal-img-wrap">
+        <div class="modal-img"><img src="images/biganos.jpg" alt="Gitana" loading="lazy"></div>
+      </div>
+    </div>
+    <div class="audio-player">
+      <div class="ap-track" data-src="audio/biganos_entradilla.mp3">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title">Entradilla</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
+      <div class="ap-track" data-src="audio/biganos_una.mp3">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title">A La Una</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
+      <div class="ap-track" data-src="audio/biganos_que.mp3">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title">O Que Ama Tan Garrida</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
+      <div class="ap-track" data-src="audio/biganos_siroco.mp3">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title">Siroco</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALE : Madarat -->
+<div class="modal-overlay" id="modal-madarat" onclick="closeModalMadarat(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModalMadarat()">✕ Fermer</button>
+    <div class="modal-title">Mawarra Ajjoudran</div>
+    <div class="modal-meta">2012 · Madarat</div>
+    <div class="modal-imgs" style="grid-template-columns:1fr;margin-bottom:0;max-width:320px;margin-left:auto;margin-right:auto;">
+      <div class="modal-img-wrap">
+        <div class="modal-img"><img src="images/madarat.jpg" alt="Mawarra Ajjoudran" loading="lazy"></div>
+      </div>
+    </div>
+    <div class="audio-player">
+      <div class="ap-track" data-src="audio/madarat_urban.mp3">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title">Urban Vibration Awarness</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
+      <div class="ap-track" data-src="audio/madarat_waer.mp3">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title">Waer</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
+      <div class="ap-track" data-src="audio/madarat_olivier.mp3">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title">La Veillée des Oliviers</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALE : Les quatre portraits de Rilke -->
+<div class="modal-overlay" id="modal-rilke" onclick="closeModalRilke(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModalRilke()">✕ Fermer</button>
+    <div class="modal-title">Les quatre portraits de Rainer Maria Rilke</div>
+    <div class="modal-meta" data-i18n="modal_meta_rilke">2022 · Mise en scène Mehdi Duman · Cie Divisar</div>
+    <div class="modal-imgs" style="grid-template-columns:1fr;margin-bottom:0;max-width:480px;margin-left:auto;margin-right:auto;">
+      <div class="modal-img-wrap">
+        <div class="modal-img"><img src="images/rilke.jpg" alt="Les quatre portraits de Rilke" loading="lazy"></div>
+      </div>
+    </div>
+    <div class="audio-player">
+      <div class="ap-track" data-src="audio/rilke_caverne.mp3">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title">Caverne épurée</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
+      <div class="ap-track" data-src="audio/rilke_acteiii.mp3">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title">Acte III</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALE : Fahrenheit 451 -->
+<div class="modal-overlay" id="modal-f451" onclick="closeModalF451(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModalF451()">✕ Fermer</button>
+    <div class="modal-title">Fahrenheit 451</div>
+    <div class="modal-meta" data-i18n="modal_meta_f451">2023 · Mise en scène Laurent Annoni · Cie les arTpenteurs</div>
+    <div class="modal-imgs" style="grid-template-columns:1fr;margin-bottom:0;">
+      <div class="modal-img-wrap">
+        <div class="modal-img"><img src="images/f451_fire.jpg" alt="Fahrenheit 451" loading="lazy"></div>
+        <span class="modal-img-credit"><span class="cr-sym">©</span> Alfons L Reiter</span>
+      </div>
+    </div>
+    <div class="audio-player">
+      <div class="ap-track" data-src="audio/f451_river.mp3">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title">Arpeggio River</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
+      <div class="ap-track" data-src="audio/f451_fireman.mp3">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title">Lost Fireman</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
+      <div class="ap-track" data-src="audio/f451_clarisse.mp3">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title">Theme Clarisse</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALE : Dasein (lien YouTube, pas de lecteur audio) -->
+<div class="modal-overlay" id="modal-dasein" onclick="closeModalDasein(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModalDasein()">✕ Fermer</button>
+    <div class="modal-title">Dasein</div>
+    <div class="modal-meta" data-i18n="modal_meta_dasein">2024 · Quatuor · Composition collective (trad., jazz, électro)</div>
+    <div class="modal-imgs" style="grid-template-columns:1fr;margin-bottom:0;">
+      <div class="modal-img-wrap">
+        <a href="https://www.youtube.com/watch?v=XX23ITRfbRw" target="_blank">
+          <div class="modal-img"><img src="images/dasein.jpg" alt="Dasein" loading="lazy"></div>
+        </a>
+        <span class="modal-img-credit" style="justify-content:center;" data-i18n="modal_meta_dasein_credit">↗ Voir le teaser</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALE : Vybisto (lien SoundCloud, pas de lecteur audio) -->
+<div class="modal-overlay" id="modal-vybisto" onclick="closeModalVybisto(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModalVybisto()">✕ Fermer</button>
+    <div class="modal-title">Vybisto</div>
+    <div class="modal-meta" data-i18n="modal_meta_vybisto">2017–2018 · Trio jazz/rock · Composition &amp; Performance</div>
+    <div class="modal-imgs" style="grid-template-columns:1fr;margin-bottom:0;">
+      <div class="modal-img-wrap">
+        <a href="https://soundcloud.com/user-272553173" target="_blank">
+          <div class="modal-img" style="max-width:320px;margin:0 auto;"><img src="images/vybisto.jpg" alt="Vybisto" loading="lazy"></div>
+        </a>
+        <span class="modal-img-credit" style="justify-content:center;" data-i18n="modal_meta_vybisto_credit">↗ Écouter sur SoundCloud</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALE : Lolomis (grille de 3 albums → liens YouTube) -->
+<div class="modal-overlay" id="modal-lolomis" onclick="closeModalLolomis(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModalLolomis()">✕ Fermer</button>
+    <div class="modal-title">Lolomis</div>
+    <div class="modal-meta">2020 · Composition &amp; Performance</div>
+    <div class="modal-albums">
+      <a class="modal-album" href="https://www.youtube.com/watch?v=82Rg0vcSGMo&list=PL34hLaHsZ3wi4xh_6QnA3DYaYbQIHsl2N" target="_blank">
+        <div class="modal-album-img"><img src="images/lolomis_balkanpulse.jpg" alt="Balkan Pulse" loading="lazy"></div>
+        <div class="modal-album-label">Balkan Pulse</div>
+        <div class="modal-album-yt">↗ YouTube</div>
+      </a>
+      <a class="modal-album" href="https://www.youtube.com/watch?v=-BlavuFgeXA&list=PL4c5eBtnzClYPOfIwHOpYThJJKRiY8blD" target="_blank">
+        <div class="modal-album-img"><img src="images/lolomis_boukane.jpg" alt="Boukane" loading="lazy"></div>
+        <div class="modal-album-label">Boukane</div>
+        <div class="modal-album-yt">↗ YouTube</div>
+      </a>
+      <a class="modal-album" href="https://www.youtube.com/watch?v=NsYVoNPHc20&list=PLN4shEjCz0TaxNihzpKibU8qQZWWYKee2&index=1" target="_blank">
+        <div class="modal-album-img"><img src="images/lolomis_redsonja.jpg" alt="Red Sonja" loading="lazy"></div>
+        <div class="modal-album-label">Red Sonja</div>
+        <div class="modal-album-yt">↗ YouTube</div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- MODALE : Sillons de mémoires (carrousel vidéo portrait) -->
+<div class="modal-overlay" id="modal-sillons" onclick="closeModalSillons(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModalSillons()">✕ Fermer</button>
+    <div class="modal-title">Sillons de mémoires</div>
+    <div class="modal-meta" data-i18n-html="modal_meta_sillons">2026 · Installation sonore · Opéra de Zürich · Mise en scène Steven Whiting<br>Louis Delignon &amp; Katharina Rosenberger</div>
+    <!-- Carrousel vidéo vertical (portrait 9/16) — piloté par vcGo('sillons', index) -->
+    <div class="vid-carousel" id="vc-sillons" style="max-width:340px;">
+      <div class="vid-carousel-track" id="vc-sillons-track">
+        <div class="vid-slide active"><div class="vid-slide-inner portrait">
+          <video src="videos/sillons_papier1.mp4" loop muted playsinline preload="none"></video>
+        </div></div>
+        <div class="vid-slide"><div class="vid-slide-inner portrait">
+          <video src="videos/sillons_papier2.mp4" loop muted playsinline preload="none"></video>
+        </div></div>
+        <div class="vid-slide"><div class="vid-slide-inner portrait">
+          <video src="videos/sillons_organique1.mp4" loop muted playsinline preload="none"></video>
+        </div></div>
+        <div class="vid-slide"><div class="vid-slide-inner portrait">
+          <video src="videos/sillons_sable1.mp4" loop muted playsinline preload="none"></video>
+        </div></div>
+      </div>
+      <button class="vid-carousel-btn prev" onclick="vcMove('sillons',-1)"></button>
+      <button class="vid-carousel-btn next" onclick="vcMove('sillons',1)"></button>
+    </div>
+    <div class="vid-carousel-dots" id="vc-sillons-dots">
+      <div class="vid-carousel-dot on" onclick="vcGo('sillons',0)"></div>
+      <div class="vid-carousel-dot"    onclick="vcGo('sillons',1)"></div>
+      <div class="vid-carousel-dot"    onclick="vcGo('sillons',2)"></div>
+      <div class="vid-carousel-dot"    onclick="vcGo('sillons',3)"></div>
+    </div>
+    <!-- À rédiger -->
+    <!-- 3 blocs dispositifs + contexte final -->
+    <div class="modal-desc" style="margin-top:28px;">
+
+      <div style="margin-bottom:28px;">
+        <div style="font-family:var(--display);font-size:13px;font-weight:700;
+          letter-spacing:.12em;text-transform:uppercase;color:var(--violet);
+          margin-bottom:10px;">Pen Turntable</div>
+        <p data-i18n="sillons_p1">Un feutre remplace l'aiguille de lecture, un disque en papier remplace le vinyle. Un micro capte le son ambiant et un système à bobine mobile traduit ce signal en mouvement mécanique : le feutre réagit à l'amplitude et à la fréquence du son, dessinant la forme d'onde sur le papier. Un moteur déplace progressivement le bras de l'extérieur vers l'intérieur — un enregistrement graphique du son en temps réel. Le disque de papier devient archive, mémoire visible de ce qui a été entendu.</p>
+      </div>
+
+      <div style="margin-bottom:28px;padding-top:28px;border-top:1px solid var(--line2);">
+        <div style="font-family:var(--display);font-size:13px;font-weight:700;
+          letter-spacing:.12em;text-transform:uppercase;color:var(--violet);
+          margin-bottom:10px;">Organic Turntable</div>
+        <p data-i18n="sillons_p2">Une platine modifiée dont les mouvements semblent autonomes : accélérations soudaines, changements de sens, saccades imprévisibles. Le disque posé dessus est un enregistrement d'une composition de Katharina Rosenberger, entendue plus tard dans l'opéra. La déformation mécanique altère la lecture de l'enregistrement — une mémoire qui se déforme avant d'être restituée.</p>
+      </div>
+
+      <div style="padding-top:28px;border-top:1px solid var(--line2);">
+        <div style="font-family:var(--display);font-size:13px;font-weight:700;
+          letter-spacing:.12em;text-transform:uppercase;color:var(--violet);
+          margin-bottom:10px;">Sand Turntable</div>
+        <p data-i18n="sillons_p3">Un disque de sable remplace le vinyle. Un micro placé à la position de l'aiguille plonge dans la matière et en restitue la texture sonore. La rotation de la platine est pilotée par un capteur qui suit en temps réel les pas des visiteurs autour du dispositif — leurs déplacements animent la platine, et le son du sable donne l'impression de marcher dedans. Un lien avec un aria du spectacle évoquant la migration dans le désert, dont le micro trace un sillon à chaque rotation.</p>
+      </div>
+
+      <!-- Contexte discret -->
+      <p style="margin-top:28px;padding-top:20px;border-top:1px solid var(--line2);
+        font-size:11px;color:var(--dim);letter-spacing:.04em;" data-i18n="sillons_ctx">
+        Installation sonore présentée dans le cadre de la performance Sillons de Mémoires, à l'Opéra de Zürich.
+      </p>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODALE : Blind Date -->
+<div class="modal-overlay" id="modal-blinddate" onclick="closeModalBlindDate(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModalBlindDate()">✕ Fermer</button>
+    <div class="modal-title">Blind Date</div>
+    <div class="modal-meta" data-i18n="modal_meta_blinddate">2025 · Court-métrage · Réalisation Mehdi Duman</div>
+    <div class="modal-imgs" style="grid-template-columns:1fr;margin-bottom:0;">
+      <div class="modal-img-wrap">
+        <div class="modal-img"><img src="images/blinddate.jpg" alt="Blind Date" loading="lazy"></div>
+      </div>
+    </div>
+    <!-- data-volume="0.7" réduit légèrement le volume pour ce projet -->
+    <div class="audio-player">
+      <div class="ap-track" data-src="audio/ouverture.mp3" data-volume="0.7">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title">Ouverture</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
+      <div class="ap-track" data-src="audio/dissociation.mp3" data-volume="0.7">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title">Dissociation</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
+      <div class="ap-track" data-src="audio/dream.mp3" data-volume="0.7">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title">Dream</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
+      <div class="ap-track" data-src="audio/chambre.mp3" data-volume="0.7">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title">Chambre à coucher</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALE : Une fondue dans la neige -->
+<div class="modal-overlay" id="modal-fondue" onclick="closeModalFondue(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModalFondue()">✕ Fermer</button>
+    <div class="modal-title">Une fondue dans la neige</div>
+    <div class="modal-meta" data-i18n="modal_meta_fondue">2025 · Mise en scène Mehdi Duman · Cie Divisar</div>
+    <div class="modal-imgs" style="grid-template-columns:1fr;margin-bottom:0;">
+      <div class="modal-img-wrap">
+        <div class="modal-img"><img src="images/fondue.jpg" alt="Une fondue dans la neige" loading="lazy"></div>
+        <span class="modal-img-credit"><span class="cr-sym">©</span> G.Maillot_point-of-views.ch</span>
+      </div>
+    </div>
+    <div class="audio-player">
+      <div class="ap-track" data-src="audio/etrange_long.mp3">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title">Étrange</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
+      <div class="ap-track" data-src="audio/ascension.mp3">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title">Ascension</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
+      <div class="ap-track" data-src="audio/daumal.mp3">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title">Daumal sauvage</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALE : Au bord du Monde -->
+<div class="modal-overlay" id="modal-abdm" onclick="closeModalABDM(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModalABDM()">✕ Fermer</button>
+    <div class="modal-title">Au bord du Monde</div>
+    <div class="modal-meta" data-i18n="modal_meta_abdm">2025 · Mise en scène Thierry Crozat · Cie les arTpenteurs</div>
+    <div class="modal-imgs" style="grid-template-columns:1fr;margin-bottom:0;">
+      <div class="modal-img-wrap">
+        <div class="modal-img"><img src="images/abdm1.jpg" alt="Au bord du Monde" loading="lazy"></div>
+      </div>
+    </div>
+    <div class="audio-player">
+      <div class="ap-track" data-src="audio/macadam.mp3">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title">La mort de Macadam</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
+      <div class="ap-track" data-src="audio/clown.mp3">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title">La danse du clown</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
+      <div class="ap-track" data-src="audio/nomansland.mp3">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title">Le No Man's Land se réveille</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALE : Projet Vinyle -->
+<div class="modal-overlay" id="modal-vinyle" onclick="closeModalVinyle(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModalVinyle()">✕ Fermer</button>
+    <div class="modal-title">Projet Vinyle</div>
+    <div class="modal-meta" data-i18n="modal_meta_vinyle">2025 · Dispositif analogique électronique · En cours</div>
+    <div class="modal-imgs" style="grid-template-columns:1fr;margin-bottom:0;">
+      <div class="modal-img-wrap">
+        <div class="modal-img"><img src="images/projetvinyle_volpe.jpg" alt="Projet Vinyle" loading="lazy"></div>
+        <span class="modal-img-credit"><span class="cr-sym">©</span> volpe_photography</span>
+      </div>
+    </div>
+    <div class="audio-player">
+      <div class="ap-track" data-src="audio/pv_1.mp3">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title">Extrait 1</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
+      <div class="ap-track" data-src="audio/pv_2.mp3">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title">Extrait 2</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
+      <div class="ap-track" data-src="audio/pv_3.mp3">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title">Extrait 3</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALE : Topographies (carrousel vidéo paysage) -->
+<div class="modal-overlay" id="modal-topographies" onclick="closeModal(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕ Fermer</button>
+    <div class="modal-title">Topographies</div>
+    <div class="modal-meta" data-i18n="modal_meta_topo">2024 · Co-création avec Katharina Rosenberger · Projet The Gap</div>
+    <!-- Carrousel vidéo horizontal (4/3) — piloté par vcGo('topo', index) -->
+    <div class="vid-carousel" id="vc-topo">
+      <div class="vid-carousel-track" id="vc-topo-track">
+        <div class="vid-slide active"><div class="vid-slide-inner">
+          <video src="videos/topographies_fourrure.mp4" loop muted playsinline preload="none"></video>
+        </div></div>
+        <div class="vid-slide"><div class="vid-slide-inner">
+          <video src="videos/topographies_fourrure2.mp4" loop muted playsinline preload="none"></video>
+        </div></div>
+        <div class="vid-slide"><div class="vid-slide-inner">
+          <video src="videos/topographies_argile.mp4" loop muted playsinline preload="none"></video>
+        </div></div>
+        <div class="vid-slide"><div class="vid-slide-inner">
+          <video src="videos/topographies_dents.mp4" loop muted playsinline preload="none"></video>
+        </div></div>
+      </div>
+      <button class="vid-carousel-btn prev" onclick="vcMove('topo',-1)"></button>
+      <button class="vid-carousel-btn next" onclick="vcMove('topo',1)"></button>
+    </div>
+    <div class="vid-carousel-dots" id="vc-topo-dots">
+      <div class="vid-carousel-dot on" onclick="vcGo('topo',0)"></div>
+      <div class="vid-carousel-dot"    onclick="vcGo('topo',1)"></div>
+      <div class="vid-carousel-dot"    onclick="vcGo('topo',2)"></div>
+      <div class="vid-carousel-dot"    onclick="vcGo('topo',3)"></div>
+    </div>
+    <div class="modal-desc" style="margin-top:24px;">
+      <!-- Phrase d'accroche — plus visible -->
+      <p style="font-size:15px;color:var(--text);margin-bottom:24px;" data-i18n="topo_p0">Trois platines vinyles modifiées, chacune associée à une matière différente : fourrure, argile gravée, terre mêlée de dents.</p>
+      <!-- Corps du texte -->
+      <p data-i18n="topo_p1">Ces matières fonctionnent comme des supports de mémoire — à la manière d'un disque, elles contiennent des traces lisibles. L'aiguille de lecture a été remplacée par un micro électret qui capte directement la texture en contact, rendant audible ce que chaque matière a enregistré. La vitesse de rotation est variable, permettant de ralentir jusqu'au presque-immobile.</p>
+      <p style="margin-top:24px;" data-i18n="topo_p2">Le son produit est diffusé simultanément sur une enceinte et sur un casque. L'enceinte crée une présence sonore dans l'espace ; le casque donne accès au détail — le grain de la matière, ses irrégularités, son relief sonore. Le dispositif est interactif : le public peut modifier la vitesse, changer de disque, manipuler la matière.</p>
+      <!-- Contexte — séparé et discret -->
+      <p style="margin-top:28px;padding-top:20px;border-top:1px solid var(--line2);font-size:11px;color:var(--dim);letter-spacing:.04em;" data-i18n="topo_ctx">Installation présentée dans le cadre du projet The Gap, co-création avec Katharina Rosenberger.</p>
+    </div>
+  </div>
+</div>
+
+
+<script>
+/* ============================================================
+   MODALES — OUVERTURE / FERMETURE
+   modalOpen(id)  : affiche l'overlay, bloque le scroll du body
+   modalClose(id, e, withAudio, vcId) :
+     - e           : événement click (vérifie si clic sur overlay ou bouton ✕)
+     - withAudio   : arrête le lecteur audio si true
+     - vcId        : arrête les vidéos du carrousel si fourni
+   ============================================================ */
+function modalOpen(id){
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function modalClose(id,e,withAudio,vcId){
+  const el=document.getElementById(id);
+  if(!e||e.target===el||e.currentTarget.tagName==='BUTTON'){
+    if(withAudio) apStopAll();
+    if(vcId) vcStopAll(vcId);
+    el.classList.remove('open');
+    document.body.style.overflow='';
+  }
+}
+/* Raccourcis par modale */
+function openModalBiganos()   { modalOpen('modal-biganos'); }
+function closeModalBiganos(e) { modalClose('modal-biganos',   e, true); }
+function openModalMadarat()   { modalOpen('modal-madarat'); }
+function closeModalMadarat(e) { modalClose('modal-madarat',   e, true); }
+function openModalRilke()     { modalOpen('modal-rilke'); }
+function closeModalRilke(e)   { modalClose('modal-rilke',     e, true); }
+function openModalF451()      { modalOpen('modal-f451'); }
+function closeModalF451(e)    { modalClose('modal-f451',      e, true); }
+function openModalDasein()    { modalOpen('modal-dasein'); }
+function closeModalDasein(e)  { modalClose('modal-dasein',    e, false); }
+function openModalVybisto()   { modalOpen('modal-vybisto'); }
+function closeModalVybisto(e) { modalClose('modal-vybisto',   e, false); }
+function openModalLolomis()   { modalOpen('modal-lolomis'); }
+function closeModalLolomis(e) { modalClose('modal-lolomis',   e, false); }
+function openModalSillons()   { modalOpen('modal-sillons'); setTimeout(()=>vcGo('sillons',0),50); }
+function closeModalSillons(e) { modalClose('modal-sillons',   e, false, 'sillons'); }
+function openModalBlindDate() { modalOpen('modal-blinddate'); }
+function closeModalBlindDate(e){ modalClose('modal-blinddate', e, true); }
+function openModalFondue()    { modalOpen('modal-fondue'); }
+function closeModalFondue(e)  { modalClose('modal-fondue',    e, true); }
+function openModalABDM()      { modalOpen('modal-abdm'); }
+function closeModalABDM(e)    { modalClose('modal-abdm',      e, true); }
+function openModalVinyle()    { modalOpen('modal-vinyle'); }
+function closeModalVinyle(e)  { modalClose('modal-vinyle',    e, true); }
+function openModal()          { modalOpen('modal-topographies'); setTimeout(()=>vcGo('topo',0),50); }
+function closeModal(e)        { modalClose('modal-topographies', e, false, 'topo'); }
+
+/* ============================================================
+   CARROUSEL VIDÉO
+   vcState stocke l'index courant de chaque carrousel (par id).
+   vcGo(id, index) : déplace le track via translateX et joue/pause les vidéos.
+   vcMove(id, dir) : avance ou recule d'un cran (+1 / -1), boucle infinie.
+   vcStopAll(id)   : met tout en pause et remet à zéro (à la fermeture de modale).
+   ============================================================ */
+const vcState={};
+function vcGo(id,idx){
+  const container=document.getElementById('vc-'+id);
+  const track=document.getElementById('vc-'+id+'-track');
+  if(!container||!track) return;
+  const slides=track.querySelectorAll('.vid-slide');
+  const dots=document.querySelectorAll('#vc-'+id+'-dots .vid-carousel-dot');
+  const total=slides.length;
+  idx=((idx%total)+total)%total; // boucle circulaire
+  vcState[id]=idx;
+  /* Calcul du décalage pour centrer la diapo active */
+  const cW=container.offsetWidth;
+  const slideW=cW*0.76;
+  const slotW=cW*0.80;
+  const offset=(cW-slideW)/2-idx*slotW;
+  track.style.transform=`translateX(${offset}px)`;
+  slides.forEach((s,i)=>{
+    s.classList.toggle('active',i===idx);
+    const v=s.querySelector('video');
+    if(v){ i===idx ? v.play() : v.pause(); }
+  });
+  dots.forEach((d,i)=>d.classList.toggle('on',i===idx));
+}
+function vcMove(id,dir){ vcGo(id,(vcState[id]||0)+dir); }
+function vcStopAll(id){
+  const track=document.getElementById('vc-'+id+'-track');
+  if(track) track.querySelectorAll('video').forEach(v=>{v.pause();v.currentTime=0;});
+}
+/* Recalcul des positions au redimensionnement de la fenêtre */
+window.addEventListener('resize',()=>{
+  Object.keys(vcState).forEach(id=>{
+    const el=document.getElementById('vc-'+id);
+    if(el) vcGo(id,vcState[id]||0);
+  });
+});
+
+/* ============================================================
+   LECTEUR AUDIO
+   Un seul fichier joue à la fois (apAudio / apCurrent).
+   apToggle(btn)  : play/pause de la piste liée au bouton
+   apSeek(bar, e) : repositionne la tête de lecture via clic sur la barre
+   apStopAll()    : arrête tout et remet les boutons en état initial
+   apFmt(s)       : formate des secondes en "m:ss"
+   ============================================================ */
+let apCurrent=null, apAudio=null;
+function apToggle(btn){
+  const track=btn.closest('.ap-track'), src=track.dataset.src;
+  /* Si la même piste est déjà chargée : toggle play/pause */
+  if(apAudio && apCurrent===track){
+    if(apAudio.paused){
+      apAudio.play();
+      btn.classList.add('playing');
+      btn.querySelector('polygon').setAttribute('points','2,2 5,2 5,8 2,8 M6,2 9,2 9,8 6,8');
+    } else {
+      apAudio.pause();
+      btn.classList.remove('playing');
+      btn.querySelector('polygon').setAttribute('points','2,1 9,5 2,9');
+    }
+    return;
+  }
+  /* Nouvelle piste : arrêter l'ancienne et lancer la nouvelle */
+  apStopAll();
+  apAudio=new Audio(src);
+  apAudio.preload='none';
+  apAudio.volume=parseFloat(track.dataset.volume)||1; // volume optionnel via data-volume
+  apCurrent=track;
+  const fill=track.querySelector('.ap-bar-fill'), dur=track.querySelector('.ap-duration');
+  apAudio.addEventListener('loadedmetadata',()=>{ dur.textContent=apFmt(apAudio.duration); });
+  apAudio.addEventListener('timeupdate',()=>{
+    fill.style.width=(apAudio.currentTime/apAudio.duration*100)+'%';
+    dur.textContent=apFmt(apAudio.currentTime)+' / '+apFmt(apAudio.duration);
+  });
+  apAudio.addEventListener('ended',()=>{
+    btn.classList.remove('playing');
+    btn.querySelector('polygon').setAttribute('points','2,1 9,5 2,9');
+    fill.style.width='0%';
+  });
+  apAudio.play();
+  btn.classList.add('playing');
+  btn.querySelector('polygon').setAttribute('points','2,2 5,2 5,8 2,8 M6,2 9,2 9,8 6,8');
+}
+function apSeek(bar,e){
+  if(!apAudio||!apCurrent||apCurrent!==bar.closest('.ap-track')) return;
+  const r=bar.getBoundingClientRect();
+  apAudio.currentTime=(e.clientX-r.left)/r.width*apAudio.duration;
+}
+function apStopAll(){
+  if(apAudio){ apAudio.pause(); apAudio=null; }
+  document.querySelectorAll('.ap-play').forEach(b=>{
+    b.classList.remove('playing');
+    b.querySelector('polygon').setAttribute('points','2,1 9,5 2,9');
+  });
+  document.querySelectorAll('.ap-bar-fill').forEach(f=>f.style.width='0%');
+  apCurrent=null;
+}
+function apFmt(s){
+  if(isNaN(s)) return '--:--';
+  const m=Math.floor(s/60), sec=Math.floor(s%60);
+  return m+':'+(sec<10?'0':'')+sec;
+}
+
+/* ============================================================
+   ACCORDÉON EKLEKTO
+   Toggle des classes .open sur le header et le contenu.
+   ============================================================ */
+function ekToggle(){
+  document.getElementById('ek-toggle').classList.toggle('open');
+  document.getElementById('ek-collapsible').classList.toggle('open');
+}
+
+/* ============================================================
+   NAVIGATION ENTRE PAGES
+   go(id) : affiche la page #page-{id} et marque le lien nav actif.
+   ============================================================ */
+function go(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('nav ul a').forEach(a=>a.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  const lnk=document.querySelector(`nav ul a[onclick="go('${id}')"]`);
+  if(lnk) lnk.classList.add('active');
+  /* Remettre au sommet les pages scrollables */
+  if(id!=='home') document.getElementById('page-'+id).scrollTop=0;
+  /* Recalculer la position du slider vinyle à l'ouverture de Recherche */
+  if(id==='recherche') setTimeout(()=>rsGo('vinyle',rsState['vinyle']||0),50);
+}
+
+/* ============================================================
+   FILTRES PROJETS
+   aRole et aCtx mémorisent les filtres actifs.
+   applyF() parcourt tous les .proj-row et applique .hidden si besoin.
+   Règle spéciale : le filtre Installation ignore le filtre de contexte.
+   ============================================================ */
+let aRole='all', aCtx='all';
+function applyF(){
+  document.querySelectorAll('.proj-row').forEach(r=>{
+    const roles=r.dataset.roles||'', ctx=r.dataset.ctx||'';
+    const isInstallation=roles.split(' ').every(r=>r==='installation');
+    const okRole=aRole==='all'||roles.split(' ').includes(aRole);
+    const okCtx=aCtx==='all'||ctx===aCtx;
+    /* Les installations ne s'affichent que si on sélectionne explicitement
+       "Installation" ou "Tout" sans filtre de contexte actif */
+    const okInstallation=!isInstallation||aRole==='installation'||(aRole==='all'&&aCtx==='all');
+    r.classList.toggle('hidden',!(okRole&&okCtx&&okInstallation));
+  });
+}
+document.querySelectorAll('#rf .fbtn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('#rf .fbtn').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); aRole=b.dataset.role; applyF();
+}));
+document.querySelectorAll('#cf .fbtn-sub').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('#cf .fbtn-sub').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); aCtx=b.dataset.ctx; applyF();
+}));
+
+/* ============================================================
+   SLIDER IMAGES (page Recherche — platines vinyles)
+   Même logique que vcGo mais sans gestion vidéo.
+   rsState stocke l'index courant par slider.
+   ============================================================ */
+const rsState={};
+function rsGo(id,idx){
+  const container=document.getElementById('rs-'+id);
+  const track=document.getElementById('rs-'+id+'-track');
+  if(!container||!track) return;
+  const slides=track.querySelectorAll('.rech-slide');
+  const dots=document.querySelectorAll('#rs-'+id+'-dots .rech-slider-dot');
+  const total=slides.length;
+  idx=((idx%total)+total)%total;
+  rsState[id]=idx;
+  const cW=container.offsetWidth;
+  const slideW=cW*0.76;
+  const slotW=cW*0.80;
+  const offset=(cW-slideW)/2-idx*slotW;
+  track.style.transform=`translateX(${offset}px)`;
+  slides.forEach((s,i)=>s.classList.toggle('active',i===idx));
+  dots.forEach((d,i)=>d.classList.toggle('on',i===idx));
+}
+function rsMove(id,dir){ rsGo(id,(rsState[id]||0)+dir); }
+window.addEventListener('resize',()=>{ Object.keys(rsState).forEach(id=>rsGo(id,rsState[id])); });
+
+
+/* ============================================================
+   INSTAGRAM CANVAS (logo phosphore animé — page Contact)
+   Même style que l'oscilloscope : couleur ambre, glow, flicker CRT.
+   S'anime uniquement quand la page Contact est active.
+   ============================================================ */
+(function(){
+  const igCanvas=document.getElementById('ct-ig-canvas');
+  if(!igCanvas) return;
+  const igCtx=igCanvas.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  const S=200;
+  igCanvas.width=S*dpr; igCanvas.height=S*dpr;
+  igCanvas.style.width=S+'px'; igCanvas.style.height=S+'px';
+  igCtx.scale(dpr,dpr);
+
+  function drawIgShape(c){
+    const m=S*.13, r=S*.22, cx=S/2, cy=S/2;
+    /* Carré arrondi */
+    c.beginPath();
+    c.moveTo(m+r,m);
+    c.lineTo(S-m-r,m); c.arcTo(S-m,m,S-m,m+r,r);
+    c.lineTo(S-m,S-m-r); c.arcTo(S-m,S-m,S-m-r,S-m,r);
+    c.lineTo(m+r,S-m); c.arcTo(m,S-m,m,S-m-r,r);
+    c.lineTo(m,m+r); c.arcTo(m,m,m+r,m,r);
+    c.closePath(); c.stroke();
+    /* Cercle central */
+    c.beginPath(); c.arc(cx,cy,S*.175,0,Math.PI*2); c.stroke();
+    /* Point top-right */
+    c.beginPath(); c.arc(S*.67,S*.33,S*.048,0,Math.PI*2);
+    c.fillStyle=c.strokeStyle; c.fill();
+  }
+
+  let igT=0;
+  function drawIg(){
+    igT++;
+    const onContact=document.getElementById('page-contact').classList.contains('active');
+    igCtx.clearRect(0,0,S,S);
+    if(onContact){
+      const flicker=0.80+0.20*Math.sin(igT*.065)*(0.5+0.5*Math.sin(igT*.028));
+      const col=`rgba(192,96,16,${flicker})`;
+      igCtx.strokeStyle=col; igCtx.shadowColor=col; igCtx.lineCap='round';
+      /* Passe glow */
+      igCtx.lineWidth=2.8; igCtx.shadowBlur=20; drawIgShape(igCtx);
+      /* Passe nette */
+      igCtx.lineWidth=1.6; igCtx.shadowBlur=5; drawIgShape(igCtx);
+    }
+    requestAnimationFrame(drawIg);
+  }
+  drawIg();
+})();
+
+/* ============================================================
+   OSCILLOSCOPE (canvas animé — page Home uniquement)
+
+   Architecture :
+   - channels[]  : 2 canaux superposés (un principal + un fantôme)
+   - spikes[]    : perturbations ponctuelles ajoutées aléatoirement
+   - triggerGlitch() : anime aléatoirement des lettres du nom (effet CRT)
+
+   Fonctions mathématiques :
+   - hash(n)  : bruit pseudo-aléatoire déterministe
+   - noise(x) : interpolation smooth entre hash(i) et hash(i+1)
+   - fbm(x)   : fractal Brownian motion (5 octaves de bruit)
+
+   Boucle d'animation :
+   - draw() tourne en continu via requestAnimationFrame
+   - Si on n'est pas sur Home, le canvas est simplement vidé
+   ============================================================ */
+const canvas=document.getElementById('osc');
+const ctx=canvas.getContext('2d');
+const letters=document.querySelectorAll('#nameMain .l');
+let W, H, t=0, spikes=[], nextSpike=0;
+
+function resize(){ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; }
+resize();
+window.addEventListener('resize',resize);
+
+function hash(n){ let x=Math.sin(n)*43758.5453; return x-Math.floor(x); }
+function noise(x){ const i=Math.floor(x),f=x-i,u=f*f*(3-2*f); return hash(i)*(1-u)+hash(i+1)*u; }
+function fbm(x){ let v=0,a=0.5,fr=1; for(let i=0;i<5;i++){v+=a*(noise(x*fr)*2-1);a*=.5;fr*=2.1;} return v; }
+
+function addSpike(){
+  spikes.push({t, x:.1+Math.random()*.8, amp:.25+Math.random()*.4,
+    decay:.01+Math.random()*.02, width:.01+Math.random()*.04, polarity:Math.random()>.5?1:-1});
+}
+function scheduleSpike(){
+  const burst=Math.random()<0.18;
+  nextSpike=t+(burst ? 8+Math.random()*18 : 30+Math.random()*85);
+}
+
+function triggerGlitch(){
+  const intense=Math.random()<0.25;
+  const count=intense ? 4+Math.floor(Math.random()*4) : 1+Math.floor(Math.random()*3);
+  const maxD=intense?24:10;
+  [...Array(letters.length).keys()].sort(()=>Math.random()-.5).slice(0,count).forEach(i=>{
+    const el=letters[i];
+    el.classList.remove('glitch');
+    el.style.setProperty('--gx',(Math.random()*maxD-maxD/2).toFixed(1)+'px');
+    el.style.setProperty('--gy',(Math.random()*(intense?14:6)-(intense?7:3)).toFixed(1)+'px');
+    el.style.setProperty('--gsk',(Math.random()*(intense?18:8)-(intense?9:4)).toFixed(1)+'deg');
+    void el.offsetWidth; // force reflow pour relancer l'animation CSS
+    el.classList.add('glitch');
+    el.addEventListener('animationend',()=>el.classList.remove('glitch'),{once:true});
+  });
+}
+
+/* Définition des deux canaux de la courbe oscilloscopique.
+   Chaque canal a ses propres harmoniques (amps/freqs), bruit et opacité. */
+const channels=[
+  { freq:.0009, amps:[.52,.18,.09], freqs:[1,2.03,3.97], noise:.06, nf:.008, alpha:.7,  lw:1.4, blur:7, col:'192,96,16' },
+  { freq:.0004, amps:[.04],         freqs:[1],            noise:.20, nf:.06,  alpha:.15, lw:.5,  blur:2, col:'160,80,12' },
+];
+
+function drawWave(ch,CY,HALF){
+  ctx.beginPath();
+  const phase=t*ch.freq*Math.PI*2;
+  for(let px=0;px<=W;px+=2){
+    const xn=px/W;
+    let y=0;
+    /* Somme des harmoniques */
+    for(let i=0;i<ch.amps.length;i++) y+=ch.amps[i]*Math.sin(ch.freqs[i]*xn*Math.PI*6+phase*ch.freqs[i]);
+    /* Bruit fractal */
+    y+=ch.noise*fbm(xn*W*ch.nf+t*.003);
+    /* Contribution de chaque spike (transitoire) */
+    for(const s of spikes){
+      const age=(t-s.t)*s.decay, dist=Math.abs(xn-s.x);
+      const env=Math.exp(-age*4)*Math.exp(-dist*dist/(s.width*s.width));
+      y+=s.polarity*s.amp*env*(1-age*.5)*(1+Math.sin(age*18)*Math.exp(-age*3)*.3);
+    }
+    px===0 ? ctx.moveTo(px,CY+y*HALF) : ctx.lineTo(px,CY+y*HALF);
+  }
+  ctx.stroke();
+}
+
+scheduleSpike();
+
+function draw(){
+  t++;
+  const onHome=document.getElementById('page-home').classList.contains('active');
+  if(onHome){
+    /* Persistance légère (trail) via fillRect semi-transparent */
+    ctx.fillStyle='rgba(7,5,0,0.22)';
+    ctx.fillRect(0,0,W,H);
+    /* Déclenchement périodique de spikes et glitch */
+    if(t>=nextSpike){ addSpike(); triggerGlitch(); scheduleSpike(); }
+    spikes=spikes.filter(s=>(t-s.t)*s.decay<1.8); // nettoyage des spikes éteints
+    const CY=H/2, HALF=H*.22;
+    /* Dessin de chaque canal en deux passes : glow puis trait net */
+    for(const ch of channels){
+      ctx.save(); ctx.shadowBlur=ch.blur*3; ctx.shadowColor=`rgba(${ch.col},.3)`;
+      ctx.lineWidth=ch.lw; ctx.strokeStyle=`rgba(${ch.col},${ch.alpha*.3})`; drawWave(ch,CY,HALF); ctx.restore();
+      ctx.save(); ctx.shadowBlur=ch.blur; ctx.shadowColor=`rgba(${ch.col},.7)`;
+      ctx.lineWidth=ch.lw; ctx.strokeStyle=`rgba(${ch.col},${ch.alpha})`;   drawWave(ch,CY,HALF); ctx.restore();
+    }
+  } else {
+    ctx.clearRect(0,0,W,H); // canvas vide sur les autres pages
+  }
+  requestAnimationFrame(draw);
+}
+draw();
+
+/* ============================================================
+   SYSTÈME BILINGUE
+   ============================================================ */
+
+let currentLang = 'fr';
+
+const LANG = {
+  fr: {
+    // Navigation
+    nav_projets:  'Projets',
+    nav_recherche: 'Recherche',
+
+    // Home — ligne disciplines
+    disc_installation: 'Installation sonore',
+    disc_recherche:    'Recherche artistique',
+
+    // Page Projets — en-tête & filtres
+    ph_projets:   '<span class="out">Pro</span><span class="sol">jets.</span>',
+    legend_on:    'En cours',
+    legend_re:    'Récent',
+    filter_all:   'Tout',
+    filter_theatre: 'Théâtre',
+    status_on:    '● En cours',
+    status_re:    '● Récent',
+    tag_theatre:  'Théâtre',
+    tag_installation: 'Installation sonore',
+
+    // Page Projets — sous-titres projets
+    psub_vinyle:   'Dispositif analogique électronique — électro expérimentale',
+    psub_abdm:     'Mise en scène Thierry Crozat — Cie les arTpenteurs',
+    psub_fondue:   'Mise en scène Mehdi Duman — Cie Divisar',
+    psub_blinddate:'Court-métrage réalisé par Mehdi Duman',
+    psub_sillons:  'Platines vinyles modifiées — Opéra de Zurich',
+    psub_topo:     'Co-création avec Katharina Rosenberger — projet The Gap',
+    psub_dasein:   'Quatuor — composition collective (trad., jazz, électro)',
+    psub_f451:     'Mise en scène Laurent Annoni — Cie les arTpenteurs',
+    psub_rilke:    'Mise en scène Mehdi Duman — Cie Divisar',
+    psub_wdw:      'Mise en scène Lefki Papachrysostomou — Cie Alma Alba',
+    psub_pinter:   'Textes de Harold Pinter — mise en scène Sébastien Dupperet',
+
+    // Page Recherche
+    ph_recherche: '<span class="out">Re</span><span class="sol">cherche.</span>',
+    rech_intro: 'Développer des formes performatives fondées sur l\'instabilité des systèmes analogiques pour créer des expériences d\'écoute singulières et éphémères.',
+    rech_main_label: 'Recherche en cours — instrument acoustique & dispositif analogique',
+    rech_p1: 'Ma recherche s\'appuie sur <span class="rech-hl">l\'instabilité des systèmes analogiques</span>. Les micro-variations générées par les composants — tolérances, dérives, interactions électriques — produisent des comportements sonores imprévisibles. Ces phénomènes constituent le point de départ d\'une <span class="rech-hl">écriture performative</span>.',
+    rech_p2: 'Le dispositif n\'est pas un simple outil de production sonore : il agit comme un système actif dont le comportement influence la forme, la temporalité et l\'intensité de la performance. L\'instrument acoustique entre en dialogue avec cette instabilité, créant une tension constante <span class="rech-hl">entre maîtrise et imprévu</span>.',
+    rech_p3: 'Le·la musicien·ne intervient au sein de ce système instable en articulant comportement électronique et présence acoustique. La composition établit des règles d\'interaction qui organisent leur confrontation et leur transformation réciproque.',
+    rech_p4: 'Pensés pour des <span class="rech-hl">contextes de proximité et d\'immersion</span>, ces projets déplacent le cadre d\'écoute habituel. La spatialisation, la distance, la circulation du son et la présence corporelle modifient la <span class="rech-hl">perception des micro-variations</span>. L\'espace et le public participent ainsi activement à la construction de la situation sonore.',
+    rech_vinyle_title: 'La platine vinyle comme instrument',
+    rech_vinyle_desc:  'Un travail de lutherie autour de la modification de platines vinyles — détournement de fonction, altérations mécaniques et électroniques — pour produire des <span class="rech-hl-ph">textures sonores autonomes</span>.',
+    rech_fil_label: 'Fil conducteur',
+    rech_fil_title: 'Improvisation & écriture',
+    rech_fil_p1: 'La composition n\'est pas envisagée comme une structure fermée mais comme un cadre d\'action. Les partitions que je développe définissent des conditions d\'émergence plutôt que des résultats : elles organisent les possibles sans les fixer.',
+    rech_fil_p2: 'L\'aléatoire, l\'imprévisible et la valorisation du moment présent en sont des piliers centraux. L\'implication du·de la performeur·euse est constitutive de la pièce : ses décisions, ses réactions, son écoute transforment la forme en temps réel. La partition fixe des règles d\'interaction, des zones de liberté, des seuils — elle génère une situation plutôt qu\'elle ne prescrit un résultat.',
+    rech_fil_p3: 'Cette approche place le concert comme lieu de risque et de présence. Ce qui se passe ne peut être répété à l\'identique : chaque performance est une occurrence unique, irréductible à sa notation.',
+
+    // Collaborations — Eklekto
+    ek_text: 'Membre d\'Eklekto Geneva Percussion Center depuis 2016, j\'ai participé à de nombreuses créations originales et concerts en Suisse et à l\'international, travaillant avec un large spectre de compositeur·rices de la scène contemporaine actuelle.',
+    ek_tag_creation:      'Création',
+    ek_tag_inst_creation: 'Installation · Création',
+
+    // Eklekto — contextes
+    ek_ctx_2026_1: 'Fév. · Opéra de Zürich · Mise en scène Steven Whiting<br>Installation sonore : Louis Delignon &amp; Katharina Rosenberger',
+    ek_ctx_2025_1: 'Avr. · Festival Archipel, Genève',
+    ek_ctx_2025_2: 'Jan. · Festival Sonic Matter, Zürich',
+    ek_ctx_2024_1: 'Oct. · Victoria Hall, Genève',
+    ek_ctx_2024_2: 'Oct. · Concert 50ème anniversaire Eklekto, Genève',
+    ek_ctx_2024_3: 'Sept. · Festival Label Suisse, Lausanne',
+    ek_ctx_2023_1: 'Nov. · Les 6 Toits, Genève',
+    ek_ctx_2023_2: 'Oct. · Shangyin Opera House, Shanghai',
+    ek_ctx_2023_3: 'Sept. · Les 6 Toits, Genève · <a href="https://www.youtube.com/watch?v=VMS7Pi9kEq8" target="_blank" style="color:var(--violet);text-decoration:none;">Voir le film ↗</a>',
+    ek_ctx_2023_4: 'Avr. · Festival Archipel, Genève',
+    ek_ctx_2022_1: 'Sept. · Les 6 Toits, Genève',
+    ek_ctx_2022_2: 'Avr. · Les 6 Toits, Genève',
+    ek_ctx_2022_3: 'Mai · Het Cenakel, Tilburg',
+    ek_ctx_2022_4: 'Avr. · Bâtiment Arcoop, Genève',
+    ek_ctx_2022_5: 'Mars · ADC — Pavillon de la danse, Genève',
+    ek_ctx_2021_1: 'Nov. · Villa Bernasconi, Grand-Lancy',
+    ek_ctx_2021_2: 'Juil. · Festival Tonlagen, Albertinum, Dresden',
+    ek_ctx_2021_3: 'Juil. · Scène Ella Fitzgerald, Genève',
+    ek_ctx_2020_1: 'Oct. · La Chaux-de-Fonds',
+    ek_ctx_2019_1: 'Nov. · Festival de la Bâtie, Alhambra, Genève',
+    ek_ctx_2019_2: 'Sept. · Biennale de Venise, Salon Suisse',
+    ek_ctx_2019_3: 'Mai · Wittener Tage für neue Kammermusik, Witten',
+    ek_ctx_2018_1: 'Déc. · IGNM, Zürich',
+    ek_ctx_2018_2: 'Nov. · Musée de la Croix-Rouge, Genève',
+    ek_ctx_2018_3: 'Mars · Festival Archipel, Alhambra, Genève',
+    ek_ctx_2017_1: 'Nov. · Théâtre du Galpon, Genève',
+    ek_ctx_2017_2: 'Sept. · Radial System V, Berlin',
+    ek_ctx_2017_3: 'Avr. · Festival Archipel, Alhambra, Genève',
+    ek_ctx_2016_1: 'Mai · Crypte de l\'Athénée, Genève',
+
+    // Collaborations passées
+    collab_section_title: 'Collaborations passées',
+    collab_desc_raaar:      'Trio d\'improvisation libre',
+    collab_desc_biganos:    'Musique ancienne',
+    collab_desc_jonas:      'Rap et musique ancienne',
+    collab_desc_tirabosco:  'Musique du monde',
+    collab_desc_hassan:     'Musique syrienne',
+    collab_desc_kaboul:     'Musique afghane',
+    collab_desc_inflammatur:'Chanson francophone',
+    collab_desc_minimal:    'Musique contemporaine',
+    collab_desc_atrium:     'Théâtre musical, trio de percussion',
+    collab_desc_moussa:     'Musique Folk, néo-trad.',
+    collab_desc_geneve:     'Indescriptible',
+    disco_title: 'Discographie',
+
+    // Contact
+    ct_big: '<span class="out">Commandes,</span><br><span class="out">collaborations</span><br><span class="col">&amp; projets.</span>',
+    ct_bio:   '↓ Bio / Contact',
+    ct_press: '↓ Photos de presse',
+
+    // Modales — bouton fermer
+    modal_close: '✕ Fermer',
+
+    // Modales — métadonnées
+    modal_meta_rilke:          '2022 · Mise en scène Mehdi Duman · Cie Divisar',
+    modal_meta_f451:           '2023 · Mise en scène Laurent Annoni · Cie les arTpenteurs',
+    modal_meta_dasein:         '2024 · Quatuor · Composition collective (trad., jazz, électro)',
+    modal_meta_dasein_credit:  '↗ Voir le teaser',
+    modal_meta_vybisto:        '2017–2018 · Trio jazz/rock · Composition & Performance',
+    modal_meta_vybisto_credit: '↗ Écouter sur SoundCloud',
+    modal_meta_sillons:        '2026 · Installation sonore · Opéra de Zürich · Mise en scène Steven Whiting<br>Louis Delignon &amp; Katharina Rosenberger',
+    modal_meta_blinddate:      '2025 · Court-métrage · Réalisation Mehdi Duman',
+    modal_meta_fondue:         '2025 · Mise en scène Mehdi Duman · Cie Divisar',
+    modal_meta_abdm:           '2025 · Mise en scène Thierry Crozat · Cie les arTpenteurs',
+    modal_meta_vinyle:         '2025 · Dispositif analogique électronique · En cours',
+    modal_meta_topo:           '2024 · Co-création avec Katharina Rosenberger · Projet The Gap',
+
+    // Modale Sillons — descriptions
+    sillons_p1: 'Un feutre remplace l\'aiguille de lecture, un disque en papier remplace le vinyle. Un micro capte le son ambiant et un système à bobine mobile traduit ce signal en mouvement mécanique : le feutre réagit à l\'amplitude et à la fréquence du son, dessinant la forme d\'onde sur le papier. Un moteur déplace progressivement le bras de l\'extérieur vers l\'intérieur — un enregistrement graphique du son en temps réel. Le disque de papier devient archive, mémoire visible de ce qui a été entendu.',
+    sillons_p2: 'Une platine modifiée dont les mouvements semblent autonomes : accélérations soudaines, changements de sens, saccades imprévisibles. Le disque posé dessus est un enregistrement d\'une composition de Katharina Rosenberger, entendue plus tard dans l\'opéra. La déformation mécanique altère la lecture de l\'enregistrement — une mémoire qui se déforme avant d\'être restituée.',
+    sillons_p3: 'Un disque de sable remplace le vinyle. Un micro placé à la position de l\'aiguille plonge dans la matière et en restitue la texture sonore. La rotation de la platine est pilotée par un capteur qui suit en temps réel les pas des visiteurs autour du dispositif — leurs déplacements animent la platine, et le son du sable donne l\'impression de marcher dedans. Un lien avec un aria du spectacle évoquant la migration dans le désert, dont le micro trace un sillon à chaque rotation.',
+    sillons_ctx: 'Installation sonore présentée dans le cadre de la performance Sillons de Mémoires, à l\'Opéra de Zürich.',
+
+    // Modale Topographies — descriptions
+    topo_p0:  'Trois platines vinyles modifiées, chacune associée à une matière différente : fourrure, argile gravée, terre mêlée de dents.',
+    topo_p1:  'Ces matières fonctionnent comme des supports de mémoire — à la manière d\'un disque, elles contiennent des traces lisibles. L\'aiguille de lecture a été remplacée par un micro électret qui capte directement la texture en contact, rendant audible ce que chaque matière a enregistré. La vitesse de rotation est variable, permettant de ralentir jusqu\'au presque-immobile.',
+    topo_p2:  'Le son produit est diffusé simultanément sur une enceinte et sur un casque. L\'enceinte crée une présence sonore dans l\'espace ; le casque donne accès au détail — le grain de la matière, ses irrégularités, son relief sonore. Le dispositif est interactif : le public peut modifier la vitesse, changer de disque, manipuler la matière.',
+    topo_ctx: 'Installation présentée dans le cadre du projet The Gap, co-création avec Katharina Rosenberger.',
+  },
+
+  en: {
+    nav_projets:  'Projects',
+    nav_recherche: 'Research',
+
+    disc_installation: 'Sound installation',
+    disc_recherche:    'Artistic research',
+
+    ph_projets:   '<span class="out">Pro</span><span class="sol">jects.</span>',
+    legend_on:    'Ongoing',
+    legend_re:    'Recent',
+    filter_all:   'All',
+    filter_theatre: 'Theatre',
+    status_on:    '● Ongoing',
+    status_re:    '● Recent',
+    tag_theatre:  'Theatre',
+    tag_installation: 'Sound installation',
+
+    psub_vinyle:   'Analogue electronic device — experimental electronica',
+    psub_abdm:     'Direction Thierry Crozat — Cie les arTpenteurs',
+    psub_fondue:   'Direction Mehdi Duman — Cie Divisar',
+    psub_blinddate:'Short film directed by Mehdi Duman',
+    psub_sillons:  'Modified turntables — Zurich Opera House',
+    psub_topo:     'Co-creation with Katharina Rosenberger — The Gap project',
+    psub_dasein:   'Quartet — collective composition (trad., jazz, electro)',
+    psub_f451:     'Direction Laurent Annoni — Cie les arTpenteurs',
+    psub_rilke:    'Direction Mehdi Duman — Cie Divisar',
+    psub_wdw:      'Direction Lefki Papachrysostomou — Cie Alma Alba',
+    psub_pinter:   'Texts by Harold Pinter — direction Sébastien Dupperet',
+
+    ph_recherche: '<span class="out">Re</span><span class="sol">search.</span>',
+    rech_intro: 'Developing performative forms grounded in the instability of analogue systems to create singular, ephemeral listening experiences.',
+    rech_main_label: 'Ongoing research — acoustic instrument & analogue device',
+    rech_p1: 'My research is grounded in <span class="rech-hl">the instability of analogue systems</span>. The micro-variations generated by components — tolerances, drifts, electrical interactions — produce unpredictable sonic behaviours. These phenomena form the starting point for a <span class="rech-hl">performative compositional practice</span>.',
+    rech_p2: 'The device is not a mere sound-production tool: it acts as an active system whose behaviour shapes the form, timing, and intensity of the performance. The acoustic instrument enters into dialogue with this instability, creating a constant tension <span class="rech-hl">between control and the unexpected</span>.',
+    rech_p3: 'The performer intervenes within this unstable system, articulating electronic behaviour and acoustic presence. The composition establishes interaction rules that organise their confrontation and mutual transformation.',
+    rech_p4: 'Conceived for <span class="rech-hl">intimate and immersive settings</span>, these projects displace conventional listening frameworks. Spatialisation, distance, sound circulation and bodily presence all modify the <span class="rech-hl">perception of micro-variations</span>. Space and audience thus actively participate in constructing the sonic situation.',
+    rech_vinyle_title: 'The turntable as instrument',
+    rech_vinyle_desc:  'A lutherie practice centred on the modification of turntables — functional repurposing, mechanical and electronic alterations — to produce <span class="rech-hl-ph">autonomous sonic textures</span>.',
+    rech_fil_label: 'Common thread',
+    rech_fil_title: 'Improvisation & writing',
+    rech_fil_p1: 'Composition is not conceived as a closed structure, but as a framework for action. The scores I develop define conditions for emergence rather than outcomes: they organise possibilities without fixing them.',
+    rech_fil_p2: 'Chance, unpredictability and the valorisation of the present moment are central pillars. The performer\'s involvement is constitutive of the piece: their decisions, reactions, and listening transform the form in real time. The score sets interaction rules, zones of freedom, thresholds — it generates a situation rather than prescribing a result.',
+    rech_fil_p3: 'This approach positions the concert as a site of risk and presence. What takes place cannot be identically repeated: each performance is a unique occurrence, irreducible to its notation.',
+
+    ek_text: 'A member of Eklekto Geneva Percussion Center since 2016, I have taken part in numerous original creations and concerts in Switzerland and abroad, working with a wide range of composers from the contemporary scene.',
+    ek_tag_creation:      'World premiere',
+    ek_tag_inst_creation: 'Installation · World premiere',
+
+    ek_ctx_2026_1: 'Feb. · Zurich Opera House · Direction Steven Whiting<br>Sound installation: Louis Delignon &amp; Katharina Rosenberger',
+    ek_ctx_2025_1: 'Apr. · Festival Archipel, Geneva',
+    ek_ctx_2025_2: 'Jan. · Festival Sonic Matter, Zurich',
+    ek_ctx_2024_1: 'Oct. · Victoria Hall, Geneva',
+    ek_ctx_2024_2: 'Oct. · Eklekto 50th anniversary concert, Geneva',
+    ek_ctx_2024_3: 'Sep. · Festival Label Suisse, Lausanne',
+    ek_ctx_2023_1: 'Nov. · Les 6 Toits, Geneva',
+    ek_ctx_2023_2: 'Oct. · Shangyin Opera House, Shanghai',
+    ek_ctx_2023_3: 'Sep. · Les 6 Toits, Geneva · <a href="https://www.youtube.com/watch?v=VMS7Pi9kEq8" target="_blank" style="color:var(--violet);text-decoration:none;">Watch the film ↗</a>',
+    ek_ctx_2023_4: 'Apr. · Festival Archipel, Geneva',
+    ek_ctx_2022_1: 'Sep. · Les 6 Toits, Geneva',
+    ek_ctx_2022_2: 'Apr. · Les 6 Toits, Geneva',
+    ek_ctx_2022_3: 'May · Het Cenakel, Tilburg',
+    ek_ctx_2022_4: 'Apr. · Bâtiment Arcoop, Geneva',
+    ek_ctx_2022_5: 'Mar. · ADC — Pavillon de la danse, Geneva',
+    ek_ctx_2021_1: 'Nov. · Villa Bernasconi, Grand-Lancy',
+    ek_ctx_2021_2: 'Jul. · Festival Tonlagen, Albertinum, Dresden',
+    ek_ctx_2021_3: 'Jul. · Scène Ella Fitzgerald, Geneva',
+    ek_ctx_2020_1: 'Oct. · La Chaux-de-Fonds',
+    ek_ctx_2019_1: 'Nov. · Festival de la Bâtie, Alhambra, Geneva',
+    ek_ctx_2019_2: 'Sep. · Venice Biennale, Swiss Pavilion',
+    ek_ctx_2019_3: 'May · Wittener Tage für neue Kammermusik, Witten',
+    ek_ctx_2018_1: 'Dec. · IGNM, Zurich',
+    ek_ctx_2018_2: 'Nov. · Red Cross Museum, Geneva',
+    ek_ctx_2018_3: 'Mar. · Festival Archipel, Alhambra, Geneva',
+    ek_ctx_2017_1: 'Nov. · Théâtre du Galpon, Geneva',
+    ek_ctx_2017_2: 'Sep. · Radial System V, Berlin',
+    ek_ctx_2017_3: 'Apr. · Festival Archipel, Alhambra, Geneva',
+    ek_ctx_2016_1: 'May · Crypte de l\'Athénée, Geneva',
+
+    collab_section_title: 'Past collaborations',
+    collab_desc_raaar:      'Free improvisation trio',
+    collab_desc_biganos:    'Early music',
+    collab_desc_jonas:      'Rap and early music',
+    collab_desc_tirabosco:  'World music',
+    collab_desc_hassan:     'Syrian music',
+    collab_desc_kaboul:     'Afghan music',
+    collab_desc_inflammatur:'French-language song',
+    collab_desc_minimal:    'Contemporary music',
+    collab_desc_atrium:     'Music theatre, percussion trio',
+    collab_desc_moussa:     'Folk music, neo-trad.',
+    collab_desc_geneve:     'Indescribable',
+    disco_title: 'Discography',
+
+    ct_big: '<span class="out">Commissions,</span><br><span class="out">collaborations</span><br><span class="col">&amp; projects.</span>',
+    ct_bio:   '↓ Bio / Contact',
+    ct_press: '↓ Press photos',
+
+    modal_close: '✕ Close',
+
+    modal_meta_rilke:          '2022 · Direction Mehdi Duman · Cie Divisar',
+    modal_meta_f451:           '2023 · Direction Laurent Annoni · Cie les arTpenteurs',
+    modal_meta_dasein:         '2024 · Quartet · Collective composition (trad., jazz, electro)',
+    modal_meta_dasein_credit:  '↗ Watch the teaser',
+    modal_meta_vybisto:        '2017–2018 · Jazz/rock trio · Composition & Performance',
+    modal_meta_vybisto_credit: '↗ Listen on SoundCloud',
+    modal_meta_sillons:        '2026 · Sound installation · Zurich Opera House · Direction Steven Whiting<br>Louis Delignon &amp; Katharina Rosenberger',
+    modal_meta_blinddate:      '2025 · Short film · Directed by Mehdi Duman',
+    modal_meta_fondue:         '2025 · Direction Mehdi Duman · Cie Divisar',
+    modal_meta_abdm:           '2025 · Direction Thierry Crozat · Cie les arTpenteurs',
+    modal_meta_vinyle:         '2025 · Analogue electronic device · Ongoing',
+    modal_meta_topo:           '2024 · Co-creation with Katharina Rosenberger · The Gap project',
+
+    sillons_p1: 'A felt-tip pen replaces the stylus, a paper disc replaces the vinyl. A microphone captures the ambient sound, and a moving-coil system translates this signal into mechanical movement: the pen responds to the amplitude and frequency of the sound, drawing the waveform onto the paper. A motor progressively moves the arm from the outside in — a graphic recording of sound in real time. The paper disc becomes an archive, a visible memory of what was heard.',
+    sillons_p2: 'A modified turntable whose movements appear autonomous: sudden accelerations, direction changes, unpredictable jolts. The record placed on it is a recording of a composition by Katharina Rosenberger, heard later in the opera. The mechanical distortion alters the playback of the recording — a memory that warps before being restored.',
+    sillons_p3: 'A sand disc replaces the vinyl. A microphone placed at the stylus position plunges into the material and renders its sonic texture. The turntable\'s rotation is driven by a sensor that tracks visitors\' footsteps around the device in real time — their movements animate the turntable, and the sound of sand gives the impression of walking through it. A connection with an aria from the show evoking migration through the desert, with the microphone tracing a groove with each rotation.',
+    sillons_ctx: 'Sound installation presented as part of the performance Sillons de Mémoires, at the Zurich Opera House.',
+
+    topo_p0:  'Three modified turntables, each associated with a different material: fur, engraved clay, earth mixed with teeth.',
+    topo_p1:  'These materials function as memory supports — like a record, they hold legible traces. The stylus has been replaced by an electret microphone that directly captures the texture in contact, making audible what each material has recorded. The rotation speed is variable, allowing deceleration down to near-stillness.',
+    topo_p2:  'The resulting sound is broadcast simultaneously through a speaker and headphones. The speaker creates a sonic presence in the space; the headphones give access to the detail — the grain of the material, its irregularities, its sonic relief. The device is interactive: the audience can adjust the speed, change the disc, and handle the material.',
+    topo_ctx: 'Installation presented as part of The Gap project, co-created with Katharina Rosenberger.',
+  }
+};
+
+/* ---- Fonction setLang ---- */
+function setLang(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang;
+  document.getElementById('btn-fr').classList.toggle('on', lang === 'fr');
+  document.getElementById('btn-en').classList.toggle('on', lang === 'en');
+  const L = LANG[lang];
+  // textContent — éléments simples
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.dataset.i18n;
+    if (L[k] !== undefined) el.textContent = L[k];
+  });
+  // innerHTML — éléments avec balises HTML internes
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const k = el.dataset.i18nHtml;
+    if (L[k] !== undefined) el.innerHTML = L[k];
+  });
+  // Boutons "Fermer" des modales — traités globalement
+  document.querySelectorAll('.modal-close').forEach(b => b.textContent = L.modal_close);
+}
+</script>
+</body>
+</html>
