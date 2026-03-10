@@ -185,6 +185,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
 .fbtn:hover,.fbtn-sub:hover{border-color:var(--dim2);color:var(--text);}
 .fbtn.on{background:var(--violet2);color:var(--violet);border-color:var(--violet2);}
 .fbtn-sub.on{background:var(--violet2);color:var(--violet);border-color:var(--violet2);opacity:.8;}
+#cf.cf-disabled{opacity:0.35;pointer-events:none;transition:opacity .2s;}
 
 /* Liste de projets en grille 3 colonnes : année / contenu / statut
    data-roles et data-ctx sont lus par JS pour le filtrage
@@ -655,7 +656,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
         <div class="pstatus s-re" data-i18n="status_re">● Récent</div>
       </div>
 
-      <div class="proj-row" data-roles="installation" data-ctx="concert" onclick="openModalSillons()" style="cursor:pointer;">
+      <div class="proj-row" data-roles="installation" data-ctx="concert" onclick="openModalSillons()" onmouseenter="vcPreload('sillons')" style="cursor:pointer;">
         <div class="py">2026</div>
         <div>
           <div class="ptitle">Sillons de mémoires</div>
@@ -665,7 +666,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
         <div class="pstatus s-re" data-i18n="status_re">● Récent</div>
       </div>
 
-      <div class="proj-row" data-roles="installation" data-ctx="concert" onclick="openModal()" style="cursor:pointer;">
+      <div class="proj-row" data-roles="installation" data-ctx="concert" onclick="openModal()" onmouseenter="vcPreload('topo')" style="cursor:pointer;">
         <div class="py">2024</div>
         <div>
           <div class="ptitle">Topographies</div>
@@ -1106,9 +1107,9 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
     <!-- Grille collaborations passées (sans accordéon) -->
     <div class="par-section-title" data-i18n="collab_section_title">Collaborations passées</div>
     <div class="par-grid">
-      <div class="par-item"><div class="par-name"><a href="https://www.youtube.com/watch?v=W7nJzas8Cl8&list=PL3Nye1RuGb78TbojA8dcWFDFN4RwNJvYC" target="_blank" style="color:var(--text);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--violet)'" onmouseout="this.style.color='var(--text)'">Raaar</a></div><div class="par-desc" data-i18n="collab_desc_raaar">Trio d'improvisation libre</div></div>
-      <div class="par-item"><div class="par-name"><a href="https://www.youtube.com/watch?v=z4hJ-gTsscg&list=RDz4hJ-gTsscg&start_radio=1" target="_blank" style="color:var(--text);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--violet)'" onmouseout="this.style.color='var(--text)'">Los Biganos</a></div><div class="par-desc" data-i18n="collab_desc_biganos">Musique ancienne</div></div>
-      <div class="par-item"><div class="par-name"><a href="https://www.youtube.com/watch?v=qDKEoMfBnPQ&list=RDqDKEoMfBnPQ&start_radio=1" target="_blank" style="color:var(--text);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--violet)'" onmouseout="this.style.color='var(--text)'">Jonas &amp; le Chant des Roseaux</a></div><div class="par-desc" data-i18n="collab_desc_jonas">Rap et musique ancienne</div></div>
+      <div class="par-item"><div class="par-name"><a href="https://www.youtube.com/watch?v=W7nJzas8Cl8&list=PL3Nye1RuGb78TbojA8dcWFDFN4RwNJvYC" target="_blank" style="color:var(--text);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--violet)'" onmouseout="this.style.color='var(--text)'">Raaar <span style="font-size:.7em;opacity:.6;">↗</span></a></div><div class="par-desc" data-i18n="collab_desc_raaar">Trio d'improvisation libre</div></div>
+      <div class="par-item"><div class="par-name"><a href="https://www.youtube.com/watch?v=z4hJ-gTsscg&list=RDz4hJ-gTsscg&start_radio=1" target="_blank" style="color:var(--text);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--violet)'" onmouseout="this.style.color='var(--text)'">Los Biganos <span style="font-size:.7em;opacity:.6;">↗</span></a></div><div class="par-desc" data-i18n="collab_desc_biganos">Musique ancienne</div></div>
+      <div class="par-item"><div class="par-name"><a href="https://www.youtube.com/watch?v=qDKEoMfBnPQ&list=RDqDKEoMfBnPQ&start_radio=1" target="_blank" style="color:var(--text);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--violet)'" onmouseout="this.style.color='var(--text)'">Jonas &amp; le Chant des Roseaux <span style="font-size:.7em;opacity:.6;">↗</span></a></div><div class="par-desc" data-i18n="collab_desc_jonas">Rap et musique ancienne</div></div>
       <div class="par-item"><div class="par-name">Michel Tirabosco &amp; Bella Terra</div><div class="par-desc" data-i18n="collab_desc_tirabosco">Musique du monde</div></div>
       <div class="par-item"><div class="par-name">Hassan Abd Alrahman</div><div class="par-desc" data-i18n="collab_desc_hassan">Musique syrienne</div></div>
       <div class="par-item"><div class="par-name">Ensemble Kaboul</div><div class="par-desc" data-i18n="collab_desc_kaboul">Musique afghane</div></div>
@@ -1127,7 +1128,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
       <a class="disco-item" href="https://link.deezer.com/s/32E5IEg5aaWbyx0ewvMTq" target="_blank" style="text-decoration:none;">
         <div class="disco-cover"><img src="images/lesmondesbar.jpg" alt="Jeu de rôles" loading="lazy"></div>
         <div class="disco-info">
-          <div class="disco-title">Jeu de rôles</div>
+          <div class="disco-title">Jeu de rôles <span style="font-size:.7em;opacity:.6;">↗</span></div>
           <div class="disco-group">Les mondes baroques</div>
           <div class="disco-meta">2026 · Paraty</div>
         </div>
@@ -1135,7 +1136,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
       <a class="disco-item" href="https://www.youtube.com/watch?v=NsYVoNPHc20&list=PLN4shEjCz0TaxNihzpKibU8qQZWWYKee2&index=1" target="_blank" style="text-decoration:none;">
         <div class="disco-cover"><img src="images/lolomis_redsonja.jpg" alt="Red Sonja" loading="lazy"></div>
         <div class="disco-info">
-          <div class="disco-title">Red Sonja</div>
+          <div class="disco-title">Red Sonja <span style="font-size:.7em;opacity:.6;">↗</span></div>
           <div class="disco-group">Lolomis</div>
           <div class="disco-meta">2020 · Buda musique</div>
         </div>
@@ -1143,7 +1144,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
       <a class="disco-item" href="https://www.youtube.com/watch?v=-BlavuFgeXA&list=PL4c5eBtnzClYPOfIwHOpYThJJKRiY8blD" target="_blank" style="text-decoration:none;">
         <div class="disco-cover"><img src="images/lolomis_boukane.jpg" alt="Boukane" loading="lazy"></div>
         <div class="disco-info">
-          <div class="disco-title">Boukane</div>
+          <div class="disco-title">Boukane <span style="font-size:.7em;opacity:.6;">↗</span></div>
           <div class="disco-group">Lolomis</div>
           <div class="disco-meta">2017 · Buda musique</div>
         </div>
@@ -1151,7 +1152,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
       <a class="disco-item" href="https://www.youtube.com/watch?v=82Rg0vcSGMo&list=PL34hLaHsZ3wi4xh_6QnA3DYaYbQIHsl2N" target="_blank" style="text-decoration:none;">
         <div class="disco-cover"><img src="images/lolomis_balkanpulse.jpg" alt="Balkan Pulse" loading="lazy"></div>
         <div class="disco-info">
-          <div class="disco-title">Balkan Pulse</div>
+          <div class="disco-title">Balkan Pulse <span style="font-size:.7em;opacity:.6;">↗</span></div>
           <div class="disco-group">Lolomis</div>
           <div class="disco-meta">2014 · Playa Sound</div>
         </div>
@@ -1733,6 +1734,12 @@ function vcStopAll(id){
   const track=document.getElementById('vc-'+id+'-track');
   if(track) track.querySelectorAll('video').forEach(v=>{v.pause();v.currentTime=0;});
 }
+function vcPreload(id){
+  const track=document.getElementById('vc-'+id+'-track');
+  if(!track) return;
+  const firstVideo=track.querySelector('.vid-slide video');
+  if(firstVideo && firstVideo.preload==='none'){firstVideo.preload='auto';firstVideo.load();}
+}
 /* Recalcul des positions au redimensionnement de la fenêtre */
 window.addEventListener('resize',()=>{
   Object.keys(vcState).forEach(id=>{
@@ -1852,7 +1859,16 @@ function applyF(){
 }
 document.querySelectorAll('#rf .fbtn').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('#rf .fbtn').forEach(x=>x.classList.remove('on'));
-  b.classList.add('on'); aRole=b.dataset.role; applyF();
+  b.classList.add('on'); aRole=b.dataset.role;
+  const cf=document.getElementById('cf');
+  if(aRole==='installation'){
+    document.querySelectorAll('#cf .fbtn-sub').forEach(x=>x.classList.remove('on'));
+    document.querySelector('#cf [data-ctx="all"]').classList.add('on');
+    aCtx='all'; cf.classList.add('cf-disabled');
+  } else {
+    cf.classList.remove('cf-disabled');
+  }
+  applyF();
 }));
 document.querySelectorAll('#cf .fbtn-sub').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('#cf .fbtn-sub').forEach(x=>x.classList.remove('on'));
