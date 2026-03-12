@@ -140,10 +140,11 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
   100%{transform:none;color:var(--text);opacity:1;}
 }
 /* Ligne de disciplines en bas de page (cachée sur mobile) */
-.disc-line{position:absolute;bottom:28px;left:0;right:0;z-index:10;
-  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px 22px;padding:0 32px;
-  font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim2);}
-.disc-sep{width:4px;height:4px;border-radius:50%;background:var(--violet);opacity:.6;}
+.disc-line{position:absolute;inset:0;z-index:2;
+  display:flex;flex-wrap:wrap;align-content:center;align-items:center;justify-content:center;gap:0 .3em;padding:40px 52px;
+  font-family:var(--display);font-size:clamp(72px,14vw,140px);font-weight:800;letter-spacing:-.02em;line-height:.85;text-transform:uppercase;
+  color:var(--dim2);opacity:.04;cursor:default;user-select:none;overflow:hidden;pointer-events:none;}
+.disc-sep{display:none;}
 
 /* ============================================================
    LAYOUT GÉNÉRAL DES PAGES INTÉRIEURES
@@ -497,8 +498,8 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
   .ct-wrap{grid-template-columns:1fr;} /* Contact passe en colonne unique */
   .ct-l{padding-right:0;border-right:none;padding-bottom:32px;}
   .ct-r{padding-left:0;padding-top:32px;}
-  .proj-row{grid-template-columns:64px 1fr;} /* Statut masqué sur mobile */
-  .pstatus{display:none;}
+  .proj-row{grid-template-columns:64px 1fr;row-gap:8px;} /* Statut dans colonne 2 sur mobile */
+  .pstatus{grid-column:2;text-align:left;}
   .fg{flex-direction:column;align-items:flex-start;gap:8px;}
   .disco-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:16px;}
 }
@@ -569,10 +570,9 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
   </div>
   <!-- Ligne de disciplines en bas (cachée sur mobile) -->
   <div class="disc-line">
-    <span>Composition</span><span class="disc-sep"></span>
-    <span>Performance</span><span class="disc-sep"></span>
-    <span data-i18n="disc_installation">Installation sonore</span><span class="disc-sep"></span>
-    <span data-i18n="disc_recherche">Recherche artistique</span>
+    <span>Composition</span>
+    <span>Performance</span>
+    <span data-i18n="disc_installation">Installation sonore</span>
   </div>
 </div>
 
