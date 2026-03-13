@@ -195,6 +195,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
 .proj-row{display:grid;grid-template-columns:80px 1fr 90px;gap:20px;align-items:start;
   padding:18px 0;border-top:1px solid var(--line);transition:all .15s;cursor:default;}
 .proj-row:hover{padding-left:8px;background:rgba(255,255,255,.015);}
+.proj-row.no-modal{opacity:.45;pointer-events:none;}
 .proj-row.hidden{display:none;}
 .py{font-family:var(--mono);font-size:12px;color:var(--dim);padding-top:4px;} /* Année */
 .ptitle{font-family:var(--display);font-size:22px;font-weight:700;margin-bottom:6px;line-height:1.1;}
@@ -455,6 +456,10 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
 .vid-carousel-dot{width:5px;height:5px;border-radius:50%;background:var(--line2);
   cursor:pointer;transition:background .2s;}
 .vid-carousel-dot.on{background:var(--violet);}
+.vid-muted-badge{position:absolute;top:10px;right:10px;z-index:5;pointer-events:none;
+  transform:translateX(-100%);
+  font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;
+  color:rgba(255,255,255,.5);background:rgba(0,0,0,.45);padding:4px 9px;border-radius:3px;}
 
 /* ============================================================
    COMPOSANT LECTEUR AUDIO
@@ -752,7 +757,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
         <div class="pstatus s-pa"></div>
       </div>
 
-      <div class="proj-row" data-roles="composition performance" data-ctx="theatre">
+      <div class="proj-row no-modal" data-roles="composition performance" data-ctx="theatre">
         <div class="py">2014</div>
         <div>
           <div class="ptitle">Wie Der Wolf</div>
@@ -762,7 +767,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
         <div class="pstatus s-pa"></div>
       </div>
 
-      <div class="proj-row" data-roles="composition performance" data-ctx="theatre">
+      <div class="proj-row no-modal" data-roles="composition performance" data-ctx="theatre">
         <div class="py">2014</div>
         <div>
           <div class="ptitle">Précisément…</div>
@@ -1373,7 +1378,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
   <div class="modal-box">
     <button class="modal-close" onclick="closeModalVybisto()">✕ Fermer</button>
     <div class="modal-title">Vybisto</div>
-    <div class="modal-meta" data-i18n="modal_meta_vybisto">2017–2018 · Trio jazz/rock · Composition &amp; Performance</div>
+    <div class="modal-meta" data-i18n="modal_meta_vybisto">2018 · Trio jazz/rock · Composition &amp; Performance</div>
     <div class="modal-imgs" style="grid-template-columns:1fr;margin-bottom:0;">
       <div class="modal-img-wrap">
         <a href="https://soundcloud.com/user-272553173" target="_blank">
@@ -1435,12 +1440,20 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
       </div>
       <button class="vid-carousel-btn prev" onclick="vcMove('sillons',-1)"></button>
       <button class="vid-carousel-btn next" onclick="vcMove('sillons',1)"></button>
+      <div class="vid-muted-badge" style="transform:translateX(-25%);">NO AUDIO</div>
     </div>
     <div class="vid-carousel-dots" id="vc-sillons-dots">
       <div class="vid-carousel-dot on" onclick="vcGo('sillons',0)"></div>
       <div class="vid-carousel-dot"    onclick="vcGo('sillons',1)"></div>
       <div class="vid-carousel-dot"    onclick="vcGo('sillons',2)"></div>
       <div class="vid-carousel-dot"    onclick="vcGo('sillons',3)"></div>
+    </div>
+    <div class="audio-player">
+      <div class="ap-track" data-src="audio/sillons_organic.mp3">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title">Organic Turntable</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
     </div>
     <!-- À rédiger -->
     <!-- 3 blocs dispositifs + contexte final -->
@@ -1633,12 +1646,20 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
       </div>
       <button class="vid-carousel-btn prev" onclick="vcMove('topo',-1)"></button>
       <button class="vid-carousel-btn next" onclick="vcMove('topo',1)"></button>
+      <div class="vid-muted-badge">NO AUDIO</div>
     </div>
     <div class="vid-carousel-dots" id="vc-topo-dots">
       <div class="vid-carousel-dot on" onclick="vcGo('topo',0)"></div>
       <div class="vid-carousel-dot"    onclick="vcGo('topo',1)"></div>
       <div class="vid-carousel-dot"    onclick="vcGo('topo',2)"></div>
       <div class="vid-carousel-dot"    onclick="vcGo('topo',3)"></div>
+    </div>
+    <div class="audio-player">
+      <div class="ap-track" data-src="audio/topographies_fur.mp3">
+        <button class="ap-play" onclick="apToggle(this)"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></button>
+        <div class="ap-info"><div class="ap-title" data-i18n="topo_audio_title">Fourrure</div><div class="ap-duration">--:--</div></div>
+        <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
+      </div>
     </div>
     <div class="modal-desc" style="margin-top:24px;">
       <!-- Phrase d'accroche — plus visible -->
@@ -1691,7 +1712,7 @@ function closeModalVybisto(e) { modalClose('modal-vybisto',   e, false); }
 function openModalLolomis()   { modalOpen('modal-lolomis'); }
 function closeModalLolomis(e) { modalClose('modal-lolomis',   e, false); }
 function openModalSillons()   { modalOpen('modal-sillons'); setTimeout(()=>vcGo('sillons',0),50); }
-function closeModalSillons(e) { modalClose('modal-sillons',   e, false, 'sillons'); }
+function closeModalSillons(e) { modalClose('modal-sillons',   e, true, 'sillons'); }
 function openModalBlindDate() { modalOpen('modal-blinddate'); }
 function closeModalBlindDate(e){ modalClose('modal-blinddate', e, true); }
 function openModalFondue()    { modalOpen('modal-fondue'); }
@@ -1701,7 +1722,7 @@ function closeModalABDM(e)    { modalClose('modal-abdm',      e, true); }
 function openModalVinyle()    { modalOpen('modal-vinyle'); }
 function closeModalVinyle(e)  { modalClose('modal-vinyle',    e, true); }
 function openModal()          { modalOpen('modal-topographies'); setTimeout(()=>vcGo('topo',0),50); }
-function closeModal(e)        { modalClose('modal-topographies', e, false, 'topo'); }
+function closeModal(e)        { modalClose('modal-topographies', e, true, 'topo'); }
 
 /* ============================================================
    CARROUSEL VIDÉO
@@ -2192,7 +2213,7 @@ const LANG = {
     modal_meta_f451:           '2023 · Mise en scène Laurent Annoni · Cie les arTpenteurs',
     modal_meta_dasein:         '2024 · Quatuor · Composition collective (trad., jazz, électro)',
     modal_meta_dasein_credit:  '↗ Voir le teaser',
-    modal_meta_vybisto:        '2017–2018 · Trio jazz/rock · Composition & Performance',
+    modal_meta_vybisto:        '2018 · Trio jazz/rock · Composition & Performance',
     modal_meta_vybisto_credit: '↗ Écouter sur SoundCloud',
     modal_meta_sillons:        '2026 · Installation sonore · Opéra de Zürich · Mise en scène Steven Whiting<br>Louis Delignon &amp; Katharina Rosenberger',
     modal_meta_blinddate:      '2025 · Court-métrage · Réalisation Mehdi Duman',
@@ -2200,6 +2221,7 @@ const LANG = {
     modal_meta_abdm:           '2025 · Mise en scène Thierry Crozat · Cie les arTpenteurs',
     modal_meta_vinyle:         '2025 · Dispositif analogique électronique · En cours',
     modal_meta_topo:           '2024 · Co-création avec Katharina Rosenberger · Projet The Gap',
+    topo_audio_title:          'Fourrure',
 
     // Modale Sillons — descriptions
     sillons_p1: 'Un feutre remplace l\'aiguille de lecture, un disque en papier remplace le vinyle. Un micro capte le son ambiant et un système à bobine mobile traduit ce signal en mouvement mécanique : le feutre réagit à l\'amplitude et à la fréquence du son, dessinant la forme d\'onde sur le papier. Un moteur déplace progressivement le bras de l\'extérieur vers l\'intérieur — un enregistrement graphique du son en temps réel. Le disque de papier devient archive, mémoire visible de ce qui a été entendu.',
@@ -2316,7 +2338,7 @@ const LANG = {
     modal_meta_f451:           '2023 · Direction Laurent Annoni · Cie les arTpenteurs',
     modal_meta_dasein:         '2024 · Quartet · Collective composition (trad., jazz, electro)',
     modal_meta_dasein_credit:  '↗ Watch the teaser',
-    modal_meta_vybisto:        '2017–2018 · Jazz/rock trio · Composition & Performance',
+    modal_meta_vybisto:        '2018 · Jazz/rock trio · Composition & Performance',
     modal_meta_vybisto_credit: '↗ Listen on SoundCloud',
     modal_meta_sillons:        '2026 · Sound installation · Zurich Opera House · Direction Steven Whiting<br>Louis Delignon &amp; Katharina Rosenberger',
     modal_meta_blinddate:      '2025 · Short film · Directed by Mehdi Duman',
@@ -2324,6 +2346,7 @@ const LANG = {
     modal_meta_abdm:           '2025 · Direction Thierry Crozat · Cie les arTpenteurs',
     modal_meta_vinyle:         '2025 · Analogue electronic device · Ongoing',
     modal_meta_topo:           '2024 · Co-creation with Katharina Rosenberger · The Gap project',
+    topo_audio_title:          'Fur',
 
     sillons_p1: 'A felt-tip pen replaces the stylus, a paper disc replaces the vinyl. A microphone captures the ambient sound, and a moving-coil system translates this signal into mechanical movement: the pen responds to the amplitude and frequency of the sound, drawing the waveform onto the paper. A motor progressively moves the arm from the outside in — a graphic recording of sound in real time. The paper disc becomes an archive, a visible memory of what was heard.',
     sillons_p2: 'A modified turntable whose movements appear autonomous: sudden accelerations, direction changes, unpredictable jolts. The record placed on it is a recording of a composition by Katharina Rosenberger, heard later in the opera. The mechanical distortion alters the playback of the recording — a memory that warps before being restored.',
