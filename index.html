@@ -420,6 +420,18 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
 .modal-img-credit .cr-sym{font-size:13px;line-height:1;font-family:var(--display);}
 .modal-desc{font-family:var(--mono);font-size:14px;line-height:2;color:var(--dim2);
   border-left:2px solid var(--violet2);padding-left:24px;}
+/* Lien page projet (bouton CTA bas de modale) */
+.modal-project-link{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:28px;padding:16px 20px;
+  border:1px solid var(--violet2);
+  font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--violet);text-decoration:none;
+  transition:border-color .25s,color .25s,background .25s;}
+.modal-project-link:hover{border-color:var(--violet);background:rgba(157,143,255,.06);}
+.modal-project-link span{font-size:16px;line-height:1;transition:transform .25s;}
+.modal-project-link:hover span{transform:translate(3px,-3px);}
+
 /* Grille 3 albums (modale Lolomis) */
 .modal-albums{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:8px;}
 .modal-album{display:flex;flex-direction:column;gap:8px;text-decoration:none;}
@@ -1788,6 +1800,9 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
         <div class="ap-bar" onclick="apSeek(this,event)"><div class="ap-bar-fill"></div></div>
       </div>
     </div>
+    <a class="modal-project-link" href="https://louisdelignon.com/projet_vinyle/#cover" target="_blank">
+      Page du projet <span>↗</span>
+    </a>
   </div>
 </div>
 
