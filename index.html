@@ -75,12 +75,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   -webkit-mask-image:linear-gradient(to bottom,black 75%,transparent 100%);
   mask-image:linear-gradient(to bottom,black 75%,transparent 100%);}
-.nav-name{font-family:var(--mono);font-size:10px;font-weight:700;
+.nav-name{font-family:var(--mono);font-size:11px;font-weight:700;
   letter-spacing:.22em;text-transform:uppercase;color:var(--dim2);cursor:pointer;
   text-decoration:none;transition:color .2s;}
 .nav-name:hover{color:var(--text);}
 nav ul{list-style:none;display:flex;gap:32px;}
-nav ul a{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+nav ul a{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
   text-decoration:none;color:var(--dim);transition:color .2s;cursor:pointer;}
 nav ul a:hover{color:var(--text);}
 nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bottom:1px;}
@@ -91,7 +91,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
 
 .fbtn-lang {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: .14em;
   text-transform: uppercase;
   border: 1px solid var(--line2);
@@ -123,7 +123,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
 #page-home{overflow:hidden;}
 /* Bloc nom positionné en bas à gauche */
 .home-name{position:absolute;bottom:6vh;left:52px;z-index:10;user-select:none;line-height:1;}
-.name-first{display:block;font-family:var(--mono);font-size:11px;font-weight:700;
+.name-first{display:block;font-family:var(--mono);font-size:12px;font-weight:700;
   letter-spacing:.42em;text-transform:uppercase;color:var(--warm);opacity:.7;margin-bottom:8px;}
 /* Nom de famille en grand — chaque lettre est un <span class="l"> pour l'effet glitch */
 .name-last{display:block;font-family:var(--display);font-weight:800;
@@ -164,7 +164,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
    ============================================================ */
 /* Légende des statuts (En cours / Récent) */
 .status-legend{display:flex;gap:28px;margin-bottom:32px;}
-.leg{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;}
+.leg{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:12px;letter-spacing:.1em;}
 .leg-dot{width:6px;height:6px;border-radius:50%;}
 
 /* Système de filtres à deux niveaux :
@@ -177,10 +177,10 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
   border-left:1px solid var(--line2);margin-left:4px;}
 .fr{display:flex;flex-wrap:wrap;gap:7px;}
 /* Boutons de filtre — .on = filtre actif (fond violet) */
-.fbtn{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+.fbtn{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;
   border:1px solid var(--line2);background:none;padding:7px 16px;cursor:pointer;
   color:var(--dim);transition:all .15s;}
-.fbtn-sub{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+.fbtn-sub{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
   border:1px solid var(--line2);background:none;padding:5px 12px;cursor:pointer;
   color:var(--dim);transition:all .15s;}
 .fbtn:hover,.fbtn-sub:hover{border-color:var(--dim2);color:var(--text);}
@@ -197,16 +197,16 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
 .proj-row:hover{padding-left:8px;background:rgba(255,255,255,.015);}
 .proj-row.no-modal{opacity:.45;pointer-events:none;}
 .proj-row.hidden{display:none;}
-.py{font-family:var(--mono);font-size:12px;color:var(--dim);padding-top:4px;} /* Année */
+.py{font-family:var(--mono);font-size:13px;color:var(--dim);padding-top:4px;} /* Année */
 .ptitle{font-family:var(--display);font-size:22px;font-weight:700;margin-bottom:6px;line-height:1.1;}
-.psub{font-family:var(--mono);font-size:13px;color:var(--dim2);margin-bottom:10px;line-height:1.7;}
+.psub{font-family:var(--mono);font-size:14px;color:var(--dim2);margin-bottom:10px;line-height:1.7;}
 .ptags{display:flex;flex-wrap:wrap;gap:5px;}
 /* Tags : .role = violet (rôle principal) / sans classe = gris (contexte) */
-.ptag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+.ptag{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;
   padding:4px 11px;border:1px solid var(--line2);color:var(--dim);}
 .ptag.role{border-color:var(--violet2);color:var(--violet);background:rgba(157,143,255,.07);}
 /* Statut à droite : .s-on = orange (en cours) / .s-re = violet (récent) / .s-pa = caché (passé) */
-.pstatus{font-family:var(--mono);font-size:11px;text-align:right;padding-top:4px;}
+.pstatus{font-family:var(--mono);font-size:12px;text-align:right;padding-top:4px;}
 .s-on{color:var(--phosphor);}
 .s-re{color:var(--violet);}
 .s-pa{display:none;}
@@ -229,7 +229,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
 .rech-main{margin-bottom:64px;padding-bottom:48px;border-bottom:1px solid var(--line2);}
 .rech-main-label{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.2em;
   text-transform:uppercase;color:var(--warm);margin-bottom:28px;}
-.rech-main p{font-family:var(--mono);font-size:13px;line-height:2.1;color:var(--dim2);max-width:680px;}
+.rech-main p{font-family:var(--mono);font-size:14px;line-height:2.1;color:var(--dim2);max-width:680px;}
 .rech-main p+p{margin-top:18px;}
 /* Bande d'images 3 colonnes — format portrait 3:4 */
 .rech-img-strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:48px 0 0;}
@@ -239,11 +239,11 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
 .rech-img img:hover{opacity:1;}
 /* Numéro en bas à gauche de chaque image */
 .rech-img-num{position:absolute;bottom:10px;left:12px;
-  font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.14em;
+  font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.14em;
   color:var(--dim2);opacity:.7;pointer-events:none;}
 /* Ligne chronologique sous la frise */
 .rech-img-timeline{display:flex;align-items:center;gap:0;margin:12px 0 48px;height:20px;}
-.rech-img-tl-label{font-family:var(--mono);font-size:9px;letter-spacing:.14em;
+.rech-img-tl-label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;
   text-transform:uppercase;color:var(--dim);white-space:nowrap;flex-shrink:0;}
 .rech-img-tl-line{flex:1;height:1px;background:linear-gradient(to right,var(--violet2),var(--dim));
   margin:0 10px;position:relative;}
@@ -255,18 +255,18 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
 /* Bloc "Fil conducteur" avec fond légèrement teinté */
 .rech-fil{margin-top:0;padding:40px;border-top:1px solid var(--line);
   background:rgba(74,63,160,.06);border-left:2px solid var(--violet2);}
-.rech-fil-label{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.2em;
+.rech-fil-label{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.2em;
   text-transform:uppercase;color:var(--violet);margin-bottom:16px;}
 .rech-fil-title{font-family:var(--display);font-size:clamp(22px,3vw,36px);font-weight:800;
   letter-spacing:-.02em;color:var(--text);margin-bottom:24px;line-height:1;}
-.rech-fil p{font-family:var(--mono);font-size:13px;line-height:2.1;color:var(--dim2);max-width:720px;}
+.rech-fil p{font-family:var(--mono);font-size:14px;line-height:2.1;color:var(--dim2);max-width:720px;}
 .rech-fil p+p{margin-top:14px;}
 
 /* Bloc slider platine vinyle */
 .rech-vinyle-block{margin-bottom:64px;padding-bottom:48px;border-bottom:1px solid var(--line2);}
 .rech-vinyle-title{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.18em;
   text-transform:uppercase;margin-bottom:24px;color:var(--warm);text-align:center;}
-.rech-vinyle-desc{font-family:var(--mono);font-size:13px;line-height:2.1;color:var(--dim2);max-width:900px;margin-top:20px;text-align:center;margin:20px auto 0;}
+.rech-vinyle-desc{font-family:var(--mono);font-size:14px;line-height:2.1;color:var(--dim2);max-width:900px;margin-top:20px;text-align:center;margin:20px auto 0;}
 .rech-hl-ph{font-family:var(--display);font-weight:800;font-size:1em;color:var(--phosphor);font-style:normal;}
 
 /* ============================================================
@@ -306,9 +306,9 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
 .par-eklekto-title{font-family:var(--display);font-size:28px;font-weight:800;color:var(--violet);}
 .par-eklekto-sub{font-family:var(--mono);font-size:11px;letter-spacing:.14em;
   text-transform:uppercase;color:var(--violet2);}
-.par-eklekto-text{font-family:var(--mono);font-size:13px;line-height:2;
+.par-eklekto-text{font-family:var(--mono);font-size:14px;line-height:2;
   color:var(--dim2);margin-bottom:28px;}
-.par-ek-link{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+.par-ek-link{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
   color:var(--violet);text-decoration:none;border-bottom:1px solid var(--violet2);
   padding-bottom:2px;display:inline-block;margin-top:24px;transition:border-color .2s;}
 .par-ek-link:hover{border-color:var(--violet);}
@@ -331,28 +331,28 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
 .ek-timeline{display:flex;flex-direction:column;}
 .ek-yr{display:grid;grid-template-columns:52px 1fr;gap:20px;padding:14px 0;
   border-top:1px solid rgba(74,63,160,.18);}
-.ek-yr-label{font-family:var(--mono);font-size:11px;font-weight:700;
+.ek-yr-label{font-family:var(--mono);font-size:12px;font-weight:700;
   color:var(--violet2);padding-top:3px;letter-spacing:.08em;}
 .ek-events{display:flex;flex-direction:column;gap:12px;}
-.ek-ev-tag{display:inline-block;font-family:var(--mono);font-size:9px;
+.ek-ev-tag{display:inline-block;font-family:var(--mono);font-size:10px;
   letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;
   border:1px solid var(--violet2);color:var(--violet);margin-bottom:3px;}
 .ek-ev-title{font-family:var(--display);font-size:15px;font-weight:700;
   color:var(--text);line-height:1.2;margin-bottom:2px;}
-.ek-ev-ctx{font-family:var(--mono);font-size:11px;color:var(--dim);line-height:1.6;}
-.ek-ev-pieces{font-family:var(--mono);font-size:11px;color:var(--violet2);
+.ek-ev-ctx{font-family:var(--mono);font-size:12px;color:var(--dim);line-height:1.6;}
+.ek-ev-pieces{font-family:var(--mono);font-size:12px;color:var(--violet2);
   font-style:italic;margin-top:2px;line-height:1.6;}
 
 /* Titre de section et grille collaborations passées */
-.par-section-title{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.2em;
+.par-section-title{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.2em;
   text-transform:uppercase;color:var(--dim);margin-bottom:0;}
 .par-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));}
 .par-item{padding:22px 20px 22px 0;border-top:1px solid var(--line);}
 .par-name{font-family:var(--display);font-size:19px;font-weight:700;margin-bottom:5px;}
-.par-desc{font-family:var(--mono);font-size:12px;color:var(--dim);line-height:1.7;}
+.par-desc{font-family:var(--mono);font-size:13px;color:var(--dim);line-height:1.7;}
 
 /* Grille discographie */
-.disco-section-title{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.2em;
+.disco-section-title{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.2em;
   text-transform:uppercase;color:var(--dim);margin:64px 0 24px;}
 .disco-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:24px;}
 .disco-item{display:flex;flex-direction:column;gap:10px;}
@@ -361,8 +361,8 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
 .disco-cover img:hover{opacity:1;}
 .disco-info{display:flex;flex-direction:column;gap:3px;}
 .disco-title{font-family:var(--display);font-size:14px;font-weight:700;color:var(--text);line-height:1.2;}
-.disco-group{font-family:var(--mono);font-size:11px;color:var(--dim2);}
-.disco-meta{font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.06em;}
+.disco-group{font-family:var(--mono);font-size:12px;color:var(--dim2);}
+.disco-meta{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.06em;}
 
 /* ============================================================
    PAGE CONTACT — PROCHAINE DATE & INFOS
@@ -382,7 +382,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
 .ct-r{padding-left:64px;display:flex;flex-direction:column;justify-content:center;}
 /* Boutons de téléchargement Bio / Photos de presse */
 .ct-dl-row{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap;}
-.ct-dl{display:inline-block;font-family:var(--mono);font-size:11px;
+.ct-dl{display:inline-block;font-family:var(--mono);font-size:12px;
   letter-spacing:.18em;text-transform:uppercase;padding:13px 26px;
   border:1px solid var(--violet2);text-decoration:none;color:var(--violet);transition:all .15s;}
 .ct-dl:hover{background:var(--violet);border-color:var(--violet);color:var(--bg);}
@@ -400,13 +400,13 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
   background:var(--bg);border:1px solid var(--line2);cursor:default;padding:48px 48px 40px;}
 .modal-box::-webkit-scrollbar{width:3px;}
 .modal-box::-webkit-scrollbar-thumb{background:var(--line2);}
-.modal-close{position:absolute;top:20px;right:24px;font-family:var(--mono);font-size:11px;
+.modal-close{position:absolute;top:20px;right:24px;font-family:var(--mono);font-size:12px;
   letter-spacing:.14em;text-transform:uppercase;color:var(--dim);background:none;
   border:none;cursor:pointer;transition:color .15s;}
 .modal-close:hover{color:var(--text);}
 .modal-title{font-family:var(--display);font-size:clamp(20px,5vw,52px);font-weight:800;
   letter-spacing:-.02em;line-height:.95;margin-bottom:6px;}
-.modal-meta{font-family:var(--mono);font-size:12px;color:var(--dim2);margin-bottom:32px;}
+.modal-meta{font-family:var(--mono);font-size:13px;color:var(--dim2);margin-bottom:32px;}
 .modal-imgs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:32px;}
 .modal-img{background:var(--line2);overflow:hidden;position:relative;}
 .modal-img img{width:100%;height:auto;display:block;opacity:.85;transition:opacity .2s;}
@@ -415,10 +415,10 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
   font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--dim);text-transform:uppercase;}
 /* Conteneur image + crédit photo */
 .modal-img-wrap{display:flex;flex-direction:column;gap:5px;}
-.modal-img-credit{font-family:var(--mono);font-size:9px;letter-spacing:.08em;
+.modal-img-credit{font-family:var(--mono);font-size:10px;letter-spacing:.08em;
   color:var(--dim);text-align:right;display:flex;align-items:center;justify-content:flex-end;gap:3px;}
-.modal-img-credit .cr-sym{font-size:12px;line-height:1;font-family:var(--display);}
-.modal-desc{font-family:var(--mono);font-size:13px;line-height:2;color:var(--dim2);
+.modal-img-credit .cr-sym{font-size:13px;line-height:1;font-family:var(--display);}
+.modal-desc{font-family:var(--mono);font-size:14px;line-height:2;color:var(--dim2);
   border-left:2px solid var(--violet2);padding-left:24px;}
 /* Grille 3 albums (modale Lolomis) */
 .modal-albums{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:8px;}
@@ -426,10 +426,10 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
 .modal-album-img{aspect-ratio:1/1;background:var(--line2);overflow:hidden;}
 .modal-album-img img{width:100%;height:100%;object-fit:cover;display:block;opacity:.8;transition:opacity .2s;}
 .modal-album:hover .modal-album-img img{opacity:1;}
-.modal-album-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;
+.modal-album-label{font-family:var(--mono);font-size:11px;letter-spacing:.1em;
   text-transform:uppercase;color:var(--dim);text-align:center;transition:color .2s;}
 .modal-album:hover .modal-album-label{color:var(--violet);}
-.modal-album-yt{font-family:var(--mono);font-size:9px;color:var(--violet2);text-align:center;letter-spacing:.06em;}
+.modal-album-yt{font-family:var(--mono);font-size:10px;color:var(--violet2);text-align:center;letter-spacing:.06em;}
 
 /* ============================================================
    COMPOSANT CARROUSEL VIDÉO (utilisé dans modales Sillons & Topographies)
@@ -476,10 +476,81 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
 .ap-play.playing{background:var(--violet2);}
 .ap-info{flex:1;min-width:0;}
 .ap-title{font-family:var(--display);font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px;}
-.ap-duration{font-family:var(--mono);font-size:10px;color:var(--dim);}
+.ap-duration{font-family:var(--mono);font-size:11px;color:var(--dim);}
 /* Barre de progression — .ap-bar-fill s'élargit via JS */
 .ap-bar{flex:1;height:2px;background:var(--line2);cursor:pointer;position:relative;}
 .ap-bar-fill{height:100%;background:var(--violet);width:0%;transition:width .1s linear;pointer-events:none;}
+
+/* ============================================================
+   OSC WIDGET — Intégré page d'accueil
+   ============================================================ */
+.osc-panel{
+  position:absolute;
+  bottom:6vh;
+  right:52px;
+  z-index:20;
+  width:220px;
+}
+.osc-wave-row{display:flex;align-items:center;gap:0;margin-bottom:14px;}
+.osc-wbtn{
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  background:none;
+  border:none;
+  color:var(--dim);
+  padding:0 8px 0 0;
+  cursor:pointer;
+  transition:color .15s;
+  line-height:1;
+}
+.osc-wbtn:hover:not(.on){color:var(--dim2);}
+.osc-wbtn.on{color:var(--phosphor);}
+.osc-play{
+  margin-left:auto;
+  width:18px;height:18px;
+  border:1px solid var(--dim);
+  background:none;
+  cursor:pointer;
+  color:var(--dim);
+  font-size:8px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;
+  font-family:var(--mono);
+  flex-shrink:0;
+  line-height:1;
+}
+.osc-play:hover{border-color:var(--phosphor);color:var(--phosphor);}
+.osc-play.playing{border-color:var(--phosphor);color:var(--phosphor);background:rgba(192,96,16,.1);}
+.osc-param{margin-bottom:10px;}
+.osc-param:last-child{margin-bottom:0;}
+.osc-param-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;}
+.osc-param-label{font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--dim);text-transform:uppercase;cursor:default;}
+.osc-param-val{font-family:var(--mono);font-size:9px;color:var(--dim2);letter-spacing:.04em;text-align:right;}
+.osc-slider{
+  -webkit-appearance:none;
+  appearance:none;
+  width:100%;
+  height:1px;
+  background:var(--line2);
+  outline:none;
+  cursor:pointer;
+}
+.osc-slider::-webkit-slider-runnable-track{
+  height:1px;
+  background:linear-gradient(to right,rgba(192,96,16,.5) 0%,rgba(192,96,16,.5) var(--pct,0%),#1E180A var(--pct,0%),#1E180A 100%);
+}
+.osc-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  appearance:none;
+  width:8px;height:8px;
+  background:var(--phosphor);
+  border:none;
+  cursor:pointer;
+  margin-top:-3px;
+}
+.osc-slider::-moz-range-thumb{width:8px;height:8px;background:var(--phosphor);border:none;border-radius:0;cursor:pointer;}
 
 /* ============================================================
    RESPONSIVE — TABLETTE (< 900px)
@@ -497,6 +568,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
   nav ul{gap:14px;}
   .page-inner{padding:90px 20px 60px;}
   .home-name{left:20px;bottom:max(12vh,120px);}
+  .osc-panel{right:20px;width:calc(100vw - 40px);max-width:280px;bottom:max(12vh,120px);}
   .modal-overlay.open{align-items:flex-start;padding-top:56px;padding-bottom:16px;}
   .modal-box{max-height:calc(100vh - 72px);max-height:calc(100dvh - 72px);padding:40px 20px 32px;}
   .disc-line{padding:0 20px;} /* Adapter le padding au mobile */
@@ -523,6 +595,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
    ============================================================ */
 @media(max-width:440px){
   .home-name{bottom:max(14vh,160px);}
+  .osc-panel{bottom:max(14vh,160px);}
 }
 
 /* ============================================================
@@ -579,6 +652,41 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
     <span>Performance</span>
     <span data-i18n="disc_installation">Installation sonore</span>
   </div>
+
+  <!-- ============================================================
+       OSC WIDGET — Panneau de contrôle permanent
+       ============================================================ -->
+  <div class="osc-panel" id="oscPanel">
+    <div class="osc-wave-row">
+      <button class="osc-wbtn on" data-wave="sine"     onclick="oscSetWave('sine')"    >SINE</button>
+      <button class="osc-wbtn"    data-wave="square"   onclick="oscSetWave('square')"  >SQR</button>
+      <button class="osc-wbtn"    data-wave="triangle" onclick="oscSetWave('triangle')">TRI</button>
+      <button class="osc-wbtn"    data-wave="sawtooth" onclick="oscSetWave('sawtooth')">SAW</button>
+      <button class="osc-play" id="oscPlay" onclick="oscToggleAudio()">▶</button>
+    </div>
+    <div class="osc-param">
+      <div class="osc-param-row">
+        <label class="osc-param-label" for="oscFreq">FREQ</label>
+        <span class="osc-param-val" id="oscFreqVal">220 Hz</span>
+      </div>
+      <input class="osc-slider" id="oscFreq" type="range" min="0.1" max="4.0" step="0.05" value="1.0" oninput="oscSetParam('freq',this.value)">
+    </div>
+    <div class="osc-param">
+      <div class="osc-param-row">
+        <label class="osc-param-label" for="oscAmp">AMP</label>
+        <span class="osc-param-val" id="oscAmpVal">1.0</span>
+      </div>
+      <input class="osc-slider" id="oscAmp" type="range" min="0.1" max="2.0" step="0.05" value="1.0" oninput="oscSetParam('amp',this.value)">
+    </div>
+    <div class="osc-param">
+      <div class="osc-param-row">
+        <label class="osc-param-label" for="oscNoise">NOISE</label>
+        <span class="osc-param-val" id="oscNoiseVal">0.00</span>
+      </div>
+      <input class="osc-slider" id="oscNoise" type="range" min="0" max="0.4" step="0.01" value="0" oninput="oscSetParam('noise',this.value)">
+    </div>
+  </div>
+
 </div>
 
 <!-- ============================================================
@@ -715,7 +823,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
         <div class="pstatus s-pa"></div>
       </div>
 
-      <div class="proj-row" data-roles="composition performance" data-ctx="solo">
+      <div class="proj-row" data-roles="composition performance" data-ctx="solo" onclick="openModalParoles()" style="cursor:pointer;">
         <div class="py">2021</div>
         <div>
           <div class="ptitle">parole.es</div>
@@ -757,7 +865,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
         <div class="pstatus s-pa"></div>
       </div>
 
-      <div class="proj-row no-modal" data-roles="composition performance" data-ctx="theatre">
+      <div class="proj-row" data-roles="composition performance" data-ctx="theatre" onclick="openModalWdw()" style="cursor:pointer;">
         <div class="py">2014</div>
         <div>
           <div class="ptitle">Wie Der Wolf</div>
@@ -767,7 +875,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
         <div class="pstatus s-pa"></div>
       </div>
 
-      <div class="proj-row no-modal" data-roles="composition performance" data-ctx="theatre">
+      <div class="proj-row" data-roles="composition performance" data-ctx="theatre" onclick="openModalPinter()" style="cursor:pointer;">
         <div class="py">2014</div>
         <div>
           <div class="ptitle">Précisément…</div>
@@ -1390,6 +1498,67 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
   </div>
 </div>
 
+<!-- MODALE : Wie Der Wolf (carrousel photos) -->
+<div class="modal-overlay" id="modal-wdw" onclick="closeModalWdw(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModalWdw()">✕ Fermer</button>
+    <div class="modal-title">Wie Der Wolf</div>
+    <div class="modal-meta">2014 · Composition &amp; Performance · Cie Alma Alba</div>
+    <div class="vid-carousel" id="vc-wdw">
+      <div class="vid-carousel-track" id="vc-wdw-track">
+        <div class="vid-slide active"><div class="vid-slide-inner">
+          <img src="images/wdw1.jpg" alt="Wie Der Wolf" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
+        </div></div>
+        <div class="vid-slide"><div class="vid-slide-inner">
+          <img src="images/wdw2.jpg" alt="Wie Der Wolf" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
+        </div></div>
+        <div class="vid-slide"><div class="vid-slide-inner">
+          <img src="images/wdw3.jpg" alt="Wie Der Wolf" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
+        </div></div>
+        <div class="vid-slide"><div class="vid-slide-inner">
+          <img src="images/wdw4.jpg" alt="Wie Der Wolf" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
+        </div></div>
+        <div class="vid-slide"><div class="vid-slide-inner">
+          <img src="images/wdw5.jpg" alt="Wie Der Wolf" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
+        </div></div>
+        <div class="vid-slide"><div class="vid-slide-inner">
+          <img src="images/wdw6.jpg" alt="Wie Der Wolf" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
+        </div></div>
+      </div>
+      <button class="vid-carousel-btn prev" onclick="vcMove('wdw',-1)"></button>
+      <button class="vid-carousel-btn next" onclick="vcMove('wdw',1)"></button>
+    </div>
+    <div class="vid-carousel-dots" id="vc-wdw-dots">
+      <div class="vid-carousel-dot on" onclick="vcGo('wdw',0)"></div>
+      <div class="vid-carousel-dot"    onclick="vcGo('wdw',1)"></div>
+      <div class="vid-carousel-dot"    onclick="vcGo('wdw',2)"></div>
+      <div class="vid-carousel-dot"    onclick="vcGo('wdw',3)"></div>
+      <div class="vid-carousel-dot"    onclick="vcGo('wdw',4)"></div>
+      <div class="vid-carousel-dot"    onclick="vcGo('wdw',5)"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALE : Précisément (photo) -->
+<div class="modal-overlay" id="modal-pinter" onclick="closeModalPinter(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModalPinter()">✕ Fermer</button>
+    <div class="modal-title">Précisément…</div>
+    <div class="modal-meta">2014 · Composition &amp; Performance · Textes de Harold Pinter</div>
+    <img src="images/pinter.jpg" alt="Précisément — Harold Pinter" loading="lazy" style="width:45%;display:block;margin:12px auto 0;border-radius:4px;">
+  </div>
+</div>
+
+<!-- MODALE : parole.es (photo) -->
+<div class="modal-overlay" id="modal-paroles" onclick="closeModalParoles(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModalParoles()">✕ Fermer</button>
+    <div class="modal-title">parole.es</div>
+    <div class="modal-meta">2021 · Festival Fracanaüm · Cinéma Bellevaux, Lausanne</div>
+    <img src="images/fraca.jpg" alt="parole.es — Festival Fracanaüm" loading="lazy" style="width:100%;border-radius:4px;margin-top:12px;">
+  </div>
+</div>
+
 <!-- MODALE : Lolomis (grille de 3 albums → liens YouTube) -->
 <div class="modal-overlay" id="modal-lolomis" onclick="closeModalLolomis(event)">
   <div class="modal-box">
@@ -1460,21 +1629,21 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
     <div class="modal-desc" style="margin-top:28px;">
 
       <div style="margin-bottom:28px;">
-        <div style="font-family:var(--display);font-size:13px;font-weight:700;
+        <div style="font-family:var(--display);font-size:14px;font-weight:700;
           letter-spacing:.12em;text-transform:uppercase;color:var(--violet);
           margin-bottom:10px;">Pen Turntable</div>
         <p data-i18n="sillons_p1">Un feutre remplace l'aiguille de lecture, un disque en papier remplace le vinyle. Un micro capte le son ambiant et un système à bobine mobile traduit ce signal en mouvement mécanique : le feutre réagit à l'amplitude et à la fréquence du son, dessinant la forme d'onde sur le papier. Un moteur déplace progressivement le bras de l'extérieur vers l'intérieur — un enregistrement graphique du son en temps réel. Le disque de papier devient archive, mémoire visible de ce qui a été entendu.</p>
       </div>
 
       <div style="margin-bottom:28px;padding-top:28px;border-top:1px solid var(--line2);">
-        <div style="font-family:var(--display);font-size:13px;font-weight:700;
+        <div style="font-family:var(--display);font-size:14px;font-weight:700;
           letter-spacing:.12em;text-transform:uppercase;color:var(--violet);
           margin-bottom:10px;">Organic Turntable</div>
         <p data-i18n="sillons_p2">Une platine modifiée dont les mouvements semblent autonomes : accélérations soudaines, changements de sens, saccades imprévisibles. Le disque posé dessus est un enregistrement d'une composition de Katharina Rosenberger, entendue plus tard dans l'opéra. La déformation mécanique altère la lecture de l'enregistrement — une mémoire qui se déforme avant d'être restituée.</p>
       </div>
 
       <div style="padding-top:28px;border-top:1px solid var(--line2);">
-        <div style="font-family:var(--display);font-size:13px;font-weight:700;
+        <div style="font-family:var(--display);font-size:14px;font-weight:700;
           letter-spacing:.12em;text-transform:uppercase;color:var(--violet);
           margin-bottom:10px;">Sand Turntable</div>
         <p data-i18n="sillons_p3">Un disque de sable remplace le vinyle. Un micro placé à la position de l'aiguille plonge dans la matière et en restitue la texture sonore. La rotation de la platine est pilotée par un capteur qui suit en temps réel les pas des visiteurs autour du dispositif — leurs déplacements animent la platine, et le son du sable donne l'impression de marcher dedans. Un lien avec un aria du spectacle évoquant la migration dans le désert, dont le micro trace un sillon à chaque rotation.</p>
@@ -1482,7 +1651,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
 
       <!-- Contexte discret -->
       <p style="margin-top:28px;padding-top:20px;border-top:1px solid var(--line2);
-        font-size:11px;color:var(--dim);letter-spacing:.04em;" data-i18n="sillons_ctx">
+        font-size:12px;color:var(--dim);letter-spacing:.04em;" data-i18n="sillons_ctx">
         Installation sonore présentée dans le cadre de la performance Sillons de Mémoires, à l'Opéra de Zürich.
       </p>
 
@@ -1668,7 +1837,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
       <p data-i18n="topo_p1">Ces matières fonctionnent comme des supports de mémoire — à la manière d'un disque, elles contiennent des traces lisibles. L'aiguille de lecture a été remplacée par un micro électret qui capte directement la texture en contact, rendant audible ce que chaque matière a enregistré. La vitesse de rotation est variable, permettant de ralentir jusqu'au presque-immobile.</p>
       <p style="margin-top:24px;" data-i18n="topo_p2">Le son produit est diffusé simultanément sur une enceinte et sur un casque. L'enceinte crée une présence sonore dans l'espace ; le casque donne accès au détail — le grain de la matière, ses irrégularités, son relief sonore. Le dispositif est interactif : le public peut modifier la vitesse, changer de disque, manipuler la matière.</p>
       <!-- Contexte — séparé et discret -->
-      <p style="margin-top:28px;padding-top:20px;border-top:1px solid var(--line2);font-size:11px;color:var(--dim);letter-spacing:.04em;" data-i18n="topo_ctx">Installation présentée dans le cadre du projet The Gap, co-création avec Katharina Rosenberger.</p>
+      <p style="margin-top:28px;padding-top:20px;border-top:1px solid var(--line2);font-size:12px;color:var(--dim);letter-spacing:.04em;" data-i18n="topo_ctx">Installation présentée dans le cadre du projet The Gap, co-création avec Katharina Rosenberger.</p>
     </div>
   </div>
 </div>
@@ -1709,6 +1878,12 @@ function openModalDasein()    { modalOpen('modal-dasein'); }
 function closeModalDasein(e)  { modalClose('modal-dasein',    e, false); }
 function openModalVybisto()   { modalOpen('modal-vybisto'); }
 function closeModalVybisto(e) { modalClose('modal-vybisto',   e, false); }
+function openModalWdw()       { modalOpen('modal-wdw'); setTimeout(()=>vcGo('wdw',0),50); }
+function closeModalWdw(e)     { modalClose('modal-wdw',       e, false); }
+function openModalPinter()    { modalOpen('modal-pinter'); }
+function closeModalPinter(e)  { modalClose('modal-pinter',    e, false); }
+function openModalParoles()   { modalOpen('modal-paroles'); }
+function closeModalParoles(e) { modalClose('modal-paroles',   e, false); }
 function openModalLolomis()   { modalOpen('modal-lolomis'); }
 function closeModalLolomis(e) { modalClose('modal-lolomis',   e, false); }
 function openModalSillons()   { modalOpen('modal-sillons'); setTimeout(()=>vcGo('sillons',0),50); }
@@ -2032,30 +2207,52 @@ function triggerGlitch(){
     el.style.setProperty('--gx',(Math.random()*maxD-maxD/2).toFixed(1)+'px');
     el.style.setProperty('--gy',(Math.random()*(intense?14:6)-(intense?7:3)).toFixed(1)+'px');
     el.style.setProperty('--gsk',(Math.random()*(intense?18:8)-(intense?9:4)).toFixed(1)+'deg');
-    void el.offsetWidth; // force reflow pour relancer l'animation CSS
+    void el.offsetWidth;
     el.classList.add('glitch');
     el.addEventListener('animationend',()=>el.classList.remove('glitch'),{once:true});
   });
+  _glitchFX(intense);
 }
 
 /* Définition des deux canaux de la courbe oscilloscopique.
    Chaque canal a ses propres harmoniques (amps/freqs), bruit et opacité. */
 const channels=[
   { freq:.0009, amps:[.52,.18,.09], freqs:[1,2.03,3.97], noise:.06, nf:.008, alpha:.7,  lw:1.4, blur:7, col:'192,96,16' },
-  { freq:.0004, amps:[.04],         freqs:[1],            noise:.20, nf:.06,  alpha:.15, lw:.5,  blur:2, col:'160,80,12' },
 ];
+
+/* Bases pour le canal principal — ne pas muter directement */
+const OSC_BASE_FREQ=.0009;
+const OSC_BASE_AMPS=[.52,.18,.09];
+const OSC_BASE_FHARM=[1,2.03,3.97];
 
 function drawWave(ch,CY,HALF){
   ctx.beginPath();
   const phase=t*ch.freq*Math.PI*2;
+  const wave=ch.wave||'synth';
+  const cyc=Math.PI*6*(ch.cycles||1);
+  const amp=ch.amp||1;
   for(let px=0;px<=W;px+=2){
     const xn=px/W;
     let y=0;
-    /* Somme des harmoniques */
-    for(let i=0;i<ch.amps.length;i++) y+=ch.amps[i]*Math.sin(ch.freqs[i]*xn*Math.PI*6+phase*ch.freqs[i]);
-    /* Bruit fractal */
-    y+=ch.noise*fbm(xn*W*ch.nf+t*.003);
-    /* Contribution de chaque spike (transitoire) */
+    if(wave==='sine'){
+      y=Math.sin(xn*cyc+phase)*.65*amp;
+    } else if(wave==='square'){
+      y=Math.sign(Math.sin(xn*cyc+phase))*.65*amp;
+    } else if(wave==='triangle'){
+      y=(2/Math.PI)*Math.asin(Math.sin(xn*cyc+phase))*.65*amp;
+    } else if(wave==='sawtooth'){
+      const raw=Math.tan(xn*cyc*.5+phase/2);
+      y=(2/Math.PI)*Math.atan(isFinite(raw)?raw:Math.sign(raw)*1e9)*.65*amp;
+    } else {
+      /* SYNTH — canal fantôme, algorithme original inchangé */
+      for(let i=0;i<ch.amps.length;i++) y+=ch.amps[i]*Math.sin(ch.freqs[i]*xn*Math.PI*6+phase*ch.freqs[i]);
+      y+=ch.noise*fbm(xn*W*ch.nf+t*.003);
+    }
+    /* NOISE — bruit fractal ajouté à tous les modes */
+    if(ch.noise_add>0){
+      y+=ch.noise_add*fbm(xn*W*ch.nf+t*.003);
+    }
+    /* Spikes */
     for(const s of spikes){
       const age=(t-s.t)*s.decay, dist=Math.abs(xn-s.x);
       const env=Math.exp(-age*4)*Math.exp(-dist*dist/(s.width*s.width));
@@ -2072,6 +2269,7 @@ function draw(){
   t++;
   const onHome=document.getElementById('page-home').classList.contains('active');
   if(onHome){
+    oscApplyState();
     /* Persistance légère (trail) via fillRect semi-transparent */
     ctx.fillStyle='rgba(7,5,0,0.22)';
     ctx.fillRect(0,0,W,H);
@@ -2091,7 +2289,138 @@ function draw(){
   }
   requestAnimationFrame(draw);
 }
+/* ============================================================
+   OSC WIDGET — État
+   ============================================================ */
+const oscState={wave:'sine',freq:1.0,amp:1.0,noise:0};
+
 draw();
+
+/* --- Visuel --- */
+function oscApplyState(){
+  const ch=channels[0];
+  ch.freq=OSC_BASE_FREQ*oscState.freq;
+  ch.amps=OSC_BASE_AMPS.map(a=>a*oscState.amp);
+  ch.wave=oscState.wave;
+  ch.cycles=oscState.freq;
+  ch.amp=oscState.amp;
+  ch.noise_add=oscState.noise;
+}
+
+function oscSetWave(wave){
+  oscState.wave=wave;
+  document.querySelectorAll('.osc-wbtn').forEach(btn=>btn.classList.toggle('on',btn.dataset.wave===wave));
+  if(_audioOn) _oscBuild();
+}
+
+function oscSetParam(param,rawValue){
+  const val=parseFloat(rawValue);
+  if(param==='freq'){
+    oscState.freq=val;
+    document.getElementById('oscFreqVal').textContent=Math.round(val*220)+' Hz';
+    oscUpdateTrack('oscFreq',.1,4.0,val);
+    _oscUpdateFreq();
+  } else if(param==='amp'){
+    oscState.amp=val;
+    document.getElementById('oscAmpVal').textContent=val.toFixed(1);
+    oscUpdateTrack('oscAmp',.1,2.0,val);
+    _oscUpdateAmp();
+  } else if(param==='noise'){
+    oscState.noise=val;
+    document.getElementById('oscNoiseVal').textContent=val.toFixed(2);
+    oscUpdateTrack('oscNoise',0,.4,val);
+    if(_noiseGain) _noiseGain.gain.setTargetAtTime(val*0.8,_actx.currentTime,.02);
+  }
+}
+
+function oscUpdateTrack(id,min,max,val){
+  const el=document.getElementById(id);
+  if(el) el.style.setProperty('--pct',((val-min)/(max-min)*100).toFixed(1)+'%');
+}
+
+/* --- Audio (Web Audio API) --- */
+const OSC_BASE_HZ=220;
+const WAVE_GAIN={sine:.32,square:.1,triangle:.26,sawtooth:.14};
+let _actx=null,_osc=null,_masterGain=null,_noiseGain=null,_audioOn=false;
+
+function oscToggleAudio(){
+  if(_audioOn) _audioStop(); else _audioStart();
+}
+
+function _audioStart(){
+  if(_audioOn) return;
+  _actx=new(window.AudioContext||window.webkitAudioContext)();
+  _masterGain=_actx.createGain();
+  _masterGain.gain.setValueAtTime(0,_actx.currentTime);
+  _masterGain.connect(_actx.destination);
+  /* Bruit blanc en boucle — gain contrôlé par NOISE */
+  const bufLen=_actx.sampleRate*2;
+  const noiseBuf=_actx.createBuffer(1,bufLen,_actx.sampleRate);
+  const nd=noiseBuf.getChannelData(0);
+  for(let i=0;i<bufLen;i++) nd[i]=Math.random()*2-1;
+  const noiseSrc=_actx.createBufferSource();
+  noiseSrc.buffer=noiseBuf; noiseSrc.loop=true;
+  _noiseGain=_actx.createGain();
+  _noiseGain.gain.value=0;
+  noiseSrc.connect(_noiseGain); _noiseGain.connect(_masterGain);
+  noiseSrc.start();
+  _audioOn=true;
+  _oscBuild();
+  _masterGain.gain.setTargetAtTime(oscState.amp*0.38,_actx.currentTime,.06);
+  const btn=document.getElementById('oscPlay');
+  if(btn){btn.textContent='■';btn.classList.add('playing');}
+}
+
+function _audioStop(){
+  if(!_audioOn||!_actx) return;
+  _masterGain.gain.setTargetAtTime(0,_actx.currentTime,.08);
+  setTimeout(()=>{
+    if(_osc){try{_osc.stop();}catch(e){}} _osc=null;
+    _actx.close().catch(()=>{});
+    _actx=null; _audioOn=false;
+  },400);
+  const btn=document.getElementById('oscPlay');
+  if(btn){btn.textContent='▶';btn.classList.remove('playing');}
+}
+
+function _oscBuild(){
+  if(!_actx) return;
+  if(_osc){try{_osc.stop();}catch(e){}} _osc=null;
+  _osc=_actx.createOscillator();
+  _osc.type=oscState.wave==='sine'?'sine':oscState.wave;
+  _osc.frequency.value=OSC_BASE_HZ*oscState.freq;
+  const g=_actx.createGain();
+  g.gain.value=WAVE_GAIN[oscState.wave]||.25;
+  _osc.connect(g); g.connect(_masterGain); _osc.start();
+}
+
+function _oscUpdateFreq(){
+  if(!_actx||!_audioOn||!_osc) return;
+  _osc.frequency.setTargetAtTime(OSC_BASE_HZ*oscState.freq,_actx.currentTime,.02);
+}
+
+function _oscUpdateAmp(){
+  if(!_actx||!_audioOn) return;
+  _masterGain.gain.setTargetAtTime(oscState.amp*0.38,_actx.currentTime,.02);
+}
+
+/* --- Glitch électrique — altère l'oscillateur actif --- */
+function _glitchFX(intense){
+  if(!_actx||!_audioOn||!_osc) return;
+  const now=_actx.currentTime;
+  const baseHz=OSC_BASE_HZ*oscState.freq;
+  const baseGain=oscState.amp*0.38;
+  /* Saut de fréquence brutal puis retour — décharge de condensateur */
+  const mult=intense?(4+Math.random()*6):(1.8+Math.random()*2);
+  const dur=intense?.18:.08;
+  _osc.frequency.cancelScheduledValues(now);
+  _osc.frequency.setValueAtTime(baseHz*mult,now);
+  _osc.frequency.setTargetAtTime(baseHz,now+dur*.25,dur*.3);
+  /* Pic de gain */
+  _masterGain.gain.cancelScheduledValues(now);
+  _masterGain.gain.setValueAtTime(baseGain*(intense?2.2:1.6),now);
+  _masterGain.gain.setTargetAtTime(baseGain,now+.012,.04);
+}
 
 /* ============================================================
    SYSTÈME BILINGUE
@@ -2234,6 +2563,21 @@ const LANG = {
     topo_p1:  'Ces matières fonctionnent comme des supports de mémoire — à la manière d\'un disque, elles contiennent des traces lisibles. L\'aiguille de lecture a été remplacée par un micro électret qui capte directement la texture en contact, rendant audible ce que chaque matière a enregistré. La vitesse de rotation est variable, permettant de ralentir jusqu\'au presque-immobile.',
     topo_p2:  'Le son produit est diffusé simultanément sur une enceinte et sur un casque. L\'enceinte crée une présence sonore dans l\'espace ; le casque donne accès au détail — le grain de la matière, ses irrégularités, son relief sonore. Le dispositif est interactif : le public peut modifier la vitesse, changer de disque, manipuler la matière.',
     topo_ctx: 'Installation présentée dans le cadre du projet The Gap, co-création avec Katharina Rosenberger.',
+
+    // OSC Widget
+    osc_panel_title:    'OSCILLATEUR',
+    osc_panel_subtitle: 'MODULE DE SYNTHÈSE',
+    osc_section_wave:   'FORME D\'ONDE',
+    osc_section_params: 'PARAMÈTRES',
+    osc_param_freq:     'FREQ',
+    osc_param_amp:      'AMP',
+    osc_param_harm:     'HARM',
+    osc_param_noise:    'NOISE',
+    osc_desc_sine:      'Onde sinusoïdale pure.<br>Fondamentale seule. HARM ajoute des multiples entiers — la base de la synthèse additive.',
+    osc_desc_square:    'Onde carrée.<br>Harmoniques impaires uniquement (1, 3, 5…). Son nasal, caractéristique des synthés analogiques.',
+    osc_desc_triangle:  'Onde triangulaire.<br>Harmoniques impaires atténuées en 1/n². Plus douce que le carré, plus riche que le sinus.',
+    osc_desc_sawtooth:  'Dent de scie.<br>Toutes les harmoniques (1, 2, 3…). Timbre le plus brillant et le plus dense — base de la synthèse soustractive.',
+    osc_desc_synth:     'Mode SYNTH — algorithme original.<br>Somme d\'harmoniques + bruit fractal (FBM) + transitoires aléatoires. L\'instabilité analogique comme modèle.',
   },
 
   en: {
@@ -2357,6 +2701,21 @@ const LANG = {
     topo_p1:  'These materials function as memory supports — like a record, they hold legible traces. The stylus has been replaced by an electret microphone that directly captures the texture in contact, making audible what each material has recorded. The rotation speed is variable, allowing deceleration down to near-stillness.',
     topo_p2:  'The resulting sound is broadcast simultaneously through a speaker and headphones. The speaker creates a sonic presence in the space; the headphones give access to the detail — the grain of the material, its irregularities, its sonic relief. The device is interactive: the audience can adjust the speed, change the disc, and handle the material.',
     topo_ctx: 'Installation presented as part of The Gap project, co-created with Katharina Rosenberger.',
+
+    // OSC Widget
+    osc_panel_title:    'OSCILLATOR',
+    osc_panel_subtitle: 'SYNTHESIS MODULE',
+    osc_section_wave:   'WAVEFORM',
+    osc_section_params: 'PARAMETERS',
+    osc_param_freq:     'FREQ',
+    osc_param_amp:      'AMP',
+    osc_param_harm:     'HARM',
+    osc_param_noise:    'NOISE',
+    osc_desc_sine:      'Pure sine wave.<br>Fundamental only. HARM adds integer multiples — the building block of additive synthesis.',
+    osc_desc_square:    'Square wave.<br>Odd harmonics only (1, 3, 5…). Nasal tone, characteristic of analogue synthesisers.',
+    osc_desc_triangle:  'Triangle wave.<br>Odd harmonics attenuated at 1/n². Softer than square, richer than sine.',
+    osc_desc_sawtooth:  'Sawtooth wave.<br>All harmonics (1, 2, 3…). The brightest, densest timbre — the basis of subtractive synthesis.',
+    osc_desc_synth:     'SYNTH mode — original algorithm.<br>Harmonic sum + fractal noise (FBM) + random transients. Analogue instability as a model.',
   }
 };
 
@@ -2380,6 +2739,16 @@ function setLang(lang) {
   // Boutons "Fermer" des modales — traités globalement
   document.querySelectorAll('.modal-close').forEach(b => b.textContent = L.modal_close);
 }
+/* ============================================================
+   OSC WIDGET — Initialisation
+   ============================================================ */
+(function oscInit(){
+  oscUpdateTrack('oscFreq',.1,4.0,1.0);
+  oscUpdateTrack('oscAmp',.1,2.0,1.0);
+  oscUpdateTrack('oscNoise',0,.4,0);
+  document.getElementById('oscFreqVal').textContent='220 Hz';
+  oscSetWave('sine');
+})();
 </script>
 </body>
 </html>
