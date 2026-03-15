@@ -1855,6 +1855,9 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
 function modalOpen(id){
   document.getElementById(id).classList.add('open');
   document.body.style.overflow='hidden';
+  const slug=id.replace('modal-','');
+  const page=location.hash.split('/')[0]||'#projets';
+  history.replaceState(null,'',page+'/'+slug);
 }
 function modalClose(id,e,withAudio,vcId){
   const el=document.getElementById(id);
@@ -1863,6 +1866,7 @@ function modalClose(id,e,withAudio,vcId){
     if(vcId) vcStopAll(vcId);
     el.classList.remove('open');
     document.body.style.overflow='';
+    history.replaceState(null,'',location.hash.split('/')[0]);
   }
 }
 /* Raccourcis par modale */
@@ -2036,7 +2040,24 @@ function go(id){
   if(id!=='home') document.getElementById('page-'+id).scrollTop=0;
   /* Recalculer la position du slider vinyle à l'ouverture de Recherche */
   if(id==='recherche') setTimeout(()=>rsGo('vinyle',rsState['vinyle']||0),50);
+  history.replaceState(null,'',id==='home'?location.pathname:'#'+id);
 }
+
+/* Liens directs : lire le hash à l'ouverture */
+(function(){
+  const parts=location.hash.replace('#','').split('/');
+  const validPages=['projets','recherche','collaborations','contact'];
+  const validModals={
+    vinyle:'openModalVinyle',abdm:'openModalABDM',fondue:'openModalFondue',
+    blinddate:'openModalBlindDate',sillons:'openModalSillons',
+    topographies:'openModal',dasein:'openModalDasein',f451:'openModalF451',
+    rilke:'openModalRilke',paroles:'openModalParoles',lolomis:'openModalLolomis',
+    biganos:'openModalBiganos',madarat:'openModalMadarat',vybisto:'openModalVybisto',
+    wdw:'openModalWdw',pinter:'openModalPinter'
+  };
+  if(validPages.includes(parts[0])) go(parts[0]);
+  if(parts[1]&&validModals[parts[1]]) window[validModals[parts[1]]]();
+})();
 
 /* ============================================================
    FILTRES PROJETS
