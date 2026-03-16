@@ -122,7 +122,10 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
    ============================================================ */
 #page-home{overflow:hidden;}
 /* Bloc nom positionné en bas à gauche */
-.home-name{position:absolute;bottom:6vh;left:52px;z-index:10;user-select:none;line-height:1;}
+.home-name{user-select:none;line-height:1;}
+/* Conteneur flex bas de page — desktop: côte à côte / mobile: colonne */
+.home-bottom-stack{position:absolute;bottom:6vh;left:0;right:0;padding:0 52px;display:flex;align-items:flex-end;justify-content:space-between;z-index:20;pointer-events:none;}
+.home-bottom-stack>*{pointer-events:auto;}
 .name-first{display:block;font-family:var(--mono);font-size:12px;font-weight:700;
   letter-spacing:.42em;text-transform:uppercase;color:var(--warm);opacity:.7;margin-bottom:8px;}
 /* Nom de famille en grand — chaque lettre est un <span class="l"> pour l'effet glitch */
@@ -497,10 +500,6 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
    OSC WIDGET — Intégré page d'accueil
    ============================================================ */
 .osc-panel{
-  position:absolute;
-  bottom:6vh;
-  right:52px;
-  z-index:20;
   width:220px;
 }
 .osc-wave-row{display:flex;align-items:center;gap:0;margin-bottom:14px;}
@@ -579,8 +578,8 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
   nav{padding:16px 20px;}
   nav ul{gap:14px;}
   .page-inner{padding:90px 20px 60px;}
-  .home-name{left:20px;bottom:max(12vh,120px);}
-  .osc-panel{right:20px;width:calc(100vw - 40px);max-width:280px;bottom:max(12vh,120px);}
+  .home-bottom-stack{flex-direction:column;align-items:flex-start;bottom:max(6vh,30px);padding:0 20px;gap:16px;}
+  .osc-panel{width:calc(100vw - 40px);max-width:280px;}
   .modal-overlay.open{align-items:flex-start;padding-top:56px;padding-bottom:16px;}
   .modal-box{max-height:calc(100vh - 72px);max-height:calc(100dvh - 72px);padding:40px 20px 32px;}
   .disc-line{padding:0 20px;} /* Adapter le padding au mobile */
@@ -606,8 +605,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
    RESPONSIVE — TRÈS ÉTROIT (< 440px) — disc-line 3 lignes
    ============================================================ */
 @media(max-width:440px){
-  .home-name{bottom:max(14vh,160px);}
-  .osc-panel{bottom:max(14vh,160px);}
+  .home-bottom-stack{bottom:max(8vh,40px);}
 }
 
 /* ============================================================
@@ -651,24 +649,19 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
      PAGE : HOME
      ============================================================ -->
 <div class="page active" id="page-home">
-  <div class="home-name">
-    <span class="name-first">Louis</span>
-    <!-- Chaque lettre est un <span class="l"> pour l'animation glitch -->
-    <span class="name-last" id="nameMain">
-      <span class="l">D</span><span class="l">e</span><span class="l">l</span><span class="l">i</span><span class="l">g</span><span class="l">n</span><span class="l">o</span><span class="l">n</span>
-    </span>
-  </div>
-  <!-- Ligne de disciplines en bas (cachée sur mobile) -->
-  <div class="disc-line">
-    <span>Composition</span>
-    <span>Performance</span>
-    <span data-i18n="disc_installation">Installation sonore</span>
-  </div>
+  <div class="home-bottom-stack">
+    <div class="home-name">
+      <span class="name-first">Louis</span>
+      <!-- Chaque lettre est un <span class="l"> pour l'animation glitch -->
+      <span class="name-last" id="nameMain">
+        <span class="l">D</span><span class="l">e</span><span class="l">l</span><span class="l">i</span><span class="l">g</span><span class="l">n</span><span class="l">o</span><span class="l">n</span>
+      </span>
+    </div>
 
-  <!-- ============================================================
-       OSC WIDGET — Panneau de contrôle permanent
-       ============================================================ -->
-  <div class="osc-panel" id="oscPanel">
+    <!-- ============================================================
+         OSC WIDGET — Panneau de contrôle permanent
+         ============================================================ -->
+    <div class="osc-panel" id="oscPanel">
     <div class="osc-wave-row">
       <button class="osc-wbtn on" data-wave="sine"     onclick="oscSetWave('sine')"    >SINE</button>
       <button class="osc-wbtn"    data-wave="square"   onclick="oscSetWave('square')"  >SQR</button>
@@ -697,6 +690,14 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
       </div>
       <input class="osc-slider" id="oscNoise" type="range" min="0" max="0.4" step="0.01" value="0" oninput="oscSetParam('noise',this.value)">
     </div>
+  </div><!-- /osc-panel -->
+  </div><!-- /home-bottom-stack -->
+
+  <!-- Ligne de disciplines en fond (cachée sur mobile) -->
+  <div class="disc-line">
+    <span>Composition</span>
+    <span>Performance</span>
+    <span data-i18n="disc_installation">Installation sonore</span>
   </div>
 
 </div>
