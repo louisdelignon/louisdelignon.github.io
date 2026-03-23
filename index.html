@@ -1873,7 +1873,7 @@ function modalOpen(id){
   document.body.style.overflow='hidden';
   const slug=id.replace('modal-','');
   const page=location.hash.split('/')[0]||'#projets';
-  history.replaceState(null,'',page+'/'+slug);
+  history.pushState(null,'',page+'/'+slug);
 }
 function modalClose(id,e,withAudio,vcId){
   const el=document.getElementById(id);
@@ -1882,7 +1882,7 @@ function modalClose(id,e,withAudio,vcId){
     if(vcId) vcStopAll(vcId);
     el.classList.remove('open');
     document.body.style.overflow='';
-    history.replaceState(null,'',location.hash.split('/')[0]);
+    if(!_popstate) history.replaceState(null,'',location.hash.split('/')[0]);
   }
 }
 /* Raccourcis par modale */
@@ -2046,6 +2046,7 @@ function ekToggle(){
    NAVIGATION ENTRE PAGES
    go(id) : affiche la page #page-{id} et marque le lien nav actif.
    ============================================================ */
+let _popstate=false;
 function go(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('nav ul a').forEach(a=>a.classList.remove('active'));
@@ -2056,24 +2057,61 @@ function go(id){
   if(id!=='home') document.getElementById('page-'+id).scrollTop=0;
   /* Recalculer la position du slider vinyle à l'ouverture de Recherche */
   if(id==='recherche') setTimeout(()=>rsGo('vinyle',rsState['vinyle']||0),50);
-  history.replaceState(null,'',id==='home'?location.pathname:'#'+id);
+  if(!_popstate){
+    const newUrl=id==='home'?location.pathname:'#'+id;
+    const same=id==='home'?!location.hash:location.hash==='#'+id;
+    if(same) history.replaceState(null,'',newUrl);
+    else history.pushState(null,'',newUrl);
+  }
 }
 
 /* Liens directs : lire le hash à l'ouverture */
+const _validPages=['projets','recherche','collaborations','contact'];
+const _validModals={
+  vinyle:'openModalVinyle',abdm:'openModalABDM',fondue:'openModalFondue',
+  blinddate:'openModalBlindDate',sillons:'openModalSillons',
+  topographies:'openModal',dasein:'openModalDasein',f451:'openModalF451',
+  rilke:'openModalRilke',paroles:'openModalParoles',lolomis:'openModalLolomis',
+  biganos:'openModalBiganos',madarat:'openModalMadarat',vybisto:'openModalVybisto',
+  wdw:'openModalWdw',pinter:'openModalPinter'
+};
 (function(){
   const parts=location.hash.replace('#','').split('/');
-  const validPages=['projets','recherche','collaborations','contact'];
-  const validModals={
-    vinyle:'openModalVinyle',abdm:'openModalABDM',fondue:'openModalFondue',
-    blinddate:'openModalBlindDate',sillons:'openModalSillons',
-    topographies:'openModal',dasein:'openModalDasein',f451:'openModalF451',
-    rilke:'openModalRilke',paroles:'openModalParoles',lolomis:'openModalLolomis',
-    biganos:'openModalBiganos',madarat:'openModalMadarat',vybisto:'openModalVybisto',
-    wdw:'openModalWdw',pinter:'openModalPinter'
-  };
-  if(validPages.includes(parts[0])) go(parts[0]);
-  if(parts[1]&&validModals[parts[1]]) window[validModals[parts[1]]]();
+  if(_validPages.includes(parts[0])) go(parts[0]);
+  if(parts[1]&&_validModals[parts[1]]) window[_validModals[parts[1]]]();
 })();
+
+/* Gestion du bouton retour */
+const _modalParams={
+  'modal-biganos'     :{withAudio:true, vcId:null},
+  'modal-madarat'     :{withAudio:true, vcId:null},
+  'modal-rilke'       :{withAudio:true, vcId:null},
+  'modal-f451'        :{withAudio:true, vcId:null},
+  'modal-dasein'      :{withAudio:false,vcId:null},
+  'modal-vybisto'     :{withAudio:false,vcId:null},
+  'modal-wdw'         :{withAudio:false,vcId:null},
+  'modal-pinter'      :{withAudio:false,vcId:null},
+  'modal-paroles'     :{withAudio:false,vcId:null},
+  'modal-lolomis'     :{withAudio:false,vcId:null},
+  'modal-sillons'     :{withAudio:true, vcId:'sillons'},
+  'modal-blinddate'   :{withAudio:true, vcId:null},
+  'modal-fondue'      :{withAudio:true, vcId:null},
+  'modal-abdm'        :{withAudio:true, vcId:null},
+  'modal-vinyle'      :{withAudio:true, vcId:null},
+  'modal-topographies':{withAudio:true, vcId:'topo'}
+};
+window.addEventListener('popstate',function(){
+  _popstate=true;
+  document.querySelectorAll('.modal-overlay.open').forEach(m=>{
+    const p=_modalParams[m.id]||{withAudio:false,vcId:null};
+    modalClose(m.id,null,p.withAudio,p.vcId);
+  });
+  const parts=location.hash.replace('#','').split('/');
+  if(_validPages.includes(parts[0])) go(parts[0]);
+  else go('home');
+  if(parts[1]&&_validModals[parts[1]]) window[_validModals[parts[1]]]();
+  _popstate=false;
+});
 
 /* ============================================================
    FILTRES PROJETS
