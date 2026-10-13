@@ -22,7 +22,21 @@
 <meta name="twitter:title" content="Louis Delignon">
 <meta name="twitter:image" content="https://louisdelignon.com/images/vinyle_volpe.jpg">
 
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/space-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/bricolage-grotesque-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* ============================================================
+   POLICES — hébergées sur le site (dossier fonts/)
+   Plus aucun appel à Google Fonts : aucune donnée de visiteur
+   n'est transmise à Google. Licence SIL OFL (voir fonts/).
+   ============================================================ */
+@font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/space-mono-latin-400-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/space-mono-latin-ext-400-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:'Space Mono';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/space-mono-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Space Mono';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/space-mono-latin-ext-700-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:'Bricolage Grotesque';font-style:normal;font-weight:200 800;font-display:swap;src:url(fonts/bricolage-grotesque-latin-opsz-normal.woff2) format('woff2-variations'),url(fonts/bricolage-grotesque-latin-opsz-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Bricolage Grotesque';font-style:normal;font-weight:200 800;font-display:swap;src:url(fonts/bricolage-grotesque-latin-ext-opsz-normal.woff2) format('woff2-variations'),url(fonts/bricolage-grotesque-latin-ext-opsz-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+</style>
 
 <style>
 /* ============================================================
@@ -435,6 +449,22 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
 .modal-project-link span{font-size:16px;line-height:1;transition:transform .25s;}
 .modal-project-link:hover span{transform:translate(3px,-3px);}
 
+/* Lien discret "Mentions légales & confidentialité" en bas des pages intérieures */
+.legal-foot{margin-top:72px;padding-top:20px;border-top:1px solid var(--line);}
+.legal-foot a{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--dim);text-decoration:none;cursor:pointer;transition:color .2s;}
+.legal-foot a:hover{color:var(--violet);}
+/* Contenu de la modale légale */
+.legal-body h3{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--violet);margin:32px 0 12px;}
+.legal-body h3:first-child{margin-top:0;}
+.legal-body p{font-family:var(--mono);font-size:13px;line-height:1.9;color:var(--dim2);}
+.legal-body p+p{margin-top:10px;}
+.legal-body a{color:var(--violet);text-decoration:none;border-bottom:1px solid var(--violet2);}
+.legal-body a:hover{border-color:var(--violet);}
+.legal-date{margin-top:32px;padding-top:16px;border-top:1px solid var(--line2);
+  font-family:var(--mono);font-size:11px;color:var(--dim);}
+
 /* Grille 3 albums (modale Lolomis) */
 .modal-albums{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:8px;}
 .modal-album{display:flex;flex-direction:column;gap:8px;text-decoration:none;}
@@ -763,7 +793,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
           <div class="psub" data-i18n="psub_abdm">Mise en scène Thierry Crozat — Cie les arTpenteurs</div>
           <div class="ptags"><span class="ptag role">Composition</span><span class="ptag role">Performance</span><span class="ptag" data-i18n="tag_theatre">Théâtre</span></div>
         </div>
-        <div class="pstatus s-re" data-i18n="status_re">● Récent</div>
+        <div class="pstatus s-pa"></div>
       </div>
 
       <div class="proj-row" data-roles="composition" data-ctx="theatre" onclick="openModalFondue()" style="cursor:pointer;">
@@ -773,7 +803,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
           <div class="psub" data-i18n="psub_fondue">Mise en scène Mehdi Duman — Cie Divisar</div>
           <div class="ptags"><span class="ptag role">Composition</span><span class="ptag" data-i18n="tag_theatre">Théâtre</span></div>
         </div>
-        <div class="pstatus s-re" data-i18n="status_re">● Récent</div>
+        <div class="pstatus s-pa"></div>
       </div>
 
       <div class="proj-row" data-roles="composition" data-ctx="film" onclick="openModalBlindDate()" style="cursor:pointer;">
@@ -783,7 +813,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
           <div class="psub" data-i18n="psub_blinddate">Court-métrage réalisé par Mehdi Duman</div>
           <div class="ptags"><span class="ptag role">Composition</span><span class="ptag">Film</span></div>
         </div>
-        <div class="pstatus s-re" data-i18n="status_re">● Récent</div>
+        <div class="pstatus s-pa"></div>
       </div>
 
       <div class="proj-row" data-roles="installation" data-ctx="concert" onclick="openModalSillons()" onmouseenter="vcPreload('sillons')" style="cursor:pointer;">
@@ -803,7 +833,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
           <div class="psub" data-i18n="psub_topo">Co-création avec Katharina Rosenberger — projet The Gap</div>
           <div class="ptags"><span class="ptag role" data-i18n="tag_installation">Installation sonore</span></div>
         </div>
-        <div class="pstatus s-re" data-i18n="status_re">● Récent</div>
+        <div class="pstatus s-pa"></div>
       </div>
 
       <div class="proj-row" data-roles="composition performance" data-ctx="concert" onclick="openModalDasein()" style="cursor:pointer;">
@@ -899,6 +929,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
       </div>
 
     </div><!-- fin .proj-list -->
+    <div class="legal-foot"><a onclick="openModalLegal()" data-i18n="legal_link">Mentions légales &amp; confidentialité</a></div>
   </div>
 </div>
 
@@ -982,6 +1013,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
       <p data-i18n="rech_fil_p2">L'aléatoire, l'imprévisible et la valorisation du moment présent en sont des piliers centraux. L'implication du·de la performeur·euse est constitutive de la pièce : ses décisions, ses réactions, son écoute transforment la forme en temps réel. La partition fixe des règles d'interaction, des zones de liberté, des seuils — elle génère une situation plutôt qu'elle ne prescrit un résultat.</p>
       <p data-i18n="rech_fil_p3">Cette approche place le concert comme lieu de risque et de présence. Ce qui se passe ne peut être répété à l'identique : chaque performance est une occurrence unique, irréductible à sa notation.</p>
     </div>
+    <div class="legal-foot"><a onclick="openModalLegal()" data-i18n="legal_link">Mentions légales &amp; confidentialité</a></div>
   </div>
 </div>
 
@@ -1013,6 +1045,11 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
           <div class="ek-yr">
             <div class="ek-yr-label">2026</div>
             <div class="ek-events">
+              <div class="ek-ev">
+                <div class="ek-ev-title">The Smell of Blue Electricity</div>
+                <div class="ek-ev-ctx" data-i18n="ek_ctx_2026_2">Sept. · Bâtiment Arcoop, Genève · Avec l'Ensemble Vide</div>
+                <div class="ek-ev-pieces">Vittorio Montalti</div>
+              </div>
               <div class="ek-ev">
                 <div class="ek-ev-tag" data-i18n="ek_tag_inst_creation">Installation · Création</div>
                 <div class="ek-ev-title">Sillons de mémoires</div>
@@ -1305,6 +1342,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
       </div>
     </div>
 
+    <div class="legal-foot"><a onclick="openModalLegal()" data-i18n="legal_link">Mentions légales &amp; confidentialité</a></div>
   </div>
 </div><!-- fin page-collaborations -->
 
@@ -1340,6 +1378,7 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
         </div>
       </div>
     </div>
+    <div class="legal-foot"><a onclick="openModalLegal()" data-i18n="legal_link">Mentions légales &amp; confidentialité</a></div>
   </div>
 </div>
 
@@ -1807,6 +1846,18 @@ nav ul a.active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bo
   </div>
 </div>
 
+<!-- MODALE : Mentions légales & confidentialité
+     Le texte est dans LANG (clés legal_html) pour FR et EN.
+     L'adresse e-mail est assemblée en JS (voir "E-MAIL ANTI-SPAM") -->
+<div class="modal-overlay" id="modal-legal" onclick="closeModalLegal(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModalLegal()">✕ Fermer</button>
+    <div class="modal-title" data-i18n="legal_title">Mentions légales &amp; confidentialité</div>
+    <div class="modal-meta">louisdelignon.com</div>
+    <div class="legal-body" id="legal-body" data-i18n-html="legal_html"></div>
+  </div>
+</div>
+
 <!-- MODALE : Topographies (carrousel vidéo paysage) -->
 <div class="modal-overlay" id="modal-topographies" onclick="closeModal(event)">
   <div class="modal-box">
@@ -1916,6 +1967,8 @@ function openModalABDM()      { modalOpen('modal-abdm'); }
 function closeModalABDM(e)    { modalClose('modal-abdm',      e, true); }
 function openModalVinyle()    { modalOpen('modal-vinyle'); }
 function closeModalVinyle(e)  { modalClose('modal-vinyle',    e, true); }
+function openModalLegal()     { modalOpen('modal-legal'); }
+function closeModalLegal(e)   { modalClose('modal-legal',     e, false); }
 function openModal()          { modalOpen('modal-topographies'); setTimeout(()=>vcGo('topo',0),50); }
 function closeModal(e)        { modalClose('modal-topographies', e, true, 'topo'); }
 
@@ -2073,7 +2126,7 @@ const _validModals={
   topographies:'openModal',dasein:'openModalDasein',f451:'openModalF451',
   rilke:'openModalRilke',paroles:'openModalParoles',lolomis:'openModalLolomis',
   biganos:'openModalBiganos',madarat:'openModalMadarat',vybisto:'openModalVybisto',
-  wdw:'openModalWdw',pinter:'openModalPinter'
+  wdw:'openModalWdw',pinter:'openModalPinter',legal:'openModalLegal'
 };
 (function(){
   const parts=location.hash.replace('#','').split('/');
@@ -2098,7 +2151,8 @@ const _modalParams={
   'modal-fondue'      :{withAudio:true, vcId:null},
   'modal-abdm'        :{withAudio:true, vcId:null},
   'modal-vinyle'      :{withAudio:true, vcId:null},
-  'modal-topographies':{withAudio:true, vcId:'topo'}
+  'modal-topographies':{withAudio:true, vcId:'topo'},
+  'modal-legal'       :{withAudio:false,vcId:null}
 };
 window.addEventListener('popstate',function(){
   _popstate=true;
@@ -2559,6 +2613,7 @@ const LANG = {
     ek_tag_inst_creation: 'Installation · Création',
 
     // Eklekto — contextes
+    ek_ctx_2026_2: 'Sept. · Bâtiment Arcoop, Genève · Avec l\'Ensemble Vide',
     ek_ctx_2026_1: 'Fév. · Opéra de Zürich · Mise en scène Steven Whiting<br>Installation sonore : Louis Delignon &amp; Katharina Rosenberger',
     ek_ctx_2025_1: 'Avr. · Festival Archipel, Genève',
     ek_ctx_2025_2: 'Jan. · Festival Sonic Matter, Zürich',
@@ -2639,6 +2694,11 @@ const LANG = {
     topo_p2:  'Le son produit est diffusé simultanément sur une enceinte et sur un casque. L\'enceinte crée une présence sonore dans l\'espace ; le casque donne accès au détail — le grain de la matière, ses irrégularités, son relief sonore. Le dispositif est interactif : le public peut modifier la vitesse, changer de disque, manipuler la matière.',
     topo_ctx: 'Installation présentée dans le cadre du projet The Gap, co-création avec Katharina Rosenberger.',
 
+    // Mentions légales & confidentialité
+    legal_link:  'Mentions légales & confidentialité',
+    legal_title: 'Mentions légales & confidentialité',
+    legal_html:  '<h3>Éditeur du site</h3><p>Louis Delignon — compositeur, percussionniste et luthier électronique<br>Veytaux, canton de Vaud, Suisse<br>Contact : <span class="js-email">[adresse e-mail — activer JavaScript]</span></p><h3>Hébergement</h3><p>GitHub Pages — GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis.</p><h3>Protection des données</h3><p>Ce site est une simple vitrine. Il n\'utilise <strong>aucun cookie</strong>, aucun outil de statistiques, aucun pistage publicitaire et aucun formulaire. Je ne collecte moi-même aucune donnée personnelle.</p><p>Lors de chaque visite, l\'hébergeur GitHub enregistre automatiquement des données techniques (adresse IP, navigateur, date et heure) dans ses journaux, pour assurer la sécurité et le bon fonctionnement du service. Ces données peuvent être traitées aux États-Unis. Voir la <a href="https://docs.github.com/fr/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">déclaration de confidentialité de GitHub ↗</a>.</p><p>Les polices de caractères sont hébergées directement sur ce site : aucune donnée n\'est transmise à Google ou à un autre service tiers lors de l\'affichage des pages.</p><p>Les liens vers YouTube, SoundCloud, Deezer, Instagram et d\'autres sites ne chargent rien tant que vous ne cliquez pas. Une fois sur ces sites, leurs propres règles de confidentialité s\'appliquent.</p><p>Conformément à la loi fédérale sur la protection des données (nLPD), vous pouvez me contacter à l\'adresse ci-dessus pour toute question ou demande concernant vos données.</p><h3>Droits d\'auteur</h3><p>Les textes, compositions, enregistrements et images de ce site sont protégés par le droit d\'auteur. Sauf mention contraire, ils appartiennent à Louis Delignon ou à leurs auteurs respectifs. Ils sont mis à disposition pour l\'écoute et la consultation uniquement : toute reproduction, diffusion, adaptation ou utilisation, en tout ou en partie, notamment des enregistrements sonores, est interdite sans autorisation écrite préalable. Crédits photo : volpe_photography, Alfons L Reiter, G. Maillot (point-of-views.ch).</p><p class="legal-date">Dernière mise à jour : 13 octobre 2026</p>',
+
     // OSC Widget
     osc_panel_title:    'OSCILLATEUR',
     osc_panel_subtitle: 'MODULE DE SYNTHÈSE',
@@ -2703,6 +2763,7 @@ const LANG = {
     ek_tag_creation:      'World premiere',
     ek_tag_inst_creation: 'Installation · World premiere',
 
+    ek_ctx_2026_2: 'Sep. · Bâtiment Arcoop, Geneva · With Ensemble Vide',
     ek_ctx_2026_1: 'Feb. · Zurich Opera House · Direction Steven Whiting<br>Sound installation: Louis Delignon &amp; Katharina Rosenberger',
     ek_ctx_2025_1: 'Apr. · Festival Archipel, Geneva',
     ek_ctx_2025_2: 'Jan. · Festival Sonic Matter, Zurich',
@@ -2777,6 +2838,10 @@ const LANG = {
     topo_p2:  'The resulting sound is broadcast simultaneously through a speaker and headphones. The speaker creates a sonic presence in the space; the headphones give access to the detail — the grain of the material, its irregularities, its sonic relief. The device is interactive: the audience can adjust the speed, change the disc, and handle the material.',
     topo_ctx: 'Installation presented as part of The Gap project, co-created with Katharina Rosenberger.',
 
+    legal_link:  'Legal notice & privacy',
+    legal_title: 'Legal notice & privacy',
+    legal_html:  '<h3>Site owner</h3><p>Louis Delignon — composer, percussionist and electronic instrument maker<br>Veytaux, canton of Vaud, Switzerland<br>Contact: <span class="js-email">[email address — enable JavaScript]</span></p><h3>Hosting</h3><p>GitHub Pages — GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA.</p><h3>Data protection</h3><p>This is a simple portfolio site. It uses <strong>no cookies</strong>, no analytics, no advertising trackers and no forms. I do not collect any personal data myself.</p><p>On each visit, the host GitHub automatically records technical data (IP address, browser, date and time) in its server logs, to keep the service secure and running. This data may be processed in the United States. See <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub\'s privacy statement ↗</a>.</p><p>Fonts are hosted directly on this site: no data is sent to Google or any other third party when pages are displayed.</p><p>Links to YouTube, SoundCloud, Deezer, Instagram and other sites load nothing until you click them. Once there, their own privacy policies apply.</p><p>Under the Swiss Federal Act on Data Protection (FADP), you can contact me at the address above with any question or request about your data.</p><h3>Copyright</h3><p>The texts, compositions, recordings and images on this site are protected by copyright. Unless otherwise stated, they belong to Louis Delignon or their respective authors. They are made available for listening and viewing only: any reproduction, distribution, adaptation or use, in whole or in part, including of the sound recordings, is prohibited without prior written permission. Photo credits: volpe_photography, Alfons L Reiter, G. Maillot (point-of-views.ch).</p><p class="legal-date">Last updated: 13 October 2026</p>',
+
     // OSC Widget
     osc_panel_title:    'OSCILLATOR',
     osc_panel_subtitle: 'SYNTHESIS MODULE',
@@ -2813,7 +2878,33 @@ function setLang(lang) {
   });
   // Boutons "Fermer" des modales — traités globalement
   document.querySelectorAll('.modal-close').forEach(b => b.textContent = L.modal_close);
+  injectEmail();
 }
+
+/* ============================================================
+   E-MAIL ANTI-SPAM
+   L'adresse n'apparaît jamais en clair dans le code HTML :
+   elle est assemblée ici à l'affichage, ce qui la cache aux
+   robots qui aspirent les adresses. Pour la changer, modifier
+   les deux morceaux ci-dessous (avant et après le @).
+   ============================================================ */
+const EMAIL_USER   = 'delignon.louis';
+const EMAIL_DOMAIN = 'yahoo.fr';
+function injectEmail(){
+  const a = EMAIL_USER + String.fromCharCode(64) + EMAIL_DOMAIN;
+  document.querySelectorAll('.js-email').forEach(el => {
+    el.innerHTML = '';
+    const link = document.createElement('a');
+    link.href = 'mail' + 'to:' + a;
+    link.textContent = a;
+    el.appendChild(link);
+  });
+}
+/* Remplir la modale légale au chargement (langue FR par défaut) */
+(function(){
+  document.getElementById('legal-body').innerHTML = LANG.fr.legal_html;
+  injectEmail();
+})();
 /* ============================================================
    OSC WIDGET — Initialisation
    ============================================================ */
